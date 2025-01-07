@@ -1,9 +1,12 @@
+import Banner from "../../components/main/Banner";
+import NoticeBoard from "../../components/main/NoticeBoard";
 
 const MainPage = () => {
     return (
-        <div>
-
-        </div>
+        <>
+            <Banner/>
+            <NoticeBoard/>
+        </>
     );
 }
 
