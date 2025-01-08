@@ -5,6 +5,8 @@ import MyPage from "../../pages/mine/MyPage";
 import TemplatePage from "../../pages/main/TemplatePage";
 import Login from "../../pages/auth/Login";
 import Register from "../../pages/auth/Register";
+import FindEmailPage from "../../pages/auth/FindEmailPage";
+import FindPasswordPage from "../../pages/auth/FindPasswordPage";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +32,14 @@ export const router = createBrowserRouter([
         {
           path: '/register',
           element: <Register/>
+        },
+        {
+          path: '/findemail',
+          element: <FindEmailPage/>
+        },
+        {
+          path: '/findpassword',
+          element: <FindPasswordPage/>
         }
       ],
     },
