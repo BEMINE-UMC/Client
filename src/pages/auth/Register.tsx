@@ -107,7 +107,7 @@ const Register: React.FC = () => {
           )}
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+        <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginTop: "20px" }}>
           <AuthButton
             onClick={() => {
               const validation = validate(
@@ -168,7 +168,7 @@ const Register: React.FC = () => {
         {errors.confirmPassword && (
             <ValidationMessage message={errors.confirmPassword} />
         )}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+        <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", marginTop: "20px" }}>
           <AuthButton
             onClick={() => setStep(3)}
             disabled={
