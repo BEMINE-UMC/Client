@@ -206,7 +206,7 @@ const renderStep3 = () => (
             <span>님! 로그인 후 BeMine을 즐겨보세요.</span>
         </div>     
     </div>
-      <LinkText to="/login" fontSize="16px">
+      <LinkText to="/login" fontSize="16px" bold={true}>
         로그인 하러가기
       </LinkText>
     </div>
@@ -222,7 +222,6 @@ const renderStep3 = () => (
         width: "100vw",
         height: "100vh",
         flexDirection: "column",
-
       }}
     >
       <img src={BeMineLogo} alt="BeMine Logo" style={{ display: "block", margin: "0 auto 70px" }} />

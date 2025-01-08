@@ -1,5 +1,5 @@
-// Login.tsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // useNavigate 훅 추가
 import FormContainer from "../../components/common/FormContainer";
 import InputField from "../../components/common/InputField";
 import ValidationMessage from "../../components/common/ValidationMessage";
@@ -12,11 +12,13 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // 로그인 실패 메시지
+  const navigate = useNavigate(); // useNavigate 사용
 
   const handleLogin = () => {
     // 로그인 API 호출 (추후 연결)
     if (email === "test@example.com" && password === "password123") {
       console.log("로그인 성공");
+      navigate("/"); // 루트 페이지로 이동
     } else {
       setError("다시 입력해주세요.");
     }
@@ -36,7 +38,7 @@ const Login: React.FC = () => {
       <img
         src={BeMineLogo}
         alt="BeMine Logo"
-        style={{ display: "block", margin: "0 auto 70px" }}
+        style={{ display: "block", margin: "0 auto 96px" }}
       />
       <FormContainer>
         <div style={{ marginBottom: "15px" }}>
@@ -65,10 +67,11 @@ const Login: React.FC = () => {
         </div>
         {error && <ValidationMessage message={error} />}
 
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "45px" }}>
           <AuthButton
             onClick={handleLogin}
             disabled={!email || !password}
+            fontSize="20px"
             width="552px"
           >
             로그인
@@ -83,16 +86,21 @@ const Login: React.FC = () => {
             marginTop: "20px",
             gap: "10px", // 링크와 구분자 간격 설정
             fontSize: "14px",
-            width: "100%"
+            width: "100%",
           }}
         >
-          <LinkText to="/find-email">이메일을 잊으셨나요?</LinkText>
+          <LinkText to="/find-email" underline={false}>
+            이메일을 잊으셨나요?
+          </LinkText>
           <span>|</span>
-          <LinkText to="/find-password">비밀번호를 잊으셨나요?</LinkText>
+          <LinkText to="/find-password" underline={false}>
+            비밀번호를 잊으셨나요?
+          </LinkText>
           <span>|</span>
-          <LinkText to="/register">회원가입</LinkText>
+          <LinkText to="/register" underline={false}>
+            회원가입
+          </LinkText>
         </div>
-
       </FormContainer>
     </div>
   );

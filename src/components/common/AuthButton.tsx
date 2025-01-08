@@ -9,14 +9,23 @@ interface ButtonProps {
   children: string;
   /** 버튼 너비 설정 */
   width?: string;
+  /** 버튼 폰트 크기 */
+  fontSize?: string;
 }
 
-const StyledButton = styled.button<{ disabled: boolean; width?: string }>`
-  font-size: 16px;
+const StyledButton = styled.button<{
+  disabled: boolean;
+  width?: string;
+  fontSize?: string;
+}>`
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  font-size: ${({ fontSize }) => fontSize || "16px"}; /* 기본값 16px */
   font-weight: bold;
   border: none;
   border-radius: 10px;
-  padding: 20px 0; /* 버튼 내부 여백 */
+  padding: 0; /* 내부 여백 조정 */
   width: ${({ width }) => width || "143px"};
   height: 60px; /* 입력 필드와 동일한 높이로 설정 */
   box-sizing: border-box;
@@ -35,9 +44,15 @@ const AuthButton: React.FC<ButtonProps> = ({
   onClick,
   children,
   width,
+  fontSize,
 }) => {
   return (
-    <StyledButton disabled={disabled} onClick={onClick} width={width}>
+    <StyledButton
+      disabled={disabled}
+      onClick={onClick}
+      width={width}
+      fontSize={fontSize}
+    >
       {children}
     </StyledButton>
   );

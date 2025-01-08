@@ -34,11 +34,11 @@ export const router = createBrowserRouter([
           element: <Register/>
         },
         {
-          path: '/findemail',
+          path: '/find-email',
           element: <FindEmailPage/>
         },
         {
-          path: '/findpassword',
+          path: '/find-password',
           element: <FindPasswordPage/>
         }
       ],
