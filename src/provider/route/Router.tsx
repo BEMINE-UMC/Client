@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../../layout/RootLayout";
-import HomePage from "../../pages/main/HomePage";
+import MainPage from "../../pages/main/MainPage";
 import MyPage from "../../pages/mine/MyPage";
-import TemplatePage from "../../pages/main/TemplatePage";
+
 import Login from "../../pages/auth/Login";
+import TemplatePage from "../../pages/template/TemplatePage";
 import Register from "../../pages/auth/Register";
 import FindEmailPage from "../../pages/auth/FindEmailPage";
 import FindPasswordPage from "../../pages/auth/FindPasswordPage";
@@ -15,7 +16,7 @@ export const router = createBrowserRouter([
       children: [
         {
           index: true,
-          element: <HomePage />,
+          element: <MainPage />,
         },
         {
           path: 'my',
