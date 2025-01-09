@@ -1,12 +1,19 @@
 // 마이페이지 메인 UI, 나영 작업 공간
-import CustomColumn from "./components/CustomColumn";
-import CustomFont from "./components/CustomFont";
+import CustomRow from "./components/CustomRow";
+import CustomDivider from "./components/CustomDivider";
+
+import Profile from "./main_component/Profile";
+import Likes from "./main_component/Likes";
+import Workspace from "./main_component/Workspace";
 
 const MyPage = () => {
     return (
-        <CustomColumn $width="100vw" $minHeight="100vh" $alignitems="center" $justifycontent="center">
-            <CustomFont $color="black" $font="1rem">여기는 마이페이지</CustomFont>
-        </CustomColumn>
+        <CustomRow $width="100vw" $height="auto" $alignitems="center" $justifycontent="center" $padding="0.5rem">
+            <Profile />
+            <Likes />
+            <CustomDivider $width="0.5px" $height="90vh" $backgroundcolor="#D9D9D9" />
+            <Workspace />
+        </CustomRow>
     );
 }
 
