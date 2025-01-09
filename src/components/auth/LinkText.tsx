@@ -9,11 +9,14 @@ interface LinkTextProps {
   children: React.ReactNode;
   /** 폰트 크기 (기본값: 14px) */
   fontSize?: string;
+  /** 텍스트 굵기 여부 (기본값: normal) */
+  bold?: boolean;
 }
 
 /** 클릭 가능한 텍스트를 스타일링한 컴포넌트 */
-const StyledLink = styled(Link)<{ fontSize?: string }>`
+const StyledLink = styled(Link)<{ fontSize?: string; bold?: boolean }>`
   font-size: ${({ fontSize }) => fontSize || "14px"}; /* 기본값 14px */
+  font-weight: ${({ bold }) => (bold ? "bold" : "normal")}; /* bold 여부에 따라 폰트 굵기 설정 */
   color: #6c757d; /* 회색 텍스트 색상 */
   cursor: pointer;
   text-align: center;
@@ -38,8 +41,8 @@ const StyledLink = styled(Link)<{ fontSize?: string }>`
   }
 `;
 
-const LinkText: React.FC<LinkTextProps> = ({ to, children, fontSize }) => {
-  return <StyledLink to={to} fontSize={fontSize}>{children}</StyledLink>;
+const LinkText: React.FC<LinkTextProps> = ({ to, children, fontSize, bold = false }) => {
+  return <StyledLink to={to} fontSize={fontSize} bold={bold}>{children}</StyledLink>;
 };
 
 export default LinkText;

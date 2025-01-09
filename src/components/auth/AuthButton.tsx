@@ -4,14 +4,14 @@ interface ButtonProps {
   /** 버튼 활성화 여부 */
   disabled?: boolean;
   /** 버튼 클릭 시 호출될 이벤트 핸들러 */
-  onClick: () => void;
+  onClick?: () => void;
   /** 버튼 내부에 표시할 텍스트 */
-  children: string;
+  children: React.ReactNode;
   /** 버튼 너비 설정 */
   width?: string;
 }
 
-const StyledButton = styled.button<{ disabled: boolean; width?: string }>`
+const StyledButton = styled.button<{ disabled?: boolean; width?: string }>`
   font-size: 16px;
   font-weight: bold;
   border: none;
@@ -37,7 +37,11 @@ const AuthButton: React.FC<ButtonProps> = ({
   width,
 }) => {
   return (
-    <StyledButton disabled={disabled} onClick={onClick} width={width}>
+    <StyledButton
+      disabled={disabled}
+      onClick={!disabled ? onClick : undefined} // disabled 상태에서는 클릭 이벤트 제거
+      width={width}
+    >
       {children}
     </StyledButton>
   );
