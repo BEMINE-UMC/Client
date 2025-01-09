@@ -68,9 +68,15 @@ const Workspace = () => {
 				{isDropdownOpen && (
 					<DropdownMenu>
 						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center'>
-							<CustomFont $color="black" $fontweight='bold'>최근 본 게시물</CustomFont>
-							<CustomFont $color="black" $fontweight='bold'>좋아요 누른 게시물</CustomFont>
-							<CustomFont $color="black" $fontweight='bold'>북마크한 게시물</CustomFont>
+							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+								<CustomFont $color="black" $fontweight='bold'>최근 본 게시물</CustomFont>
+							</CustomButton>
+							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+								<CustomFont $color="black" $fontweight='bold'>좋아요 누른 게시물</CustomFont>
+							</CustomButton>
+							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+								<CustomFont $color="black" $fontweight='bold'>북마크한 게시물</CustomFont>
+							</CustomButton>
 						</CustomColumn>
 					</DropdownMenu>
 				)}

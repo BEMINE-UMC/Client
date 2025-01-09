@@ -1,4 +1,4 @@
-// 템플릿 게시 UI, 나영 담당
+// 템플릿 수정/게시 UI, 나영 담당
 
 import { styled } from "styled-components";
 import { useState } from "react";
@@ -104,7 +104,7 @@ const WriteTemplatePage = () => {
 
 			<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-end">
 				<CustomButton $width='5rem' $height='auto' $padding="0.5rem" $backgroundColor="#FFE100" onClick={handlePublish}>
-					<CustomFont $color="black" $fontweight="bold">게시</CustomFont>
+					<CustomFont $color="black" $fontweight="bold">수정/게시</CustomFont>
 				</CustomButton>
 				<CustomButton $width='5rem' $height='auto' $padding="0.5rem" $backgroundColor="#FFE100" onClick={handleDelete}>
 					<CustomFont $color="black" $fontweight="bold">삭제</CustomFont>
