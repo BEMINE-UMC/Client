@@ -2,8 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../../layout/RootLayout";
 import MainPage from "../../pages/main/MainPage";
 import MyPage from "../../pages/mine/MyPage";
-import TemplatePage from "../../pages/main/TemplatePage";
+
 import Login from "../../pages/auth/Login";
+import TemplatePage from "../../pages/template/TemplatePage";
 
 export const router = createBrowserRouter([
     {
