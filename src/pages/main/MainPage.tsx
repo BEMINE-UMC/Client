@@ -1,4 +1,4 @@
-import Banner from "../../components/main/Banner";
+import Banner from "../../components/main/banner/Banner";
 import NoticeBoard from "../../components/main/NoticeBoard";
 
 const MainPage = () => {
