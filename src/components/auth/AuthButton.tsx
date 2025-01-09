@@ -9,10 +9,12 @@ interface ButtonProps {
   children: React.ReactNode;
   /** 버튼 너비 설정 */
   width?: string;
+  /** 버튼 폰트 크기 설정 */
+  fontSize?: string;
 }
 
-const StyledButton = styled.button<{ disabled?: boolean; width?: string }>`
-  font-size: 16px;
+const StyledButton = styled.button<{ disabled?: boolean; width?: string; fontSize?: string }>`
+  font-size: ${({ fontSize }) => fontSize || "16px"}; /* 기본값 16px */
   font-weight: bold;
   border: none;
   border-radius: 10px;
@@ -35,12 +37,14 @@ const AuthButton: React.FC<ButtonProps> = ({
   onClick,
   children,
   width,
+  fontSize,
 }) => {
   return (
     <StyledButton
       disabled={disabled}
       onClick={!disabled ? onClick : undefined} // disabled 상태에서는 클릭 이벤트 제거
       width={width}
+      fontSize={fontSize}
     >
       {children}
     </StyledButton>
