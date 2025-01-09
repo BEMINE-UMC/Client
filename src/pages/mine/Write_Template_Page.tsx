@@ -89,15 +89,15 @@ const WriteTemplatePage = () => {
 				<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-start">
 					<label>
 						<input type="radio" name="filePermission" value="저장 가능" checked={filePermission === "저장 가능"} onChange={() => setFilePermission("저장 가능")} />
-						저장 가능
+						<CustomFont $color="black" $fontweight="bold">저장 가능</CustomFont>
 					</label>
 					<label>
 						<input type="radio" name="filePermission" value="열람만 가능" checked={filePermission === "열람만 가능"} onChange={() => setFilePermission("열람만 가능")} />
-						열람만 가능
+						<CustomFont $color="black" $fontweight="bold">열람 가능</CustomFont>
 					</label>
 					<label>
 						<input type="radio" name="filePermission" value="비공개" checked={filePermission === "비공개"} onChange={() => setFilePermission("비공개")} />
-						비공개
+						<CustomFont $color="black" $fontweight="bold">비공개</CustomFont>
 					</label>
 				</CustomRow>
 			</CustomColumn>
