@@ -1,15 +1,15 @@
 // Register.tsx
 import React, { useState } from "react";
-import FormContainer from "../../components/common/FormContainer";
-import InputField from "../../components/common/InputField";
-import ValidationMessage from "../../components/common/ValidationMessage";
-import HorizontalInputGroup from "../../components/common/HorizontalInputGroup";
-import AuthButton from "../../components/common/AuthButton";
-import Label from "../../components/common/Label";
-import LinkText from "../../components/common/LinkText";
+import FormContainer from "../../components/auth/FormContainer";
+import InputField from "../../components/auth/InputField";
+import ValidationMessage from "../../components/auth/ValidationMessage";
+import HorizontalInputGroup from "../../components/auth/HorizontalInputGroup";
+import AuthButton from "../../components/auth/AuthButton";
+import Label from "../../components/auth/Label";
+import LinkText from "../../components/auth/LinkText";
 import useValidation from "../../hooks/useValidation";
 import useTimer from "../../hooks/useTimer";
-import BeMineLogo from "../../components/assets/icons/BeMine.svg";
+import BeMineLogo from "../../assets/images/BeMine.svg";
 
 const Register: React.FC = () => {
   const { errors, validate, validateField, getValidationRules } = useValidation();
