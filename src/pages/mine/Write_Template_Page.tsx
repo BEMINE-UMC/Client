@@ -1,8 +1,5 @@
-// 템플릿 수정/게시 UI, 나영 담당
-
 import { styled } from "styled-components";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import CustomColumn from "./components/CustomColumn";
 import CustomBox from "./components/CustomBox";
@@ -12,6 +9,7 @@ import CustomFont from "./components/CustomFont";
 import StyledImg from "./components/StyledImg";
 import upload from '../../assets/images/mine/icon_mine_upload.svg';
 import CustomRow from "./components/CustomRow";
+import Modal from "./components/Modal";
 
 const UploadButton = styled(CustomButton)`
 	min-width: 40%;
@@ -21,11 +19,13 @@ const UploadButton = styled(CustomButton)`
 `;
 
 const WriteTemplatePage = () => {
-	const navigate = useNavigate();
 	const [profileImage, setProfileImage] = useState(upload);
 	const [title, setTitle] = useState("");
 	const [filePermission, setFilePermission] = useState("저장 가능");
 	const [uploadedFileName, setUploadedFileName] = useState("템플릿 파일 올리기");
+	const [writeModal, setWriteModal] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
+	const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
 	const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files[0]) {
@@ -45,17 +45,31 @@ const WriteTemplatePage = () => {
 		}
 	};
 
+	useEffect(() => {
+		const isThumbnailUploaded = profileImage !== upload;
+		const isFileUploaded = uploadedFileName !== "템플릿 파일 올리기";
+		const isTitleFilled = title.trim() !== "";
+
+		setIsButtonEnabled(isThumbnailUploaded && isFileUploaded && isTitleFilled);
+	}, [profileImage, uploadedFileName, title]);
+
 	const handlePublish = () => {
-		if (window.confirm('이 템플릿을 게시하시겠습니까?')) {
-			navigate('/template');
+		if (isButtonEnabled) {
+			setWriteModal(true);
 		}
 	};
 
 	const handleDelete = () => {
-		if (window.confirm('이 템플릿을 삭제하시겠습니까?')) {
-			navigate('/template');
-		}
+		setDeleteModal(true);
 	};
+
+	const CloseWriteModal = () => {
+		setWriteModal(false);
+	}
+
+	const CloseDeleteModal = () => {
+		setDeleteModal(false);
+	}
 
 	return (
 		<CustomColumn $width="100vw" $minHeight="100vh" $alignitems="flex-start" $justifycontent="flex-start" $padding="2rem" $gap="2rem">
@@ -81,7 +95,7 @@ const WriteTemplatePage = () => {
 			</CustomRow>
 
 			<CustomRow $width="90%">
-				<CustomInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)}></CustomInput>
+				<CustomInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
 			</CustomRow>
 
 			<CustomColumn $width="90%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
@@ -103,13 +117,48 @@ const WriteTemplatePage = () => {
 			</CustomColumn>
 
 			<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width='5rem' $height='auto' $padding="0.5rem" $backgroundColor="#FFE100" onClick={handlePublish}>
+				<CustomButton
+					$width='5rem'
+					$height='auto'
+					$padding="0.5rem"
+					$backgroundColor={isButtonEnabled ? "#FFE100" : "#D9D9D9"}
+					onClick={handlePublish}
+					disabled={!isButtonEnabled}
+				>
 					<CustomFont $color="black" $fontweight="bold">수정/게시</CustomFont>
 				</CustomButton>
 				<CustomButton $width='5rem' $height='auto' $padding="0.5rem" $backgroundColor="#FFE100" onClick={handleDelete}>
 					<CustomFont $color="black" $fontweight="bold">삭제</CustomFont>
 				</CustomButton>
 			</CustomRow>
+
+			<Modal isOpen={writeModal} onClose={CloseWriteModal}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color='black' $fontweight='bold'>게시하시겠습니까?</CustomFont>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={CloseWriteModal}>
+							<CustomFont $color='black' $fontweight='bold'>취소</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="#FFE100">
+							<CustomFont $color='black' $fontweight='bold'>게시하기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
+
+			<Modal isOpen={deleteModal} onClose={() => setDeleteModal(false)}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color='black' $fontweight='bold'>삭제하시겠습니까?</CustomFont>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={CloseDeleteModal}>
+							<CustomFont $color='black' $fontweight='bold'>취소</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="#FFE100">
+							<CustomFont $color='black' $fontweight='bold'>삭제하기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
 		</CustomColumn>
 	);
 }

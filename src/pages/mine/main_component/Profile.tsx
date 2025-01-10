@@ -8,6 +8,7 @@ import CustomFont from "../components/CustomFont";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
+import Modal from "../components/Modal";
 
 import mockProfileImg from '../../../assets/images/mockData/mockData_mine_ProfileImg.png';
 
@@ -28,6 +29,7 @@ const Profile = () => {
 	const [profileData, setProfileData] = useState(initialProfileData);
 	const [tempData, setTempData] = useState({ ...initialProfileData });
 	const [profileImage, setProfileImage] = useState(mockProfileImg);
+	const [editModal, setEditModal] = useState(false);
 
 	const GoWriteContent = () => {
 		navigate('/writecontentpage');
@@ -36,6 +38,14 @@ const Profile = () => {
 	const GoWriteTemplate = () => {
 		navigate('/writetemplatepage');
 	}
+
+	const handleEdit = () => {
+		setEditModal(true);
+	};
+
+	const Back = () => {
+		setEditModal(false);
+	};
 
 	const handleInputChange = (index: number, key: 'title' | 'content', value: string) => {
 		setTempData(prevTempData => {
@@ -70,10 +80,9 @@ const Profile = () => {
 	};
 
 	const handleConfirmEdit = () => {
-		if (window.confirm('정말 수정하시겠습니까?')) {
-			setProfileData(tempData);
-			setIsEditing(false);
-		}
+		setEditModal(false);
+		setProfileData(tempData);
+		setIsEditing(false);
 	};
 
 	return (
@@ -117,7 +126,7 @@ const Profile = () => {
 						<CustomButton $backgroundColor="black" $padding="0.5rem" $width='7rem' $height='auto' onClick={handleCancelEdit}>
 							<CustomFont $color="white" $font="0.7rem">수정 취소</CustomFont>
 						</CustomButton>
-						<CustomButton $backgroundColor={allFieldsFilled ? "yellow" : "#D9D9D9"} $padding="0.5rem" $width='7rem' $height='auto' onClick={handleConfirmEdit} disabled={!allFieldsFilled}>
+						<CustomButton $backgroundColor={allFieldsFilled ? "yellow" : "#D9D9D9"} $padding="0.5rem" $width='7rem' $height='auto' onClick={handleEdit} disabled={!allFieldsFilled}>
 							<CustomFont $color={allFieldsFilled ? "black" : "white"} $font="0.7rem">수정 완료</CustomFont>
 						</CustomButton>
 					</>
@@ -138,6 +147,20 @@ const Profile = () => {
 					</>
 				)}
 			</CustomRow>
+
+			<Modal isOpen={editModal} onClose={() => setEditModal(false)}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color='black' $fontweight='bold'>정말 수정하시겠습니까?</CustomFont>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={Back}>
+							<CustomFont $color='black' $fontweight='bold'>취소</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="#FFE100" onClick={handleConfirmEdit}>
+							<CustomFont $color='black' $fontweight='bold'>수정하기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
 		</CustomColumn>
 	);
 };

@@ -8,12 +8,13 @@ import CustomDivider from "./components/CustomDivider";
 import CustomButton from "./components/CustomButton";
 import CustomFont from "./components/CustomFont";
 import CustomInput from "./components/CustomInput";
+import Modal from "./components/Modal";
 
 import profile from '../../assets/images/mockData/mockData_mine_ProfileImg.png';
 import TextEditor from "./components/TextEditor";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const categories = [
 	"콘텐츠 마케터",
@@ -33,18 +34,23 @@ const WriteContentPage = () => {
 	const [title, setTitle] = useState("");
 	const [category, setCategory] = useState(categories[0]);
 	const [editorState, setEditorState] = useState(EditorState.createEmpty());
-	const navigate = useNavigate();
+	const [writeModal, setWriteModal] = useState(false);
+	// const navigate = useNavigate();
 
 	const handleEditorChange = (newEditorState: EditorState) => {
 		setEditorState(newEditorState);
 	};
 
 	const isContentEmpty = !editorState.getCurrentContent().hasText();
+	const isTitleEmpty = title.trim() === "";
+	const isButtonDisabled = isContentEmpty || isTitleEmpty;
 
 	const handleSubmit = () => {
-		if (window.confirm('게시하시겠습니까?')) {
-			navigate('/');
-		}
+		setWriteModal(true);
+	};
+
+	const Back = () => {
+		setWriteModal(false);
 	};
 
 	return (
@@ -98,13 +104,27 @@ const WriteContentPage = () => {
 					$width='5rem'
 					$height='auto'
 					$padding="0.5rem"
-					$backgroundColor={isContentEmpty ? "#D9D9D9" : "#FFE100"}
-					disabled={isContentEmpty}
+					$backgroundColor={isButtonDisabled ? "#D9D9D9" : "#FFE100"}
+					disabled={isButtonDisabled}
 					onClick={handleSubmit}
 				>
 					<CustomFont $color="black" $fontweight="bold">게시</CustomFont>
 				</CustomButton>
 			</CustomRow>
+
+			<Modal isOpen={writeModal} onClose={() => setWriteModal(false)}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color='black' $fontweight='bold'>게시하시겠습니까?</CustomFont>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={Back}>
+							<CustomFont $color='black' $fontweight='bold'>취소</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="#FFE100">
+							<CustomFont $color='black' $fontweight='bold'>게시하기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
 		</CustomColumn>
 	);
 }
