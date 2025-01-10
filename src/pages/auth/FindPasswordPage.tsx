@@ -3,13 +3,13 @@ import FindPasswordStep1 from "../../components/auth/find_password/FindPasswordS
 import FindPasswordStep2 from "../../components/auth/find_password/FindPasswordStep2";
 import FindPasswordLinks from "../../components/auth/find_password/FindPasswordLinks";
 import FormContainer from "../../components/auth/FormContainer";
-import BeMineLogo from "../../assets/images/BeMine.svg";
+import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
 
 const FindPasswordPage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("jangjimin77811!");
+  const [password, setPassword] = useState("password123!");
 
   return (
     <div
@@ -18,7 +18,7 @@ const FindPasswordPage: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         width: "100vw",
-        height: "100vh",
+        height: "calc(100vh - 5rem)",
         flexDirection: "column",
       }}
     >

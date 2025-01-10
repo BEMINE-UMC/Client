@@ -3,6 +3,7 @@ import styled from 'styled-components';
 /** 전체 폼을 감싸는 레이아웃 컴포넌트 */
 const FormContainer = styled.div`
   display: flex;
+  color: black;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;

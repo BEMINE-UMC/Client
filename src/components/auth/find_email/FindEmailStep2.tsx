@@ -10,14 +10,26 @@ interface FindEmailStep2Props {
 const FindEmailStep2: React.FC<FindEmailStep2Props> = ({ nickname, email }) => {
   return (
     <StepContainer>
-      <div>
-        <p>{nickname} 님의 이메일은</p>
-        <HighlightedText>{email}</HighlightedText>
-        <p>입니다.</p>
-      </div>
-      <LinkText to="/login" fontSize="20px" bold>
-        로그인 하러가기
-      </LinkText>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        fontSize: "20px",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20px",
+      }}
+    >
+        <div style={{marginBottom:"85px"}}>
+            <p style={{marginBottom:"30px"}}>{nickname} 님의 이메일은</p>
+            <HighlightedText>{email}</HighlightedText>
+            <span> 입니다.</span>
+        </div>
+        <LinkText to="/login" fontSize="20px" bold={true} color="#707070">
+            로그인 하러가기
+        </LinkText>
+    </div>
     </StepContainer>
   );
 };

@@ -6,7 +6,7 @@ import ValidationMessage from "../../auth/ValidationMessage";
 import AuthButton from "../../auth/AuthButton";
 import Label from "../../auth/Label";
 import LinkText from "../../auth/LinkText";
-import BeMineLogo from "../../../assets/images/BeMine.svg";
+import BeMineLogo from "../../../assets/images/main/Logo_Text.svg";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         width: "100vw",
-        height: "100vh",
+        height: "calc(100vh - 5rem)",
         flexDirection: "column",
       }}
     >
@@ -94,6 +94,7 @@ const LoginForm: React.FC = () => {
             gap: "10px",
             fontSize: "14px",
             width: "100%",
+            color: "#B9B9B9",
           }}
         >
           <LinkText to="/find-email" underline={false}>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface ButtonProps {
+interface AuthButtonProps {
   /** 버튼 활성화 여부 */
   disabled?: boolean;
   /** 버튼 클릭 시 호출될 이벤트 핸들러 */
@@ -9,21 +9,30 @@ interface ButtonProps {
   children: React.ReactNode;
   /** 버튼 너비 설정 */
   width?: string;
-  /** 버튼 폰트 크기 설정 */
+  /** 버튼 폰트 크기 */
   fontSize?: string;
+  /** 버튼 높이 설정 */
+  height?: string;
 }
 
-const StyledButton = styled.button<{ disabled?: boolean; width?: string; fontSize?: string }>`
-  font-size: ${({ fontSize }) => fontSize || "16px"}; /* 기본값 16px */
+const StyledAuthButton = styled.button<{
+  disabled?: boolean;
+  width?: string;
+  fontSize?: string;
+  height?: string;
+}>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ fontSize }) => fontSize || "20px"};
   font-weight: bold;
   border: none;
   border-radius: 10px;
-  padding: 20px 0; /* 버튼 내부 여백 */
+  padding: 20px 0;
   width: ${({ width }) => width || "143px"};
-  height: 60px; /* 입력 필드와 동일한 높이로 설정 */
+  height: ${({ height }) => height || "60px"};
   box-sizing: border-box;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-
   color: ${({ disabled }) => (disabled ? "#fff" : "#000")};
   background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#FFE100")};
 
@@ -32,22 +41,24 @@ const StyledButton = styled.button<{ disabled?: boolean; width?: string; fontSiz
   }
 `;
 
-const AuthButton: React.FC<ButtonProps> = ({
+const AuthButton: React.FC<AuthButtonProps> = ({
   disabled = false,
   onClick,
   children,
   width,
   fontSize,
+  height,
 }) => {
   return (
-    <StyledButton
+    <StyledAuthButton
       disabled={disabled}
-      onClick={!disabled ? onClick : undefined} // disabled 상태에서는 클릭 이벤트 제거
+      onClick={!disabled ? onClick : undefined}
       width={width}
       fontSize={fontSize}
+      height={height}
     >
       {children}
-    </StyledButton>
+    </StyledAuthButton>
   );
 };
 

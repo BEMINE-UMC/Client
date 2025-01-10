@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const StepContainer = styled.div`
+  color : black;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   width: 100%;
 `;
 
@@ -13,7 +13,9 @@ export const LinksContainer = styled.div`
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  margin-top: 20px;
+  margin-top: 44px;
+  width: 100%;
+  color: #B9B9B9; /* 회색 텍스트 색상 */
 `;
 
 export const HighlightedText = styled.span`

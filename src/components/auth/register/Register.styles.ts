@@ -14,6 +14,7 @@ export const StepContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+  color: black;
 `;
 
 export const WelcomeMessage = styled.div`

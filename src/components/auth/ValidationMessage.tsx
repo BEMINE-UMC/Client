@@ -17,4 +17,4 @@ const ValidationMessage: React.FC<ValidationMessageProps> = ({ message }) => {
   return <StyledValidationMessage>{message}</StyledValidationMessage>;
 };
 
-export default ValidationMessage;
+export default ValidationMessage

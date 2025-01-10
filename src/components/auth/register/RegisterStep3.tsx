@@ -13,17 +13,28 @@ interface RegisterStep3Props {
 
 const RegisterStep3: React.FC<RegisterStep3Props> = ({ nickname }) => {
   return (
-    <FormContainer>
-      <WelcomeMessage>
-        <div>어서오세요</div>
-        <Nickname>{nickname}</Nickname>
-        <div>님!</div>
-        <SubMessage>로그인 후 BeMine을 즐겨보세요.</SubMessage>
-      </WelcomeMessage>
-      <LinkText to="/login" fontSize="16px" bold={true}>
-        로그인 하러가기
-      </LinkText>
-    </FormContainer>
+    <div
+      style={{
+        width:"100%",
+        display: "flex",
+        flexDirection: "column",
+        fontSize: "20px",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20px",
+      }}
+    >
+    <div style={{ marginBottom: "112px" }}>
+        <div style={{ marginBottom: "30px"}}>어서오세요</div>
+        <div>
+            <span style={{ fontSize: "32px", fontWeight: "bold",}}>{nickname}</span>
+            <span>님! 로그인 후 BeMine을 즐겨보세요.</span>
+        </div>     
+    </div>
+    <LinkText to="/login" fontSize="20px" bold={true} color="#707070">
+            로그인 하러가기
+    </LinkText>
+    </div>
   );
 };
 

@@ -23,7 +23,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
   const [error, setError] = React.useState("");
 
   const handleNext = () => {
-    if (nickname === "장지민" && email === "jangjimin778@gmail.com") {
+    if (nickname === "test" && email === "test@example.com") {
       onNext();
     } else {
       setError("해당 닉네임의 가입 이메일이 존재하지 않습니다.");
@@ -32,7 +32,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
 
   return (
     <StepContainer>
-      <div>
+      <div style={{marginBottom : "11px"}}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
@@ -44,7 +44,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
           }}
         />
       </div>
-      <div>
+      <div style={{marginBottom : "45px"}}>
         <Label htmlFor="email">이메일</Label>
         <InputField
           type="email"
@@ -57,7 +57,12 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
         />
       </div>
       {error && <ValidationMessage message={error} />}
-      <AuthButton onClick={handleNext} disabled={!nickname || !email}>
+      <AuthButton 
+        width="100%" 
+        onClick={handleNext} 
+        disabled={!nickname || !email}
+        fontSize="20px"
+      >
         비밀번호 찾기
       </AuthButton>
     </StepContainer>
