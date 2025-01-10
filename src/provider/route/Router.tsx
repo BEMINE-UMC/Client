@@ -1,7 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../../layout/RootLayout";
 import MainPage from "../../pages/main/MainPage";
+
 import MyPage from "../../pages/mine/MyPage";
+import WriteContentPage from "../../pages/mine/Write_Content_Page";
+import WriteTemplatePage from "../../pages/mine/Write_Template_Page";
 
 import Login from "../../pages/auth/Login";
 import TemplatePage from "../../pages/template/TemplatePage";
@@ -41,7 +44,15 @@ export const router = createBrowserRouter([
         {
           path: '/find-password',
           element: <FindPasswordPage/>
-        }
+        },
+        {
+          path: '/writecontentpage',
+          element: <WriteContentPage />
+        },
+        {
+          path: '/writetemplatepage',
+          element: <WriteTemplatePage />
+        },
       ],
     },
   ]);
