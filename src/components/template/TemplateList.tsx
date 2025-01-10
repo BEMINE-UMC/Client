@@ -2,7 +2,7 @@ import styled from "styled-components";
 import TemplateCard from "./templatecard/TemplateCard";
 import { FC } from "react";
 
-import mockData from "../../mock/templateMockData"; 
+import mockData from "../modal/template/templateMockData"; 
 
 interface TemplateListProps {
   selectedCategory: string;
