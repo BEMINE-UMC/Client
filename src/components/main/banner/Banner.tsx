@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import templateMockData from "../../../mock/templateMockData";
+import templateMockData from "../../modal/template/templateMockData";
 import {
   Container,
   BannerContainer,
