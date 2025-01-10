@@ -91,10 +91,10 @@ export const LikeCount = styled.span`
 
 export const BookmarkContainer = styled.div`
   position: absolute;
-  top: 8px;
+  top: 0px;
   right: 8px;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 45px;
   color: #ccc;
   opacity: 0;
   transition: all 0.3s ease;

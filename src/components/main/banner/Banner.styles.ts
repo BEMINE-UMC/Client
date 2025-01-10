@@ -82,7 +82,7 @@ export const ArrowButton = styled.button`
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(51, 51, 51, 0.8);
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,11 +90,11 @@ export const ArrowButton = styled.button`
   z-index: 10;
 
   &:hover {
-    background: rgba(51, 51, 51, 1);
+    background: rgb(238, 236, 236);
   }
 
   svg {
-    color: #fff;
+    color: black;
     font-size: 20px;
   }
 
