@@ -6,7 +6,7 @@ import ValidationMessage from "../../components/auth/ValidationMessage";
 import AuthButton from "../../components/auth/AuthButton";
 import Label from "../../components/auth/Label";
 import LinkText from "../../components/auth/LinkText";
-import BeMineLogo from "../../components/assets/icons/BeMine.svg";
+import BeMineLogo from "../../assets/images/BeMine.svg";
 
 const FindPassword: React.FC = () => {
   const [step, setStep] = useState(1); // 단계 상태 관리
