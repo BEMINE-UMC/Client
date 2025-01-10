@@ -60,7 +60,6 @@ export const Info = styled.div`
   width: 100%;
   padding: 12px;
   color: #fff;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 `;
