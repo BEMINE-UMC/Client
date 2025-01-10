@@ -10,9 +10,9 @@ interface TemplateCategoryProps {
 const TemplateCategory: React.FC<TemplateCategoryProps> = ({ onCategorySelect }) => {
   const categories = [
     { name: "전체", image: BeMine3D },
+    { name: "콘텐츠 마케터", color: "#0E003E" },
+    { name: "브랜드 마케터", color: "#0E003E" },
     { name: "퍼포먼스 마케터", color: "#0E003E" },
-    { name: "디자이너", color: "#0E003E" },
-    { name: "개발자", color: "#0E003E" },
   ];
 
   return (

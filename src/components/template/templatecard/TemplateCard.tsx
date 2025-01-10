@@ -12,7 +12,6 @@ import {
   LikeCount,
 } from "./TemplateCard.styles";
 
-// 타입 정의
 interface TemplateCardProps {
   title: string;
   author: string;
