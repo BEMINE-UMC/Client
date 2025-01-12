@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  width: 229px;
-  height: 274px;
+  width: 300px; /* 원래 크기의 1.25배 */
+  height: 380px; /* 원래 크기의 1.25배 */
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -33,16 +33,17 @@ export const ContentSection = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 5px;
 `;
 
 export const Author = styled.p`
-  font-size: 12px;
+  font-size: 15px;
   color: #555;
   margin: 0;
 `;
 
 export const Description = styled.p`
-  font-size: 14px;
+  font-size: 18 px;
   color: #333;
   margin: 2px 0 0;
   line-height: 1.4;
@@ -60,7 +61,7 @@ export const LikeButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 35px;
   display: flex;
   align-items: center;
 
@@ -78,15 +79,12 @@ export const LikeButton = styled.button`
 `;
 
 export const LikeCount = styled.span`
-  font-size: 14px;
+  font-size: 16px;
   color: #777;
   font-weight: bold;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease;
-
-  ${CardContainer}:hover & {
-    opacity: 1;
-  }
+  margin-bottom: 10%;
 `;
 
 export const BookmarkContainer = styled.div`

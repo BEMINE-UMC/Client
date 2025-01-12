@@ -1,48 +1,49 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center;  /* 세로 방향으로 내용 중앙 정렬 */
+  justify-content: center;  /* 가로 방향으로 내용 중앙 정렬 */
+  gap: 10px;
   position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 80px auto;
-  overflow: visible;
+  width: 95%;
+  margin: 40px 0;
+  overflow: visible; /* 부모 요소에서 overflow를 visible로 유지 */
 `;
 
 export const BannerContainer = styled.div`
   display: flex;
-  gap: 24px;
+  align-items: center;  /* 세로 방향 정렬 */
+  justify-content: center;  /* 가로 방향 정렬 */
+  gap: 30px;
   width: 100%;
-  max-width: 1200px;
+  height: 100%;
+  overflow: visible; /* 콘텐츠가 잘리지 않도록 설정 */
+  padding: 0 40px;
+  scroll-snap-type: x mandatory;
+
+  &::-webkit-scrollbar {
+    display: none; /* 스크롤바 숨기기 */
+  }
 `;
 
 export const BannerItem = styled.div`
-  flex: 1 1 calc(33.333% - 24px);
-  max-width: calc(33.333% - 24px);
-  height: 250px;
+  width: 530px;
+  height: 380px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: hidden; 
   position: relative;
+  display: flex;
+  align-items: center;  /* 세로 중앙 정렬 */
+  justify-content: center;  /* 가로 중앙 정렬 */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-6px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
-
-  @media (max-width: 768px) {
-    flex: 1 1 calc(50% - 24px);
-    max-width: calc(50% - 24px);
-  }
-
-  @media (max-width: 480px) {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
 `;
+
 
 export const Image = styled.div<{ backgroundImage: string }>`
   width: 100%;
@@ -53,27 +54,31 @@ export const Image = styled.div<{ backgroundImage: string }>`
   filter: brightness(0.7);
 `;
 
+
 export const Info = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   color: #fff;
   display: flex;
   flex-direction: column;
 `;
 
+
 export const Title = styled.h3`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   margin: 0;
 `;
 
+
 export const Author = styled.p`
-  font-size: 14px;
+  font-size: 16px;
   margin: 4px 0 0;
 `;
+
 
 export const ArrowButton = styled.button`
   position: absolute;
@@ -99,10 +104,10 @@ export const ArrowButton = styled.button`
   }
 
   &:first-of-type {
-    left: -60px;
+    left: 30px;
   }
 
   &:last-of-type {
-    right: -60px;
+    right: -50px; /* 오른쪽 버튼 위치 수정 */
   }
 `;

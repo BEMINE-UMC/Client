@@ -35,7 +35,7 @@ export default TemplateList;
 const ListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 25px;
+  gap: 30px;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 16px;
