@@ -17,40 +17,40 @@ interface LinkTextProps {
   color?: string;
 }
 
-/** 클릭 가능한 텍스트를 스타일링한 컴포넌트 */
-const StyledLink = styled(Link)<{
+interface StyledLinkProps {
   fontSize?: string;
-  bold?: boolean;
-  underline?: boolean;
+  bold: "true" | "false";
+  underline: "true" | "false";
   color?: string;
-}>`
-  font-size: ${({ fontSize }) => fontSize || "14px"}; /* 기본값 14px */
-  font-weight: ${({ bold }) => (bold ? "bold" : "normal")}; /* bold 여부에 따라 폰트 굵기 설정 */
-  color: ${({ color }) => color || "#B9B9B9"}; /* 기본값 #B9B9B9 */
+}
+
+/** 클릭 가능한 텍스트를 스타일링한 컴포넌트 */
+const StyledLink = styled(Link)<StyledLinkProps>`
+  font-size: ${(props) => props.fontSize || '14px'};
+  font-weight: ${(props) => (props.bold === "true" ? "700" : "400")};
+  text-decoration: none;
+  color: ${(props) => props.color || '#B9B9B9'};
   cursor: pointer;
   text-align: center;
-  text-decoration: none;
   position: relative;
   display: inline-block;
 
-  /* underline 여부에 따라 밑줄 스타일 조정 */
   ${({ underline }) =>
-    underline &&
+    underline === "true" &&
     `
     &::after {
       content: "";
       display: block;
       width: 100%;
       height: 1px;
-      background-color: #6c757d; /* 밑줄 색상 */
-      margin-top: 4px; /* 텍스트와 밑줄 간격 */
+      background-color: #6c757d;
+      margin-top: 4px;
     }
   `}
 
-  /* Hover 시에도 텍스트 색상 고정 */
   &:hover {
-    color: ${({ color }) => color || "#6c757d"}; /* Hover 시 색상 유지 */
-    text-decoration: none; /* 텍스트 꾸밈 제거 */
+    color: ${({ color }) => color || "#6c757d"};
+    text-decoration: none;
   }
 `;
 
@@ -63,7 +63,13 @@ const LinkText: React.FC<LinkTextProps> = ({
   color,
 }) => {
   return (
-    <StyledLink to={to} fontSize={fontSize} bold={bold} underline={underline} color={color}>
+    <StyledLink 
+      to={to} 
+      fontSize={fontSize} 
+      bold={bold ? "true" : "false"} 
+      underline={underline ? "true" : "false"} 
+      color={color}
+    >
       {children}
     </StyledLink>
   );

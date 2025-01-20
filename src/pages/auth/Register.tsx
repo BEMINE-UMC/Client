@@ -21,6 +21,13 @@ const Register: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(180); // 초기값 180초 (3분)
   const [timerActive, setTimerActive] = useState(false);
 
+  // 이메일 인증 상태 추가
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    emailSend: false,
+    emailVerify: false,
+  });
+
   // 타이머 작동
   useEffect(() => {
     if (!timerActive || timeLeft <= 0) return;
@@ -41,6 +48,34 @@ const Register: React.FC = () => {
     setTimerActive(false); // 타이머 중지
   };
 
+  // 이메일 인증 코드 전송 함수
+  const handleSendVerificationCode = async (email: string) => {
+    try {
+      setIsLoading(prev => ({ ...prev, emailSend: true }));
+      // TODO: API 호출 로직 구현
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 지연
+      startTimer();
+    } catch (error) {
+      console.error('이메일 전송 실패:', error);
+    } finally {
+      setIsLoading(prev => ({ ...prev, emailSend: false }));
+    }
+  };
+
+  // 인증 코드 확인 함수
+  const handleVerifyCode = async (code: string) => {
+    try {
+      setIsLoading(prev => ({ ...prev, emailVerify: true }));
+      // TODO: API 호출 로직 구현
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 지연
+      setIsEmailVerified(true);
+    } catch (error) {
+      console.error('인증 코드 확인 실패:', error);
+    } finally {
+      setIsLoading(prev => ({ ...prev, emailVerify: false }));
+    }
+  };
+
   const renderCurrentStep = () => {
     switch (step) {
       case 1:
@@ -58,6 +93,10 @@ const Register: React.FC = () => {
             validateField={validateField}
             errors={errors}
             getValidationRules={getValidationRules}
+            isEmailVerified={isEmailVerified}
+            isLoading={isLoading}
+            onSendVerificationCode={handleSendVerificationCode}
+            onVerifyCode={handleVerifyCode}
           />
         );
       case 2:

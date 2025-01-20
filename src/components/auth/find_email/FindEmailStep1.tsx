@@ -36,6 +36,7 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
+          name="nickname"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
           onChange={(e) => {
@@ -48,6 +49,7 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
+          name="password"
           placeholder="비밀번호를 입력해주세요."
           value={password}
           onChange={(e) => {

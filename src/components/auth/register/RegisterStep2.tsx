@@ -33,6 +33,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
+          name="password"
           placeholder="비밀번호를 입력해주세요."
           value={password}
           onChange={(e) => {
@@ -50,6 +51,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
+          name="confirmPassword"
           placeholder="비밀번호를 다시 입력해주세요."
           value={confirmPassword}
           onChange={(e) => {

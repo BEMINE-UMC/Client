@@ -61,6 +61,7 @@ const useValidation = () => {
         const step2Rules = {
           password: (value: string) => {
             if (!value) return "비밀번호를 입력해주세요.";
+            if (value.length < 4) return "비밀번호는 최소 4자 이상 입력해야 합니다.";
             if (value.length > 15 || /\s/.test(value))
               return "비밀번호는 최대 15자 공백 없이 입력해주세요.";
             return "";

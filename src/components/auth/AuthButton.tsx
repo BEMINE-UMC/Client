@@ -13,6 +13,8 @@ interface AuthButtonProps {
   fontSize?: string;
   /** 버튼 높이 설정 */
   height?: string;
+  /** 버튼 타입 설정 */
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const StyledAuthButton = styled.button<{
@@ -48,6 +50,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   width,
   fontSize,
   height,
+  type,
 }) => {
   return (
     <StyledAuthButton
@@ -56,6 +59,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
       width={width}
       fontSize={fontSize}
       height={height}
+      type={type}
     >
       {children}
     </StyledAuthButton>

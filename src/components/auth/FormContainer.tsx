@@ -11,7 +11,7 @@ const FormContainer = styled.div`
   height: auto;
   margin: 0 auto;
   overflow: hidden;
-  padding: 34px 39px 30px 25px;
+  padding: 34px 32px;
   border: 1px solid #ccc;
   border-radius: 20px;
   background-color: #fff;
@@ -22,4 +22,5 @@ const FormContainer = styled.div`
   min-height: 409px;
 `;
 
+//내부 padding props로 받아오기
 export default FormContainer;
