@@ -14,7 +14,8 @@ import Label from "../../auth/Label";
 import LinkText from "../../auth/LinkText";
 import BeMineLogo from "../../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../../hooks/useValidation";
-import axios from "axios";
+import api from '../../../api/axios';
+import { isAxiosError } from 'axios';
 
 // 로그인 응답 타입 정의
 interface LoginResponse {
@@ -71,13 +72,10 @@ const LoginForm: React.FC = () => {
     if (!isValid) return;
 
     try {
-      const response = await axios.post<LoginResponse>(
-        'http://3.37.241.32:3000/users/login',
-        {
-          email: formData.email,
-          password: formData.password
-        }
-      );
+      const response = await api.post<LoginResponse>('/users/login', {
+        email: formData.email,
+        password: formData.password
+      });
 
       if (response.data.resultType === "SUCCESS" && response.data.success) {
         // 토큰 저장
@@ -88,7 +86,7 @@ const LoginForm: React.FC = () => {
         navigate("/");
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const errorResponse = error.response?.data;
         if (errorResponse?.error?.reason) {
           // 에러 메시지 표시

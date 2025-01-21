@@ -5,7 +5,8 @@ import RegisterStep3 from "../../components/auth/register/RegisterStep3";
 import FormContainer from "../../components/auth/FormContainer";
 import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../hooks/useValidation";
-import axios from 'axios';
+import api from '../../api/axios';
+import { isAxiosError } from 'axios';
 
 // 사용하지 않는 상수 제거
 
@@ -107,20 +108,11 @@ const Register: React.FC = () => {
     try {
       console.log('회원가입 요청 데이터:', { name: nickname, email, password });
       
-      const response = await axios.post<SignupResponse>(
-        'http://3.37.241.32:3000/users/signup', 
-        {
-          name: nickname,
-          email,
-          password
-        },
-        {
-          timeout: 5000, // 5초 타임아웃 설정
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await api.post<SignupResponse>('/users/signup', {
+        name: nickname,
+        email,
+        password
+      });
 
       console.log('회원가입 응답:', response.data);
 
@@ -140,7 +132,7 @@ const Register: React.FC = () => {
         stack: error.stack
       });
       
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         if (error.code === 'ECONNABORTED') {
           alert('서버 응답 시간이 초과되었습니다.');
         } else {

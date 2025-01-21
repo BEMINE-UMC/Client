@@ -11,8 +11,9 @@ import SearchInput from "./SearchInput";
 
 const Header = () => {
     const navigate = useNavigate();
-    const GoMain = () => { navigate('/'); }
+    const isLoggedIn = localStorage.getItem('accessToken'); // 로그인 상태 확인
 
+    const GoMain = () => { navigate('/'); }
     const GoTemplate = () => { navigate('/template'); }
     const GoMy = () => { navigate('/my'); }
     const GoLogin = () => { navigate('/login'); }
@@ -32,17 +33,24 @@ const Header = () => {
 
                     <CustomRow $width="auto" $height="auto" $gap="0.5rem">
                         <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
+                            onClick={GoMain}>
+                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">홈</CustomFont>
+                        </CustomButton>
+                        <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
                             onClick={GoTemplate}>
                             <CustomFont $color="black" $fontweight="bold" $font="0.9rem">템플릿</CustomFont>
                         </CustomButton>
-                        <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
-                            onClick={GoMy}>
-                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">마이페이지</CustomFont>
-                        </CustomButton>
-                        <CustomButton $width='auto' $height='auto' $padding="0.5rem 1rem" $backgroundColor="#FFE100" $borderRadius="5rem"
-                            onClick={GoLogin}>
-                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">시작하기</CustomFont>
-                        </CustomButton>
+                        {isLoggedIn ? (
+                            <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
+                                onClick={GoMy}>
+                                <CustomFont $color="black" $fontweight="bold" $font="0.9rem">마이페이지</CustomFont>
+                            </CustomButton>
+                        ) : (
+                            <CustomButton $width='auto' $height='auto' $padding="0.5rem 1rem" $backgroundColor="#FFE100" $borderRadius="5rem"
+                                onClick={GoLogin}>
+                                <CustomFont $color="black" $fontweight="bold" $font="0.9rem">시작하기</CustomFont>
+                            </CustomButton>
+                        )}
                     </CustomRow>
                 </CustomRow>
             </CustomBox>
