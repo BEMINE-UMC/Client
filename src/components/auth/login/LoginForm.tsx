@@ -14,6 +14,22 @@ import Label from "../../auth/Label";
 import LinkText from "../../auth/LinkText";
 import BeMineLogo from "../../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../../hooks/useValidation";
+import axios from "axios";
+
+// 로그인 응답 타입 정의
+interface LoginResponse {
+  resultType: "SUCCESS" | "FAIL";
+  error: {
+    errorCode: string;
+    reason: string;
+    data: any;
+  } | null;
+  success: {
+    created_at: string;
+    accessToken: string;
+    refreshToken: string;
+  } | null;
+}
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +40,19 @@ const LoginForm: React.FC = () => {
   const navigate = useNavigate();
 
   const validationRules = {
-    ...getValidationRules(2) // password 규칙 가져오기
+    email: (value: string) => {
+      if (!value) return "다시 입력해주세요.";
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return "다시 입력해주세요.";
+      return "";
+    },
+    password: (value: string) => {
+      if (!value) return "다시 입력해주세요.";
+      if (value.length < 4 || value.length > 15) {
+        return "다시 입력해주세요.";
+      }
+      return "";
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,19 +71,37 @@ const LoginForm: React.FC = () => {
     if (!isValid) return;
 
     try {
-      // 임시 로직 (API 연동 전)
-      if (formData.email === "test@example.com" && formData.password === "password123") {
+      const response = await axios.post<LoginResponse>(
+        'http://3.37.241.32:3000/users/login',
+        {
+          email: formData.email,
+          password: formData.password
+        }
+      );
+
+      if (response.data.resultType === "SUCCESS" && response.data.success) {
+        // 토큰 저장
+        localStorage.setItem('accessToken', response.data.success.accessToken);
+        localStorage.setItem('refreshToken', response.data.success.refreshToken);
+        
+        // 홈 페이지로 이동
         navigate("/");
-      } else {
-        validateField('email', formData.email, {
-          email: () => "이메일 또는 비밀번호가 올바르지 않습니다."
-        });
       }
-    } catch (err: any) {
-      console.error('Login error:', err);
-      validateField('email', formData.email, {
-        email: () => "로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorResponse = error.response?.data;
+        if (errorResponse?.error?.reason) {
+          // 에러 메시지 표시
+          validateField('email', formData.email, {
+            email: () => errorResponse.error.reason
+          });
+        } else {
+          validateField('email', formData.email, {
+            email: () => "로그인에 실패했습니다."
+          });
+        }
+      }
+      console.error('Login error:', error);
     }
   };
 
@@ -100,15 +146,12 @@ const LoginForm: React.FC = () => {
               />
             </div>
 
-            {errors.email && <ValidationMessage message={errors.email} />}
-
             <div
               style={{
-                display: "flex",
-                justifyContent: "flex-end",
                 marginTop: "45px",
               }}
             >
+              <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
               <AuthButton
                 type="submit"
                 disabled={!formData.email || !formData.password}

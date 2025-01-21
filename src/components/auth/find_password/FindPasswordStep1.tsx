@@ -26,7 +26,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
     if (nickname === "test" && email === "test@example.com") {
       onNext();
     } else {
-      setError("해당 닉네임의 가입 이메일이 존재하지 않습니다.");
+      setError("해당 정보와 일치하는 계정이 없습니다.");
     }
   };
 
@@ -36,6 +36,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
+          name="nickname"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
           onChange={(e) => {
@@ -48,6 +49,7 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
         <Label htmlFor="email">이메일</Label>
         <InputField
           type="email"
+          name="email"
           placeholder="이메일을 입력해주세요."
           value={email}
           onChange={(e) => {

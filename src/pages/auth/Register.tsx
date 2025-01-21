@@ -5,6 +5,10 @@ import RegisterStep3 from "../../components/auth/register/RegisterStep3";
 import FormContainer from "../../components/auth/FormContainer";
 import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../hooks/useValidation";
+import axios from 'axios';
+
+// 사용하지 않는 상수 제거
+
 
 const Register: React.FC = () => {
   const { getValidationRules, validateField, errors } = useValidation();
@@ -28,6 +32,21 @@ const Register: React.FC = () => {
     emailVerify: false,
   });
 
+  // 회원가입 응답 타입 수정
+  interface SignupResponse {
+    resultType: "SUCCESS" | "FAIL";
+    error: {
+      errorCode: string;
+      reason: string;
+      data: any;
+    } | null;
+    success: {
+      userId: number;
+      name: string;
+      created_at: string;
+    } | null;
+  }
+
   // 타이머 작동
   useEffect(() => {
     if (!timerActive || timeLeft <= 0) return;
@@ -48,31 +67,89 @@ const Register: React.FC = () => {
     setTimerActive(false); // 타이머 중지
   };
 
-  // 이메일 인증 코드 전송 함수
+  // 이메일 인증 코드 전송 함수 (임시 구현)
   const handleSendVerificationCode = async (email: string) => {
     try {
       setIsLoading(prev => ({ ...prev, emailSend: true }));
-      // TODO: API 호출 로직 구현
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 지연
+      await new Promise(resolve => setTimeout(resolve, 1000));
       startTimer();
-    } catch (error) {
-      console.error('이메일 전송 실패:', error);
+      alert('인증 코드가 발송되었습니다. (테스트용: 코드는 "123456"입니다)');
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error('이메일 전송 실패:', error.message);
     } finally {
       setIsLoading(prev => ({ ...prev, emailSend: false }));
     }
   };
 
-  // 인증 코드 확인 함수
+  // 인증 코드 확인 함수 (임시 구현)
   const handleVerifyCode = async (code: string) => {
     try {
       setIsLoading(prev => ({ ...prev, emailVerify: true }));
-      // TODO: API 호출 로직 구현
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 지연
-      setIsEmailVerified(true);
+      // 임시: 코드가 "123456"일 때만 성공
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 로딩 효과를 위한 지연
+      
+      if (code === "123456") {
+        setIsEmailVerified(true);
+        stopTimer();
+        alert('이메일 인증이 완료되었습니다.');
+      } else {
+        alert('잘못된 인증 코드입니다.');
+      }
     } catch (error) {
       console.error('인증 코드 확인 실패:', error);
     } finally {
       setIsLoading(prev => ({ ...prev, emailVerify: false }));
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      console.log('회원가입 요청 데이터:', { name: nickname, email, password });
+      
+      const response = await axios.post<SignupResponse>(
+        'http://3.37.241.32:3000/users/signup', 
+        {
+          name: nickname,
+          email,
+          password
+        },
+        {
+          timeout: 5000, // 5초 타임아웃 설정
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log('회원가입 응답:', response.data);
+
+      if (response.data.resultType === "SUCCESS" && response.data.success) {
+        console.log('회원가입 성공!');
+        localStorage.setItem('userId', response.data.success.userId.toString());
+        localStorage.setItem('userName', response.data.success.name);
+        setStep(3);
+      }
+    } catch (err: unknown) {
+      const error = err as Error;  // 기본 Error 타입으로 캐스팅
+      
+      console.error('회원가입 에러 상세:', {
+        message: error.message,
+        response: (error as any).response?.data,
+        status: (error as any).response?.status,
+        stack: error.stack
+      });
+      
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ECONNABORTED') {
+          alert('서버 응답 시간이 초과되었습니다.');
+        } else {
+          const errorMessage = error.response?.data?.error?.reason || '회원가입에 실패했습니다.';
+          alert(errorMessage);
+        }
+      } else {
+        alert('예기치 않은 오류가 발생했습니다.');
+      }
     }
   };
 
@@ -106,7 +183,7 @@ const Register: React.FC = () => {
             setPassword={setPassword}
             confirmPassword={confirmPassword}
             setConfirmPassword={setConfirmPassword}
-            onNext={() => setStep(3)}
+            onNext={handleRegister}
             validateField={validateField}
             errors={errors}
             getValidationRules={getValidationRules}

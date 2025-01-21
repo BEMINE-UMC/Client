@@ -54,3 +54,25 @@ export const LoginLinkContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+/** 회원가입 프로그레스 바 스타일 */
+export const StepProgressContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 40px;
+`;
+
+export const StepIndicator = styled.div<{ active: boolean; completed: boolean }>`
+  width: 32%;
+  height: 4px;
+  background-color: ${({ active, completed }) =>
+    active || completed ? '#007AFF' : '#E5E5E5'};
+  transition: background-color 0.3s ease;
+`;
+
+export const StepContent = styled.div<{ isVisible: boolean }>`
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transform: ${({ isVisible }) => (isVisible ? 'translateX(0)' : 'translateX(20px)')};
+  transition: all 0.3s ease;
+`;
