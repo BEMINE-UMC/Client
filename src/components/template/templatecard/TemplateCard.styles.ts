@@ -56,25 +56,20 @@ export const LikeSection = styled.div`
   justify-content: center; /* 가로 중앙 정렬 */
 `;
 
-export const LikeButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 30px;
-  display: flex;
-  align-items: center;
+interface LikeButtonProps {
+  liked: boolean; // liked 속성 추가
+}
 
-  .liked {
-    color: red;
-  }
+export const LikeButton = styled.button<LikeButtonProps>`
+background: transparent;
+border: none;
+cursor: pointer;
+color: ${(props) => (props.liked ? "#ff6347" : "#ccc")};
+font-size: 24px;
 
-  .not-liked {
-    color: #ccc;
-
-    &:hover {
-      color: red;
-    }
-  }
+&:hover {
+  color: #ff0000;
+}
 `;
 
 export const LikeCount = styled.span`

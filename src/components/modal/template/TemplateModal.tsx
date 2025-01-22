@@ -14,12 +14,14 @@ interface TemplateModalProps {
 }
 
 const TemplateModal: React.FC<TemplateModalProps> = ({ 
-  onClose, 
+  title,
+  author,
+  onClose,
   file,
-  download, 
-  liked, 
-  likesCount, 
-  onLikeToggle 
+  download,
+  liked,
+  likesCount,
+  onLikeToggle,
 }) => (
   <ModalContainer onClick={onClose}> {/* 모달 외부 클릭 시 닫기 */}
     <ModalContent onClick={(e) => e.stopPropagation()}> {/* 콘텐츠 클릭 시 모달 닫히지 않도록 처리 */}

@@ -39,6 +39,7 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
             liked={likedTemplates.includes(template.id)} // 좋아요 상태 전달
             likesCount={likedTemplates.filter(id => id === template.id).length} // 좋아요 개수 전달
             onClick={() => openModal(template)} // 클릭 시 모달 열기
+            onLikeToggle={() => toggleLike(template.id)}
           />
         ))}
       </ListContainer>

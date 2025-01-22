@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-
 import {
   CardContainer,
   ImageSection,
@@ -20,6 +19,7 @@ interface TemplateCardProps {
   liked: boolean;
   likesCount: number;
   onClick: () => void;
+  onLikeToggle: () => void;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -29,16 +29,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   liked,
   likesCount,
   onClick,
+  onLikeToggle,
 }) => {
-  
-  const [isLiked, setIsLiked] = useState(liked);
-  const [likeCount, setLikeCount] = useState(likesCount);
+  // const [isLiked, setIsLiked] = useState(liked);
+  // const [likeCount, setLikeCount] = useState(likesCount);
 
-  const toggleLike = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsLiked(!isLiked);
-    setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
-  };
+  // const toggleLike = () => {
+  //   setIsLiked(!isLiked);
+  //   setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+  // };
 
   return (
     <CardContainer onClick={onClick}>
@@ -49,10 +48,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
           <Title>{title}</Title>
         </Description>
         <LikeSection>
-          <LikeButton onClick={toggleLike}>
-            {isLiked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
+          <LikeButton liked={liked} onClick={onLikeToggle}>
+            {liked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
           </LikeButton>
-          <LikeCount>{likeCount}</LikeCount>
+          <LikeCount>{likesCount}</LikeCount>
         </LikeSection>
       </ContentSection>
     </CardContainer>
