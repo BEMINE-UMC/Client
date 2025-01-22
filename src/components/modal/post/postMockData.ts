@@ -19,12 +19,12 @@ export interface Post {
 export const postMockData: Post[] = [
     {
       id: 1,
-      image: "",  
-      author: "김현수",
-      title: "SNS 콘텐츠의 도달률을 높이는 5가지 비밀",
-      liked: false,
-      category: "콘텐츠 마케터",
-      likesCount: 1,
+      image: "", 
+      author: "김현수", 
+      title: "SNS 콘텐츠의 도달률을 높이는 5가지 비밀", 
+      liked: false, 
+      category: "콘텐츠 마케터", 
+      likesCount: 1, 
 
       userImage: UserImage,
       userInformation: `
@@ -115,7 +115,7 @@ export const postMockData: Post[] = [
       category: "브랜드 마케터",
       likesCount: 2,
 
-      id: 2,
+      id: 5,
       userImage: "", 
       userInformation: "",
       contentImage: "",
@@ -123,13 +123,13 @@ export const postMockData: Post[] = [
     },
     {
       image: "",
-      author: "윤슬",
+      author: "김현수",
       title: "Sample 3",
       liked: false,
-      category: "퍼포먼스 마케터",
+      category: "콘텐츠 마케터",
       likesCount: 3,
 
-      id: 3,
+      id: 6,
       userImage: "", 
       userInformation: "",
       contentImage: "",
@@ -143,7 +143,7 @@ export const postMockData: Post[] = [
       category: "바이럴 마케터",
       likesCount: 4,
 
-      id: 4,
+      id: 7,
       userImage: "", 
       userInformation: "",
       contentImage: "",

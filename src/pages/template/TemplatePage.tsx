@@ -4,6 +4,7 @@ import TemplateList from "../../components/template/TemplateList";
 import styled from "styled-components";
 
 const TemplatePage = () => {
+
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
 
   const handleCategorySelect = (category: string) => {

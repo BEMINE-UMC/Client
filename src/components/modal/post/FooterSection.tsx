@@ -1,0 +1,72 @@
+import React from "react";
+import styled from "styled-components";
+import { getImageOrDefault } from "../../../utils/imageUtils"; // 유틸 함수 import
+
+interface FooterProps {
+  author: string;
+  contentImage?: string; // 이미지가 없을 수도 있음
+}
+
+const FooterSection: React.FC<FooterProps> = ({ author, contentImage }) => {
+  return (
+    <>
+        <Container>
+            <Header>
+                <Author>{author}가 작성한 다른 게시물</Author>
+            </Header>
+        
+            <ImageContainer>
+                {/* 유틸 함수 적용 */}
+                <StyledImage src={getImageOrDefault(contentImage || "")} alt={`${author}님의 게시물`} />
+            </ImageContainer>
+
+        </Container>
+    </>
+  );
+};
+
+export default FooterSection;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column; /* 요소를 세로로 나열 */
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center; /* 수평 중앙 정렬 */
+  gap: 20px;
+`;
+
+const Header = styled.div`
+
+  
+  margin-bottom: 15px;
+`;
+
+const Author = styled.h2`
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+`;
+
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+`;
+
+const StyledImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 20px; /* 더 둥글게 설정 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 애니메이션 추가 */
+  overflow: visible;
+
+  &:hover {
+    transform: scale(1.05); /* 이미지 확대 */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  }
+`;

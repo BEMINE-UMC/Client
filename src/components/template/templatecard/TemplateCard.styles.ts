@@ -11,6 +11,7 @@ export const CardContainer = styled.div`
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
   }
 `;
 
@@ -50,14 +51,16 @@ export const Title = styled.p`
 
 export const LikeSection = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column; /* 세로 방향으로 콘텐츠 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
 `;
 
 export const LikeButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 30px;
   display: flex;
   align-items: center;
 
@@ -75,14 +78,12 @@ export const LikeButton = styled.button`
 `;
 
 export const LikeCount = styled.span`
-  font-size: 14px;
+  font-size: 15px;
   color: #555;
-  margin-left: 8px;
+  margin-top: 5px;
   font-weight: bold;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease;
 
-  ${CardContainer}:hover & {
-    opacity: 1;
-  }
+  
 `;

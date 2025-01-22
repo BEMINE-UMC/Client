@@ -1,5 +1,7 @@
 import TemplateSample from "../../../assets/images/template/TemplateSample.png"
 
+
+
 const templateMockData = [
     {
       id: 1,
@@ -9,6 +11,8 @@ const templateMockData = [
       liked: false,
       likesCount: 1,
       category: "콘텐츠 마케터",
+      file: "/pdf/PDF_sample.pdf",
+      download: "/ppt/PPT_sample.pptx"
     },
     {
       id: 2,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+
 import {
   CardContainer,
   ImageSection,
@@ -18,6 +19,7 @@ interface TemplateCardProps {
   image: string;
   liked: boolean;
   likesCount: number;
+  onClick: () => void;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -26,17 +28,20 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   image,
   liked,
   likesCount,
+  onClick,
 }) => {
+  
   const [isLiked, setIsLiked] = useState(liked);
   const [likeCount, setLikeCount] = useState(likesCount);
 
-  const toggleLike = () => {
+  const toggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsLiked(!isLiked);
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
   };
 
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       <ImageSection backgroundImage={image} />
       <ContentSection>
         <Description>

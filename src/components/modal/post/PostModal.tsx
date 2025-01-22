@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Post } from "./postMockData";
 import UserSection from "./UserSection";
 import ContentSection from "./ContentSection";
+import FooterSection from "./FooterSection";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -20,14 +21,14 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data }) => {
         <UserSection
           userImage={data.userImage}
           author={data.author}
-          userInformation={data.userInformation}
+          userInformation={data.userInformation}   
         />
         <ContentSection
           title={data.title}
           contentImage={data.contentImage}
           content={data.content}
         />
-        {/* <FooterSection/> */}
+        <FooterSection author={data.author} contentImage={data.contentImage} />
       </ModalContent>
     </ModalOverlay>
   );
