@@ -12,13 +12,12 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<typeof mockData[number] | null>(null);
   const [likedTemplates, setLikedTemplates] = useState<number[]>([]);
 
-  // 필터링된 데이터: 전체 또는 선택된 카테고리에 맞는 데이터
   const filteredData = selectedCategory === "전체"
     ? mockData
     : mockData.filter((template) => template.category === selectedCategory);
 
-  const openModal = (template: typeof mockData[number]) => setSelectedTemplate(template); // 모달 열기
-  const closeModal = () => setSelectedTemplate(null); // 모달 닫기
+  const openModal = (template: typeof mockData[number]) => setSelectedTemplate(template); 
+  const closeModal = () => setSelectedTemplate(null); 
 
   // 좋아요 상태 업데이트 함수
   const toggleLike = (templateId: number) => {
@@ -47,7 +46,7 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
         <TemplateModal
           title={selectedTemplate.title}
           author={selectedTemplate.author}
-          onClose={closeModal} // 모달 닫기 함수 전달
+          onClose={closeModal} 
           file={selectedTemplate.file}
           download={selectedTemplate.download}
           liked={likedTemplates.includes(selectedTemplate.id)} // 좋아요 상태 전달
