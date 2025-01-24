@@ -1,4 +1,5 @@
-import axios from 'axios';
+import api from './axios';
+import { useAuthStore } from '../store/authStore';
 
 interface RefreshResponse {
   resultType: "SUCCESS" | "FAIL";
@@ -14,32 +15,27 @@ interface RefreshResponse {
 
 export const refreshTokens = async () => {
   try {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = useAuthStore.getState().refreshToken;
     
     if (!refreshToken) {
       throw new Error('No refresh token found');
     }
 
-    const response = await axios.post<RefreshResponse>(
-      'http://3.37.241.32:3000/users/refresh',
-      { refreshToken }
-    );
+    const response = await api.post<RefreshResponse>('/users/refresh', { refreshToken });
 
     if (response.data.resultType === "SUCCESS" && response.data.success) {
-      // 새로운 access token만 저장
-      localStorage.setItem('accessToken', response.data.success.accessToken);
+      // Zustand store 업데이트
+      useAuthStore.getState().setLoggedIn(
+        response.data.success.accessToken,
+        refreshToken  // refresh token은 그대로 유지
+      );
       return response.data.success.accessToken;
     } else {
       throw new Error(response.data.error?.reason || 'Token refresh failed');
     }
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.error?.reason || 'Token refresh failed';
-      console.error('Token refresh error:', errorMessage);
-    }
-    // 토큰 갱신 실패 시 로그아웃 처리
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    // 토큰 갱신 실패 시 로그아웃
+    useAuthStore.getState().setLoggedOut();
     window.location.href = '/login';
     throw error;
   }

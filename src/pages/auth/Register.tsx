@@ -7,9 +7,7 @@ import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../hooks/useValidation";
 import api from '../../api/axios';
 import { isAxiosError } from 'axios';
-
-// 사용하지 않는 상수 제거
-
+import AnimatedBackground from '../../components/common/AnimatedBackground';
 
 const Register: React.FC = () => {
   const { getValidationRules, validateField, errors } = useValidation();
@@ -123,7 +121,7 @@ const Register: React.FC = () => {
         setStep(3);
       }
     } catch (err: unknown) {
-      const error = err as Error;  // 기본 Error 타입으로 캐스팅
+      const error = err as Error;
       
       console.error('회원가입 에러 상세:', {
         message: error.message,
@@ -145,67 +143,65 @@ const Register: React.FC = () => {
     }
   };
 
-  const renderCurrentStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <RegisterStep1
-            nickname={nickname}
-            setNickname={setNickname}
-            email={email}
-            setEmail={setEmail}
-            verificationCode={verificationCode}
-            setVerificationCode={setVerificationCode}
-            onNext={() => setStep(2)}
-            startTimer={startTimer}
-            timeLeft={timeLeft}
-            validateField={validateField}
-            errors={errors}
-            getValidationRules={getValidationRules}
-            isEmailVerified={isEmailVerified}
-            isLoading={isLoading}
-            onSendVerificationCode={handleSendVerificationCode}
-            onVerifyCode={handleVerifyCode}
-          />
-        );
-      case 2:
-        return (
-          <RegisterStep2
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            onNext={handleRegister}
-            validateField={validateField}
-            errors={errors}
-            getValidationRules={getValidationRules}
-          />
-        );
-      case 3:
-        return <RegisterStep3 nickname={nickname} />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100vw",
-        height: "calc(100vh - 5rem)",
-        flexDirection: "column",
-      }}
-    >
-      <img
-        src={BeMineLogo}
-        alt="BeMine Logo"
-        style={{ display: "block", margin: "0 auto 96px"  }}
-      />
-      <FormContainer>{renderCurrentStep()}</FormContainer>
-    </div>
+    <>
+      <AnimatedBackground />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100vw",
+          height: "calc(100vh - 5rem)",
+          flexDirection: "column",
+        }}
+      >
+        <FormContainer>
+          <img
+            src={BeMineLogo}
+            alt="BeMine Logo"
+            style={{ 
+              display: "block", 
+              marginBottom: "45px",
+              alignSelf: "flex-start"  // 왼쪽 정렬
+            }}
+          />
+          {step === 1 && (
+            <RegisterStep1
+              nickname={nickname}
+              setNickname={setNickname}
+              email={email}
+              setEmail={setEmail}
+              verificationCode={verificationCode}
+              setVerificationCode={setVerificationCode}
+              onNext={() => setStep(2)}
+              startTimer={startTimer}
+              timeLeft={timeLeft}
+              validateField={validateField}
+              errors={errors}
+              getValidationRules={getValidationRules}
+              isEmailVerified={isEmailVerified}
+              isLoading={isLoading}
+              onSendVerificationCode={handleSendVerificationCode}
+              onVerifyCode={handleVerifyCode}
+            />
+          )}
+          {step === 2 && (
+            <RegisterStep2
+              password={password}
+              setPassword={setPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              onNext={handleRegister}
+              validateField={validateField}
+              errors={errors}
+              getValidationRules={getValidationRules}
+            />
+          )}
+          {step === 3 && <RegisterStep3 nickname={nickname} />}
+        </FormContainer>
+      </div>
+    </>
   );
 };
 

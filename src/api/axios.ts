@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { refreshTokens } from './refresh';
+import { useAuthStore } from '../store/authStore';
 
 const instance = axios.create({
   baseURL: 'http://3.37.241.32:3000',
@@ -11,9 +12,9 @@ const instance = axios.create({
 // 요청 인터셉터 - 토큰 추가
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const accessToken = useAuthStore.getState().accessToken;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -40,6 +41,8 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
       } catch (refreshError) {
+        // 토큰 갱신 실패 시 로그아웃 상태로 변경
+        useAuthStore.getState().setLoggedOut();
         return Promise.reject(refreshError);
       }
     }

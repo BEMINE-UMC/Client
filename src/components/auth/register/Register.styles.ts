@@ -2,9 +2,13 @@ import styled from "styled-components";
 
 /** RegisterStep1, RegisterStep2, RegisterStep3 공통 스타일 */
 export const TimerMessage = styled.div`
-  margin-top: 10px;
-  font-size: 12px;
-  color: gray;
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+  
+  span {
+    font-weight: bold;
+  }
 `;
 
 export const StepContainer = styled.div`

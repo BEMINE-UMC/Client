@@ -16,6 +16,7 @@ import BeMineLogo from "../../../assets/images/main/Logo_Text.svg";
 import useValidation from "../../../hooks/useValidation";
 import api from '../../../api/axios';
 import { isAxiosError } from 'axios';
+import { useAuthStore } from '../../../store/authStore';
 
 // 로그인 응답 타입 정의
 interface LoginResponse {
@@ -39,6 +40,7 @@ const LoginForm: React.FC = () => {
   });
   const { errors, validateField, validate, getValidationRules } = useValidation();
   const navigate = useNavigate();
+  const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
 
   const validationRules = {
     email: (value: string) => {
@@ -78,11 +80,10 @@ const LoginForm: React.FC = () => {
       });
 
       if (response.data.resultType === "SUCCESS" && response.data.success) {
-        // 토큰 저장
-        localStorage.setItem('accessToken', response.data.success.accessToken);
-        localStorage.setItem('refreshToken', response.data.success.refreshToken);
-        
-        // 홈 페이지로 이동
+        setLoggedIn(
+          response.data.success.accessToken,
+          response.data.success.refreshToken
+        );
         navigate("/");
       }
     } catch (error) {

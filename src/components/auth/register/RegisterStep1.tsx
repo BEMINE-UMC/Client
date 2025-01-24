@@ -50,7 +50,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
 
   return (
     <>
-      <div style={{ marginBottom: "15px" }}>
+      <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
@@ -65,7 +65,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
         />
       </div>
       {errors.nickname && <ValidationMessage message={errors.nickname} />}
-      <div>
+      <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="email">이메일</Label>
         <HorizontalInputGroup>
           <InputField
@@ -81,7 +81,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           />
           <AuthButton
             disabled={!!errors.email || !email || isLoading.emailSend}
-            fontSize="16px"
+            fontSize="15px"
             onClick={async () => {
               startTimer();
               await onSendVerificationCode(email);
@@ -93,7 +93,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
         {errors.email && <ValidationMessage message={errors.email} />}
       </div>
 
-      <div>
+      <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="verificationCode">인증번호</Label>
         <HorizontalInputGroup>
           <InputField
@@ -110,21 +110,27 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           <AuthButton
             disabled={!!errors.verificationCode || !verificationCode || isLoading.emailVerify}
             onClick={() => onVerifyCode(verificationCode)}
+            fontSize="15px"
           >
-            {isLoading.emailVerify ? "확인 중..." : "인증"}
+            {isLoading.emailVerify ? "확인 중..." : "인증하기"}
           </AuthButton>
         </HorizontalInputGroup>
         {errors.verificationCode && <ValidationMessage message={errors.verificationCode} />}
-        {isEmailVerified && <ValidationMessage type="success" message="이메일이 성공적으로 인증되었습니다." />}
-      </div>
-
-      <TimerMessage>
-        {timeLeft > 0 ? (
-          `남은 시간: ${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, "0")}`
+        {isEmailVerified ? (
+          <ValidationMessage 
+            type="success" 
+            message="인증되었습니다." 
+          />
         ) : (
-          <ValidationMessage message="인증 시간이 초과되었습니다. 다시 시도하세요." />
+          <TimerMessage>
+            {timeLeft > 0 ? (
+              <span>{`남은시간 ${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, "0")}`}</span>
+            ) : (
+              <ValidationMessage message="인증 시간이 초과되었습니다. 다시 시도하세요." />
+            )}
+          </TimerMessage>
         )}
-      </TimerMessage>
+      </div>
 
       <div style={{  width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
         <AuthButton
@@ -136,8 +142,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             !isEmailVerified || 
             Object.values(errors).some((error) => error !== "")
           }
-          width="143px"
+          width="130px"
           height="65px"
+          fontSize="20px"
         >
           다음
         </AuthButton>

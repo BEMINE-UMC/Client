@@ -15,35 +15,32 @@ interface AuthButtonProps {
   height?: string;
   /** 버튼 타입 설정 */
   type?: 'button' | 'submit' | 'reset';
+  /** 버튼 텍스트 색상 */
+  color?: string;
 }
 
-const StyledAuthButton = styled.button<{
-  disabled?: boolean;
-  width?: string;
-  fontSize?: string;
-  height?: string;
-}>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: ${({ fontSize }) => fontSize || "20px"};
-  font-weight: bold;
+const AuthButton = styled.button<AuthButtonProps>`
+  width: ${props => props.width || '100%'};
+  height: 60px;
+  background-color: ${props => props.disabled ? '#D3D3D3' : '#FFE100'};
   border: none;
   border-radius: 10px;
-  padding: 20px 0;
-  width: ${({ width }) => width || "143px"};
-  height: ${({ height }) => height || "60px"};
-  box-sizing: border-box;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  color: ${({ disabled }) => (disabled ? "#fff" : "#000")};
-  background-color: ${({ disabled }) => (disabled ? "#e0e0e0" : "#FFE100")};
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  font-size: ${props => props.fontSize || '16px'};
+  font-weight: bold;
+  color: ${props => props.disabled ? '#FFFFFF' : '#000000'};
+  transition: all 0.3s ease;
 
   &:hover {
-    opacity: ${({ disabled }) => (disabled ? "1" : "0.9")};
+    background-color: ${props => props.disabled ? '#D3D3D3' : '#FFD000'};
+  }
+
+  &:active {
+    background-color: ${props => props.disabled ? '#D3D3D3' : '#FFC000'};
   }
 `;
 
-const AuthButton: React.FC<AuthButtonProps> = ({
+const AuthButtonComponent: React.FC<AuthButtonProps> = ({
   disabled = false,
   onClick,
   children,
@@ -51,19 +48,21 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   fontSize,
   height,
   type,
+  color,
 }) => {
   return (
-    <StyledAuthButton
+    <AuthButton
       disabled={disabled}
       onClick={!disabled ? onClick : undefined}
       width={width}
       fontSize={fontSize}
       height={height}
       type={type}
+      color={color}
     >
       {children}
-    </StyledAuthButton>
+    </AuthButton>
   );
 };
 
-export default AuthButton;
+export default AuthButtonComponent;

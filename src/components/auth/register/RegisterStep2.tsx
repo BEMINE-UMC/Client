@@ -29,7 +29,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
 
   return (
     <>
-      <div style={{ marginBottom: "15px" }}>
+      <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
@@ -47,7 +47,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
         {errors.password && <ValidationMessage message={errors.password} />}
       </div>
 
-      <div style={{ marginBottom: "15px" }}>
+      <div style={{ marginBottom: "73px" }}>
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
@@ -60,15 +60,18 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
             validateField("confirmPassword", value, rules);
           }}
         />
+        <div style={{ marginTop: "20px" }}></div>
+        {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
       </div>
-      {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
+      
 
-      <div style={{ width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
+      <div style={{ width:"100%", display: "flex", justifyContent: "flex-end",}}>
         <AuthButton
           onClick={onNext}
           disabled={!password || !confirmPassword || Object.values(errors).some((error) => error !== "")}
-          width="143px"
+          width="130px"
           height="65px"
+          fontSize="20px"
         >
           다음
         </AuthButton>
