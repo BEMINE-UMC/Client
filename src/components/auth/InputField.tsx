@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 interface InputFieldProps {
   /** 입력 필드의 타입 (text, email, password 등) */
-  type: 'text' | 'email' | 'password';
+  type: string;
+  name: string;
   /** 입력 필드에 표시할 placeholder */
-  placeholder?: string;
+  placeholder: string;
   /** 입력 필드의 현재 값 */
   value: string;
   /** 값 변경 시 호출될 이벤트 핸들러 */
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 /** 텍스트 입력 필드를 제공하는 공용 컴포넌트 */
@@ -35,8 +36,14 @@ const StyledInput = styled.input`
 
 
 
-const InputField: React.FC<InputFieldProps> = ({ type, placeholder, value, onChange }) => {
-  return <StyledInput type={type} placeholder={placeholder} value={value} onChange={onChange} />;
+const InputField: React.FC<InputFieldProps> = ({ type, name, placeholder, value, onChange }) => {
+  return <StyledInput 
+    type={type} 
+    name={name}
+    placeholder={placeholder} 
+    value={value} 
+    onChange={onChange} 
+  />;
 };
 
 export default InputField;

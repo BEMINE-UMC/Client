@@ -14,10 +14,10 @@ const GroupContainer = styled.div`
   margin-bottom: 15px;
 
   & > *:first-child {
-    width:425px; /* 입력 필드 */
+    width:412px; /* 입력 필드 */
   }
   & > *:last-child {
-    width: 117px; /* 버튼 */
+    width: 130px; /* 버튼 */
   }
 `;
 

@@ -47,6 +47,7 @@ const useValidation = () => {
             if (!value) return "닉네임을 입력해주세요.";
             if (value.length > 15 || /\s/.test(value))
               return "닉네임은 최대 15자 공백 없이 입력해주세요.";
+            if (value === "duplicated") return "중복되는 닉네임입니다.";
             return "";
           },
           email: (value: string) => {
@@ -54,13 +55,17 @@ const useValidation = () => {
             if (!value) return "이메일을 입력해주세요.";
             return !pattern.test(value) ? "올바른 이메일을 작성해주세요." : "";
           },
-          verificationCode: (value: string) =>
-            !value ? "인증번호를 입력해주세요." : "",
+          verificationCode: (value: string) => {
+            if (!value) return "인증번호를 입력해주세요.";
+            if (value === "invalid") return "인증번호가 올바르지 않습니다.";
+            return "";
+          },
         };
 
         const step2Rules = {
           password: (value: string) => {
             if (!value) return "비밀번호를 입력해주세요.";
+            if (value.length < 4) return "비밀번호는 최소 4자 이상 입력해야 합니다.";
             if (value.length > 15 || /\s/.test(value))
               return "비밀번호는 최대 15자 공백 없이 입력해주세요.";
             return "";

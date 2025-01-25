@@ -8,14 +8,22 @@ import CustomDivider from "../../pages/mine/components/CustomDivider";
 import logo from '../../assets/images/main/BeMine_3D.png';
 import logotext from '../../assets/images/main/Logo_Text.svg';
 import SearchInput from "./SearchInput";
+import { useAuthStore } from '../../store/authStore';
 
 const Header = () => {
     const navigate = useNavigate();
-    const GoMain = () => { navigate('/'); }
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const setLoggedOut = useAuthStore((state) => state.setLoggedOut);
 
+    const GoMain = () => { navigate('/'); }
     const GoTemplate = () => { navigate('/template'); }
     const GoMy = () => { navigate('/my'); }
     const GoLogin = () => { navigate('/login'); }
+
+    const handleLogout = () => {
+        setLoggedOut();
+        navigate('/');
+    };
 
     return (
         <>
@@ -32,17 +40,30 @@ const Header = () => {
 
                     <CustomRow $width="auto" $height="auto" $gap="0.5rem">
                         <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
+                            onClick={GoMain}>
+                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">홈</CustomFont>
+                        </CustomButton>
+                        <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
                             onClick={GoTemplate}>
                             <CustomFont $color="black" $fontweight="bold" $font="0.9rem">템플릿</CustomFont>
                         </CustomButton>
-                        <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
-                            onClick={GoMy}>
-                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">마이페이지</CustomFont>
-                        </CustomButton>
-                        <CustomButton $width='auto' $height='auto' $padding="0.5rem 1rem" $backgroundColor="#FFE100" $borderRadius="5rem"
-                            onClick={GoLogin}>
-                            <CustomFont $color="black" $fontweight="bold" $font="0.9rem">시작하기</CustomFont>
-                        </CustomButton>
+                        {isLoggedIn ? (
+                            <>
+                                <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
+                                    onClick={GoMy}>
+                                    <CustomFont $color="black" $fontweight="bold" $font="0.9rem">마이페이지</CustomFont>
+                                </CustomButton>
+                                <CustomButton $width='auto' $height='auto' $padding="0.5rem" $backgroundColor="transparent" $borderRadius="5rem"
+                                    onClick={handleLogout}>
+                                    <CustomFont $color="black" $fontweight="bold" $font="0.9rem">로그아웃</CustomFont>
+                                </CustomButton>
+                            </>
+                        ) : (
+                            <CustomButton $width='auto' $height='auto' $padding="0.5rem 1rem" $backgroundColor="#FFE100" $borderRadius="5rem"
+                                onClick={GoLogin}>
+                                <CustomFont $color="black" $fontweight="bold" $font="0.9rem">시작하기</CustomFont>
+                            </CustomButton>
+                        )}
                     </CustomRow>
                 </CustomRow>
             </CustomBox>
