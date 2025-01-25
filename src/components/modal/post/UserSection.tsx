@@ -36,6 +36,12 @@ const UserImage = styled.img`
   width: 300px;
   height: 300px;
   border-radius: 10px;
+
+  @media (max-width: 480px) {
+    margin: 0;
+    width: 180px;
+    height: 180px;
+  }
 `;
 
 const UserInfoWrapper = styled.div`
@@ -50,6 +56,12 @@ const ModalAuthor = styled.h3`
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
+
+  @media (max-width: 480px) {
+    margin-top: -25px;
+    gap: 10px;
+    font-size: 25px;
+  }
 `;
 
 const UserInformation = styled.pre`
@@ -58,4 +70,9 @@ const UserInformation = styled.pre`
   line-height: 1.6;
   white-space: pre-wrap;
   margin-left: 5%;
+
+  @media (max-width: 480px) {
+    margin-top: -20px;
+    font-size: 5px;
+  }
 `;

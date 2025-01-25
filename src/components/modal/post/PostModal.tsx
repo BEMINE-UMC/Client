@@ -47,6 +47,11 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
+  @media (max-width: 480px) {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
 `;
 
 const ModalContent = styled.div`
@@ -65,6 +70,13 @@ const ModalContent = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  @media (max-width: 480px) {
+    margin-top: -10px;
+    width: 50%;
+    padding: 15px;
+    max-height: 80vh;
+  }
 `;
 
 const CloseButton = styled.button`

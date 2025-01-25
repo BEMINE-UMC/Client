@@ -25,6 +25,10 @@ const Wrapper = styled.div`
   align-items: center;
   margin-top: 20px;
   border-bottom: 1px solid #ddd;
+
+  @media (max-width: 480px) {
+    margin-top: 10px;
+  }
 `;
 
 const ModalTitle = styled.h4`
@@ -32,6 +36,11 @@ const ModalTitle = styled.h4`
   font-size: 30px;
   font-weight: bold;
   color: black;
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    margin: 10px 0;
+  }
 `;
 
 const ModalImage = styled.img`
@@ -39,6 +48,11 @@ const ModalImage = styled.img`
   height: auto;
   border-radius: 10px;
   margin: 20px 0;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    margin: 10px 0;
+  }
 `;
 
 const Content = styled.div`
@@ -47,4 +61,9 @@ const Content = styled.div`
   line-height: 1.6;
   white-space: pre-wrap;
   margin-bottom: 7.5%;  
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    margin-bottom: 10%;
+  }
 `;

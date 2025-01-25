@@ -41,7 +41,17 @@ const CategoryContainer = styled.div`
   align-items: center;
   gap: 10px;
   margin: 16px 0;
-  margin-bottom: 40px
+  margin-bottom: 40px;
+  margin-left: 50px;
+
+  /* 모바일 해상도 (최대 480px) 대응 */
+  @media (max-width: 480px) {
+    gap: 8px; /* 요소 간격 줄이기 */
+    margin-left: 10px; /* 좌측 여백 줄이기 */
+    flex-wrap: wrap; /* 여러 줄 배치 */
+    margin-bottom: 20px;
+
+  }
 `;
 
 const CategoryButton = styled.button`
@@ -59,6 +69,17 @@ const CategoryButton = styled.button`
   &:hover {
     background-color: #f3f3f3;
   }
+
+  /* 모바일 해상도 (최대 480px) 대응 */
+  @media (max-width: 480px) {
+    padding: 6px 10px; /* 버튼 크기 줄이기 */
+    font-size: 12px; /* 텍스트 크기 줄이기 */
+    min-width: 100px; /* 최소 버튼 너비 설정 */
+    height: auto; /* 버튼 높이 조정 */
+    gap: 4px; /* 이미지와 텍스트 간 간격 조정 */
+    
+  }
+    
 `;
 
 const CategoryImage = styled.div<{ src?: string; color?: string }>`
@@ -70,4 +91,11 @@ const CategoryImage = styled.div<{ src?: string; color?: string }>`
   background-image: ${({ src }) => (src ? `url(${src})` : "none")};
   background-size: contain;
   background-position: center;
-`;
+  
+   @media (max-width: 480px) {
+    width: 20px; /* 모바일에서 이미지 크기 줄이기 */
+    height: 20px;
+    margin-right: 0; /* 세로 정렬을 위해 여백 제거 */
+  }
+
+  `;

@@ -63,15 +63,24 @@ export default PostList;
 const PostListWrapper = styled.div`
   display: flex;
   justify-content: center; 
-  width: 100%; 
+  width: 100%;
+
 `;
 
 const PostCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap; /* 줄 바꿈 */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 모바일: 한 줄에 2장 */
   justify-content: center; /* 가로 중앙 정렬 */
-  gap: 2.5%; /* 카드 간 간격 */
+  gap: 3%; /* 카드 간 간격 */
   width: 100%; 
   padding: 10px;
   margin-right: 5%;
+
+  @media (max-width: 480px) { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 모바일: 한 줄에 2장 */
+    gap: 30px; /* 모바일에서 간격을 조금 더 좁게 */
+    margin-left: 7%
+  
+  }
 `;

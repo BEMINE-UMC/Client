@@ -33,4 +33,11 @@ const NoticeBoardContainer = styled.div`
   position: relative; /* 부모로부터의 정렬 영향 제거 */
   box-sizing: border-box; 
   gap: 10px;
+
+  /* 모바일 해상도 (최대 480px) 대응 */
+  @media (max-width: 480px) {
+    padding-left: 20px; /* 모바일에서는 왼쪽 여백을 적게 설정 */
+    gap: 0px;
+
+  }
 `;
