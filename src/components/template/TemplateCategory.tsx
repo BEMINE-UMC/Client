@@ -36,10 +36,21 @@ const TemplateCategory: React.FC<TemplateCategoryProps> = ({ onCategorySelect })
 export default TemplateCategory;
 
 const CategoryContainer = styled.div`
-  
   display: flex;
   gap: 10px;
   margin: 16px 0;
+
+  @media (max-width: 480px) {
+    // display: grid;
+    // grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 버튼이 가로로 배치되도록 설정 */
+    // max-width: 1000px;
+    display: inline-flex; /* 자식 요소를 가로로 정렬 */
+    width: 100%; /* 부모 요소의 너비에 맞춤 */
+    overflow-x: auto; /* 가로 스크롤 활성화 */
+    -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 (iOS) */
+    white-space: nowrap; /* 자식 요소가 한 줄로 배치되도록 설정 */
+
+  }
 `;
 
 const CategoryButton = styled.button`
@@ -56,6 +67,11 @@ const CategoryButton = styled.button`
 
   &:hover {
     background-color: #f3f3f3;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 `;
 

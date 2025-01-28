@@ -67,4 +67,8 @@ const ListContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   padding: 16px;
+  
+  @media (max-width: 480px) {
+    justify-content: center;
+  }
 `;

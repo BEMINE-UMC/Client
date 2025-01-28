@@ -113,6 +113,10 @@ const LikeButton = styled.button`
   &:active {
     transform: scale(0.95); /* 클릭 시 약간의 크기 축소 효과 */
   }
+  
+  @media (max-width: 480px) {
+    
+  }
 `;
 
 const DownloadButton = styled.a`
