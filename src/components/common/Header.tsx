@@ -28,7 +28,7 @@ const Header = () => {
     return (
         <>
             <CustomBox $width="100%" $height="auto" $padding="1rem" $backgroundcolor="white" $justifycontent="center" $alignitems="center" $borderradius="0">
-                <CustomRow $width="100%" $height="auto" $padding="0" $alignitems="center" $justifycontent="center" $gap="3rem">
+                <CustomRow $width="100%" $height="auto" $padding="0" $alignitems="center" $justifycontent="space-around">
                     <CustomButton $width='auto' $height='auto' $backgroundColor="transparent" $padding="0" onClick={GoMain}>
                         <CustomRow $width="auto" $height="auto" $gap="0.5rem">
                             <StyledImg src={logo} $width="4rem" />
