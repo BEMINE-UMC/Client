@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  BackgroundContainer,
-  SvgBackground,
-  GradientOverlay,
   FormWrapper,
 } from "./LoginForm.styles";
 import FormContainer from "../../auth/FormContainer";
@@ -105,91 +102,87 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <BackgroundContainer>
-      <SvgBackground />
-      <GradientOverlay />
-      <FormWrapper>
-        <FormContainer>
-          <form onSubmit={handleSubmit}>
-            <span>
-              <img
-                src={BeMineLogo}
-                alt="BeMine Logo"
-                style={{
-                  margin: "0 auto 45px",
-                  display: "flex",
-                  alignItems: "flex-start",
-                }}
-              />
-            </span>
-            
-            <div style={{ marginBottom: "15px" }}>
-              <Label htmlFor="email">이메일</Label>
-              <InputField
-                type="email"
-                name="email"
-                placeholder="이메일을 입력해주세요."
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div style={{ marginBottom: "15px" }}>
-              <Label htmlFor="password">비밀번호</Label>
-              <InputField
-                type="password"
-                name="password"
-                placeholder="비밀번호를 입력해주세요."
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div
+    <FormWrapper>
+      <FormContainer>
+        <form onSubmit={handleSubmit}>
+          <span>
+            <img
+              src={BeMineLogo}
+              alt="BeMine Logo"
               style={{
-                marginTop: "45px",
+                margin: "0 auto 45px",
+                display: "flex",
+                alignItems: "flex-start",
               }}
-            >
-              <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
-              <AuthButton
-                type="submit"
-                disabled={!formData.email || !formData.password}
-                fontSize="20px"
-                width="552px"
-              >
-                로그인
-              </AuthButton>
-            </div>
-          </form>
+            />
+          </span>
+          
+          <div style={{ marginBottom: "15px" }}>
+            <Label htmlFor="email">이메일</Label>
+            <InputField
+              type="email"
+              name="email"
+              placeholder="이메일을 입력해주세요."
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
 
-          {/* 링크 섹션 */}
+          <div style={{ marginBottom: "15px" }}>
+            <Label htmlFor="password">비밀번호</Label>
+            <InputField
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력해주세요."
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "20px",
-              gap: "10px",
-              fontSize: "14px",
-              width: "100%",
-              color: "#B9B9B9",
+              marginTop: "45px",
             }}
           >
-            <LinkText to="/find-email" underline={false}>
-              이메일을 잊으셨나요?
-            </LinkText>
-            <span>|</span>
-            <LinkText to="/find-password" underline={false}>
-              비밀번호를 잊으셨나요?
-            </LinkText>
-            <span>|</span>
-            <LinkText to="/register" underline={false}>
-              회원가입
-            </LinkText>
+            <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
+            <AuthButton
+              type="submit"
+              disabled={!formData.email || !formData.password}
+              fontSize="20px"
+              width="552px"
+            >
+              로그인
+            </AuthButton>
           </div>
-        </FormContainer>
-      </FormWrapper>
-    </BackgroundContainer>
+        </form>
+
+        {/* 링크 섹션 */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "20px",
+            gap: "10px",
+            fontSize: "14px",
+            width: "100%",
+            color: "#B9B9B9",
+          }}
+        >
+          <LinkText to="/find-email" underline={false}>
+            이메일을 잊으셨나요?
+          </LinkText>
+          <span>|</span>
+          <LinkText to="/find-password" underline={false}>
+            비밀번호를 잊으셨나요?
+          </LinkText>
+          <span>|</span>
+          <LinkText to="/register" underline={false}>
+            회원가입
+          </LinkText>
+        </div>
+      </FormContainer>
+    </FormWrapper>
   );
 };
 

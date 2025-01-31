@@ -11,7 +11,7 @@ const BackgroundContainer = styled.div`
   overflow: hidden;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 73%,
     rgba(106, 106, 106, 0.5) 100%
   );
 `;
@@ -27,10 +27,15 @@ const BackgroundImage = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   transform: translate(-50%, -50%);
+  opacity: 0.7;
+
+  /* SVG 렌더링 최적화 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 `;
 
 const AnimatedBackground = () => {
-  console.log('Background image URL:', BeMine3D); // 이미지 경로 확인용
+  //console.log('Background image URL:', BeMine3D); // SVG 경로 확인
   return (
     <BackgroundContainer>
       <BackgroundImage />

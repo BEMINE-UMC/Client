@@ -22,30 +22,15 @@ const FormContainer = styled.div<FormContainerProps>`
   max-width: 100%;
   max-height: 100%;
   min-height: 409px;
-  
-  /* 부드러운 테두리 효과 */
   position: relative;
   
-  &::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 20px;
-    background: linear-gradient(
-      to right,
-      rgba(255, 225, 0, 0.5),
-      rgba(255, 225, 0, 0.7)
-    );
-    z-index: -1;
-    filter: blur(4px);
-  }
-
-  /* 배경색이 테두리와 자연스럽게 어우러지도록 */
+  /* box-shadow를 사용한 블러 테두리 효과 */
+  box-shadow: 
+    0 0 10px 3px rgba(255, 225, 0, 0.6),  /* 중간 블러 */
+    0 0 20px 8px rgba(255, 225, 0, 0.3); /* 넓은 블러 */
+  
+  /* 배경색 */
   background: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 225, 0, 0.2);
 `;
 
 //내부 padding props로 받아오기
