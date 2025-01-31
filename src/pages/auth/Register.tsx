@@ -161,8 +161,11 @@ const Register: React.FC = () => {
             src={BeMineLogo}
             alt="BeMine Logo"
             style={{ 
+              width: "145px",
+              height: "32px",
               display: "block", 
               marginBottom: "45px",
+              marginLeft: "5px",
               alignSelf: "flex-start"  // 왼쪽 정렬
             }}
           />

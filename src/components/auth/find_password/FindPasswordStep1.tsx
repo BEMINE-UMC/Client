@@ -1,9 +1,11 @@
-import React from "react";
-import InputField from "../../auth/InputField";
-import ValidationMessage from "../../auth/ValidationMessage";
-import AuthButton from "../../auth/AuthButton";
-import Label from "../../auth/Label";
-import { StepContainer } from "./FindPassword.styles";
+import React, { useState } from "react";
+import InputField from "../InputField";
+import Label from "../Label";
+import ValidationMessage from "../ValidationMessage";
+import AuthButton from "../AuthButton";
+import api from "../../../api/axios";
+import { isAxiosError } from "axios";
+import useValidation from "../../../hooks/useValidation";
 
 interface FindPasswordStep1Props {
   nickname: string;
@@ -13,6 +15,15 @@ interface FindPasswordStep1Props {
   onNext: () => void;
 }
 
+interface CheckUserResponse {
+  resultType: "SUCCESS" | "FAIL";
+  error?: {
+    errorCode: string;
+    reason: string;
+    data: any;
+  };
+}
+
 const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
   nickname,
   setNickname,
@@ -20,54 +31,108 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
   setEmail,
   onNext,
 }) => {
-  const [error, setError] = React.useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { errors, validateField, validate } = useValidation();
 
-  const handleNext = () => {
-    if (nickname === "test" && email === "test@example.com") {
-      onNext();
-    } else {
-      setError("해당 정보와 일치하는 계정이 없습니다.");
+  const validationRules = {
+    nickname: (value: string) => {
+      if (!value) return "닉네임을 입력해주세요.";
+      return "";
+    },
+    email: (value: string) => {
+      if (!value) return "이메일을 입력해주세요.";
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return "올바른 이메일 형식이 아닙니다.";
+      return "";
+    },
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "nickname") setNickname(value);
+    if (name === "email") setEmail(value);
+    validateField(name, value, validationRules);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const { isValid } = validate({ nickname, email }, validationRules);
+    if (!isValid) return;
+
+    try {
+      setIsLoading(true);
+      const response = await api.get<CheckUserResponse>(
+        `/users/search/password/check?name=${nickname}&email=${email}`
+      );
+
+      if (response.data.resultType === "SUCCESS") {
+        onNext();
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const errorResponse = error.response?.data;
+        
+        switch(errorResponse?.error?.errorCode) {
+          case 'A021':
+            validateField('nickname', nickname, {
+              nickname: () => "존재하지 않는 닉네임입니다."
+            });
+            break;
+          case 'A022':
+            validateField('email', email, {
+              email: () => "존재하지 않는 이메일입니다."
+            });
+            break;
+          default:
+            validateField('email', email, {
+              email: () => errorResponse?.error?.reason || "사용자 확인에 실패했습니다."
+            });
+        }
+      }
+      console.error('User check error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <StepContainer>
-      <div style={{marginBottom : "11px"}}>
+    <form onSubmit={handleSubmit}>
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
           name="nickname"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
-          onChange={(e) => {
-            setNickname(e.target.value);
-            setError("");
-          }}
+          onChange={handleChange}
         />
+        {errors.nickname && <ValidationMessage message={errors.nickname} />}
       </div>
-      <div style={{marginBottom : "45px"}}>
+
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="email">이메일</Label>
         <InputField
           type="email"
           name="email"
           placeholder="이메일을 입력해주세요."
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setError("");
-          }}
+          onChange={handleChange}
         />
+        {errors.email && <ValidationMessage message={errors.email} />}
       </div>
-      {error && <ValidationMessage message={error} />}
-      <AuthButton 
-        width="100%" 
-        onClick={handleNext} 
-        disabled={!nickname || !email}
-        fontSize="20px"
-      >
-        비밀번호 찾기
-      </AuthButton>
-    </StepContainer>
+
+      <div style={{ marginTop: "45px" }}>
+        <AuthButton
+          type="submit"
+          disabled={!nickname || !email || isLoading}
+          fontSize="20px"
+          width="552px"
+        >
+          {isLoading ? "확인중..." : "다음"}
+        </AuthButton>
+      </div>
+    </form>
   );
 };
 

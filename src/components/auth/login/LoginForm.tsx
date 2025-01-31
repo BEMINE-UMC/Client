@@ -110,9 +110,11 @@ const LoginForm: React.FC = () => {
               src={BeMineLogo}
               alt="BeMine Logo"
               style={{
-                margin: "0 auto 45px",
-                display: "flex",
-                alignItems: "flex-start",
+                marginBottom: "45px", 
+                marginLeft: "5px",
+                display: "block",
+                width: "145px",
+                height: "32px",
               }}
             />
           </span>
@@ -162,7 +164,7 @@ const LoginForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: "20px",
+            marginTop: "27px",
             gap: "10px",
             fontSize: "14px",
             width: "100%",
@@ -172,11 +174,11 @@ const LoginForm: React.FC = () => {
           <LinkText to="/find-email" underline={false}>
             이메일을 잊으셨나요?
           </LinkText>
-          <span>|</span>
+          <span style={{ margin: "0 10px" }}>|</span>
           <LinkText to="/find-password" underline={false}>
             비밀번호를 잊으셨나요?
           </LinkText>
-          <span>|</span>
+          <span style={{ margin: "0 10px" }}>|</span>
           <LinkText to="/register" underline={false}>
             회원가입
           </LinkText>

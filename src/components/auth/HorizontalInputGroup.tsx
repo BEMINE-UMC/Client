@@ -11,7 +11,6 @@ const GroupContainer = styled.div`
   width:552px;
   align-items: center;
   gap: 10px; /* 입력 필드와 버튼 간의 간격 조정 */
-  margin-bottom: 15px;
 
   & > *:first-child {
     width:412px; /* 입력 필드 */
