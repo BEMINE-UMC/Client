@@ -139,14 +139,10 @@ const LoginForm: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
             />
+            
           </div>
-
-          <div
-            style={{
-              marginTop: "45px",
-            }}
-          >
-            <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
+          {errors.email && <ValidationMessage message={errors.email} />}
+          <div style={{ marginTop: "20px" }}>     
             <AuthButton
               type="submit"
               disabled={!formData.email || !formData.password}

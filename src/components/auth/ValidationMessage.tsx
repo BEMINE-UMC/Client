@@ -6,20 +6,16 @@ interface ValidationMessageProps {
   type?: 'error' | 'success';  // type prop을 선택적으로 추가
 }
 
-interface StyledMessageProps {
-  $type: 'error' | 'success';
-}
-
-/** 입력 필드 아래에 오류 메시지를 표시하는 컴포넌트 */
-const StyledValidationMessage = styled.p<StyledMessageProps>`
-  font-size: 12px;
-  color: ${props => props.$type === 'success' ? '#00C31A' : 'red'};
-  margin-top: -10px;
-  margin-bottom: 15px;
+const MessageWrapper = styled.div<{ type?: 'error' | 'success' }>`
+  color: ${props => props.type === 'success' ? '#00B700' : '#FF0000'};
+  font-size: 15px;
+  margin-top: 8px;
+  margin-left: 6px;  // 모든 에러 메시지에 왼쪽 마진 6px 추가
 `;
 
+/** 입력 필드 아래에 오류 메시지를 표시하는 컴포넌트 */
 const ValidationMessage: React.FC<ValidationMessageProps> = ({ message, type = 'error' }) => {
-  return <StyledValidationMessage $type={type}>{message}</StyledValidationMessage>;
+  return <MessageWrapper type={type}>{message}</MessageWrapper>;
 };
 
 export default ValidationMessage

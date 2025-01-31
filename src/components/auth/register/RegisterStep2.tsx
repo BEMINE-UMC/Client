@@ -42,10 +42,9 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
             validateField("password", value, rules);
           }}
         />
-      </div>
-      <div>
         {errors.password && <ValidationMessage message={errors.password} />}
       </div>
+        
 
       <div style={{ marginBottom: "73px" }}>
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
@@ -60,7 +59,6 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
             validateField("confirmPassword", value, rules);
           }}
         />
-        <div style={{ marginTop: "20px" }}></div>
         {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
       </div>
       

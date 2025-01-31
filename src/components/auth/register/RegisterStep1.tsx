@@ -71,8 +71,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             validateField("nickname", value, rules);
           }}
         />
+        {errors.nickname && <ValidationMessage message={errors.nickname} />}
       </div>
-      {errors.nickname && <ValidationMessage message={errors.nickname} />}
+      
       <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="email">이메일</Label>
         <HorizontalInputGroup>
@@ -122,7 +123,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
         </HorizontalInputGroup>
         {errors.verificationCode && <ValidationMessage message={errors.verificationCode} />}
       </div>
-      <div style={{ marginLeft: "9px" }}>
+      <div>
       {isEmailVerified ? (
           <ValidationMessage 
             type="success" 
