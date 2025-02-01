@@ -23,6 +23,7 @@ export default TemplatePage;
 
 const Container = styled.div`
   display: flex; 
+  background: linear-gradient(to bottom, #ffffff, #fff6b4);
   flex-direction: column; /* 자식 요소를 세로로 배치 */
   justify-content: flex-start; /* 세로 방향 상단 정렬 */
   align-items: flex-start; /* 가로 방향 왼쪽 정렬 */
@@ -35,4 +36,13 @@ const Container = styled.div`
   padding-left: 7%; /* 왼쪽 간격 추가 */
   gap: 20px;
   margin-top: 2%;
+  
+  @media (max-width: 768px) {
+      width: min(100vw, 100%); /* 화면 크기에 맞게 자동 조정 */
+    }
+
+  @media (max-width: 480px) {
+    padding-left: 0px; /* 왼쪽 간격 추가 */
+    gap: 0px;
+  }
 `;

@@ -36,6 +36,11 @@ const Container = styled.div`
   justify-content: center;
   align-items: center; /* 수평 중앙 정렬 */
   gap: 20px;
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    gap: 15px;
+  }
 `;
 
 const Header = styled.div`
@@ -48,6 +53,14 @@ const Author = styled.h2`
   font-size: 30px;
   font-weight: bold;
   color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -55,6 +68,10 @@ const ImageContainer = styled.div`
   height: 200px;
   overflow: hidden;
   border-radius: 8px;
+
+  @media (max-width: 480px) {
+    height: 150px;
+  }
 `;
 
 const StyledImage = styled.img`
@@ -68,5 +85,16 @@ const StyledImage = styled.img`
   &:hover {
     transform: scale(1.05); /* 이미지 확대 */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  }
+
+  @media (max-width: 768px) {
+    width: 50%;
+    height: 50%;
+    border-radius: 20px;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 10px;
   }
 `;

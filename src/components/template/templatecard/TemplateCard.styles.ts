@@ -13,6 +13,21 @@ export const CardContainer = styled.div`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    width: 160px;
+    height: 200px;
+  }
+
+  @media (max-width: 480px) {
+    width: 160px;
+    height: 200px;
+  }
+
+  @media (max-width: 350px) {
+    width: 140px;
+    height: 180px;
+  }
 `;
 
 export const ImageSection = styled.div<{ backgroundImage: string }>`
@@ -22,6 +37,21 @@ export const ImageSection = styled.div<{ backgroundImage: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  @media (max-width: 768px) {
+    border-radius: 12px;
+    width: 90%;
+    margin: 10px auto; /* 모바일에서도 중앙 정렬 */
+    margin-bottom: -10px;
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 12px;
+    font-size: 12px;
+    width: 90%;
+    margin: 10px auto; /* 모바일에서도 중앙 정렬 */
+    margin-bottom: -10px;
+  }
 `;
 
 export const ContentSection = styled.div`
@@ -29,24 +59,58 @@ export const ContentSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  @media (max-width: 768px) {
+    margin-top: -10%;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 20px;
+  }
 `;
 
 export const Description = styled.div`
   display: flex;
   flex-direction: column;
+
+  
 `;
 
 export const Author = styled.p`
   font-size: 14px;
   color: #777;
   margin: 0 0 4px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 export const Title = styled.p`
   font-size: 16px;
   font-weight: bold;
   color: #333;
-  margin: 0;
+  margin: 0;  
+
+  @media (max-width: 768px) {
+    max-width: 100px;
+    font-size: 14px;
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 부분에 ... 표시 */
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100px;
+    font-size: 13px;
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 부분에 ... 표시 */
+  }
 `;
 
 export const LikeSection = styled.div`
@@ -54,6 +118,10 @@ export const LikeSection = styled.div`
   flex-direction: column; /* 세로 방향으로 콘텐츠 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
   justify-content: center; /* 가로 중앙 정렬 */
+
+  @media (max-width: 768px) {
+    
+  }
 `;
 
 interface LikeButtonProps {
@@ -61,15 +129,24 @@ interface LikeButtonProps {
 }
 
 export const LikeButton = styled.button<LikeButtonProps>`
-background: transparent;
-border: none;
-cursor: pointer;
-color: ${(props) => (props.liked ? "#ff6347" : "#ccc")};
-font-size: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: ${(props) => (props.liked ? "#ff6347" : "#ccc")};
+  font-size: 24px;
 
-&:hover {
-  color: #ff0000;
-}
+  &:hover {
+    color: #ff0000;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 5px; 
+    font-size: 22px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+  }
 `;
 
 export const LikeCount = styled.span`
@@ -80,5 +157,14 @@ export const LikeCount = styled.span`
   opacity: 1;
   transition: opacity 0.3s ease;
 
+  @media (max-width: 768px) {
+    font-size: 10px;
+    margin-top: 0.5px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    margin-top: 0.5px;
+  }
   
 `;

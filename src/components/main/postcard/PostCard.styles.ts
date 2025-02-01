@@ -10,9 +10,21 @@ export const CardContainer = styled.div`
   position: relative;
   font-family: Arial, sans-serif;
   transition: box-shadow 0.3s ease;
+  margin-bottom: 5%;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) { //375기준
+    width: 180px;
+    height: 200px;
+    margin-bottom: 20%
+  }
+
+  @media (max-width: 480px) { //375기준
+    width: 170px;
+    height: 200px;
   }
 `;
 
@@ -24,6 +36,11 @@ export const ImageSection = styled.div<{ image: string }>`
   background-size: cover;
   background-position: center;
   margin: 12px auto 0;
+
+  @media (max-width: 480px) {
+    width: 85%;
+    height: 65%;
+  }
 `;
 
 export const ContentSection = styled.div`
@@ -34,20 +51,65 @@ export const ContentSection = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 5px;
+
+  @media (max-width: 768px) {
+       
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 10px;
+   
+  }
+`;
+
+export const Box = styled.div`
+  @media (max-width: 768px) {
+    margin-top: -20%;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 15%;
+  }
 `;
 
 export const Author = styled.p`
   font-size: 15px;
   color: #555;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 export const Description = styled.p`
-  font-size: 18 px;
+  font-size: 18px;
   color: #333;
-  margin: 2px 0 0;
   line-height: 1.4;
   font-weight: bold;
+  
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    display: -webkit-box; /* 플렉스 기반 레이아웃 */
+    -webkit-line-clamp: 1; /* 표시할 줄 수 */
+    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+   
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    display: -webkit-box; /* 플렉스 기반 레이아웃 */
+    -webkit-line-clamp: 1; /* 표시할 줄 수 */
+    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+   
+  }
 `;
 
 export const LikeContainer = styled.div`
@@ -55,6 +117,16 @@ export const LikeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 7px;
+
+  @media (max-width: 768px) {
+    margin-top: -20%;
+    gap: 5px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 20%;
+   
+  }
 `;
 
 export const LikeButton = styled.button`
@@ -75,6 +147,16 @@ export const LikeButton = styled.button`
     &:hover {
       color: red;
     }
+  } 
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+   
+  }
+
+  @media (max-width: 480px) {
+    font-size: 25px;
+   
   }
 `;
 
@@ -85,6 +167,14 @@ export const LikeCount = styled.span`
   opacity: 1;
   transition: opacity 0.3s ease;
   margin-bottom: 10%;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 export const BookmarkContainer = styled.div`
@@ -94,12 +184,8 @@ export const BookmarkContainer = styled.div`
   cursor: pointer;
   font-size: 45px;
   color: #ccc;
-  opacity: 0;
   transition: all 0.3s ease;
-
-  ${CardContainer}:hover & {
-    opacity: 1;
-  }
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* 기본 그림자 효과 */
 
   .bookmarked {
     color: gold;
@@ -107,9 +193,17 @@ export const BookmarkContainer = styled.div`
 
   .not-bookmarked {
     color: #ccc;
-
     &:hover {
       color: gold;
+      text-shadow: 2px 2px 6px rgba(255, 215, 0, 0.6); /* 호버 시 강조 */
     }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 40px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 40px;
   }
 `;

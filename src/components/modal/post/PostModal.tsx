@@ -47,6 +47,21 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    width: min(100vw, 100%); /* 화면 크기에 맞게 자동 조정 */
+    background-color: white;
+    height: auto;
+  }
+
+  @media (max-width: 480px) {
+    justify-content: center;
+    width: min(100vw, 100%); /* 화면 크기에 맞게 자동 조정 */
+    height: min(100vw, 100%); /* 화면 크기에 맞게 자동 조정 */
+    max-width: 480px;
+    height: auto;
+  }
 `;
 
 const ModalContent = styled.div`
@@ -65,6 +80,16 @@ const ModalContent = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  @media (max-width: 768px) {
+    background: rgba(0, 0, 0, 0.01);
+    width: min(100vw, 50%); /* 화면 크기에 맞게 자동 조정 */
+    box-shadow: none;
+  }
+
+  @media (max-width: 480px) {
+    
+  }
 `;
 
 const CloseButton = styled.button`

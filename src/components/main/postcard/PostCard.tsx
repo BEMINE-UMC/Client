@@ -9,9 +9,10 @@ import {
   LikeButton,
   LikeCount,
   BookmarkContainer,
+  Box,
 } from "./PostCard.styles";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import { BsBookmarkFill } from "react-icons/bs";
 
 interface PostCardData {
   image: string;
@@ -49,13 +50,17 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick }) => {
         e.stopPropagation(); // 북마크 클릭 시 부모의 onClick이 동작하지 않도록 막기
         toggleBookmark();
       }}>
-        {isBookmarked ? <BsBookmarkFill className="bookmarked" /> : <BsBookmark className="not-bookmarked" />}
+        {isBookmarked ? (
+          <BsBookmarkFill className="bookmarked" />
+        ) : (
+          <BsBookmarkFill className="not-bookmarked" /> // 채워진 아이콘 사용
+        )}
       </BookmarkContainer>
       <ContentSection>
-        <div>
+        <Box>
           <Author>{author}</Author>
           <Description>{title}</Description>
-        </div>
+        </Box>
         <LikeContainer>
           <LikeButton
             onClick={(e) => {
