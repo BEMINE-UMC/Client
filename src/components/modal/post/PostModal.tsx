@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Post } from "./postMockData";
+
+import { Post } from "../../main/type/Post";
+
 import UserSection from "./UserSection";
 import ContentSection from "./ContentSection";
 import FooterSection from "./FooterSection";
+
 
 interface PostModalProps {
   isOpen: boolean;
@@ -19,16 +22,19 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data }) => {
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <UserSection
-          userImage={data.userImage}
-          author={data.author}
-          userInformation={data.userInformation}   
+          userImage={data.userImage || ""}  // userImage 추가
+          author={data.authorName}  // authorName 사용
+          userInformation={data.userInformation || ""}  // userInformation 추가
         />
         <ContentSection
           title={data.title}
-          contentImage={data.contentImage}
-          content={data.content}
+          contentImage={data.thumbnail}  // contentImage를 thumbnail로 변경
+          content={data.content || ""}  // content 필드 추가
         />
-        <FooterSection author={data.author} contentImage={data.contentImage} />
+        <FooterSection
+          author={data.authorName}
+          contentImage={data.thumbnail}  // contentImage를 thumbnail로 변경
+        />
       </ModalContent>
     </ModalOverlay>
   );
