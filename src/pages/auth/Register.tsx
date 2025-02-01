@@ -66,40 +66,9 @@ const Register: React.FC = () => {
     setTimerActive(false); // 타이머 중지
   };
 
-  // 이메일 인증 코드 전송 함수 (임시 구현)
-  const handleSendVerificationCode = async (email: string) => {
-    try {
-      setIsLoading(prev => ({ ...prev, emailSend: true }));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      startTimer();
-      alert('인증 코드가 발송되었습니다. (테스트용: 코드는 "123456"입니다)');
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error('이메일 전송 실패:', error.message);
-    } finally {
-      setIsLoading(prev => ({ ...prev, emailSend: false }));
-    }
-  };
-
-  // 인증 코드 확인 함수 (임시 구현)
-  const handleVerifyCode = async (code: string) => {
-    try {
-      setIsLoading(prev => ({ ...prev, emailVerify: true }));
-      // 임시: 코드가 "123456"일 때만 성공
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 로딩 효과를 위한 지연
-      
-      if (code === "123456") {
-        setIsEmailVerified(true);
-        stopTimer();
-        alert('이메일 인증이 완료되었습니다.');
-      } else {
-        alert('잘못된 인증 코드입니다.');
-      }
-    } catch (error) {
-      console.error('인증 코드 확인 실패:', error);
-    } finally {
-      setIsLoading(prev => ({ ...prev, emailVerify: false }));
-    }
+  const handleVerifySuccess = () => {
+    setIsEmailVerified(true);
+    stopTimer();
   };
 
   const handleRegister = async () => {
@@ -143,6 +112,10 @@ const Register: React.FC = () => {
     }
   };
 
+  const setErrors = (field: string, value: any, rules: { [key: string]: (value: any) => string }) => {
+    validateField(field, value, rules);
+  };
+
   return (
     <>
       <AnimatedBackground />
@@ -161,11 +134,8 @@ const Register: React.FC = () => {
             src={BeMineLogo}
             alt="BeMine Logo"
             style={{ 
-              width: "145px",
-              height: "32px",
               display: "block", 
               marginBottom: "45px",
-              marginLeft: "5px",
               alignSelf: "flex-start"  // 왼쪽 정렬
             }}
           />
@@ -185,8 +155,9 @@ const Register: React.FC = () => {
               getValidationRules={getValidationRules}
               isEmailVerified={isEmailVerified}
               isLoading={isLoading}
-              onSendVerificationCode={handleSendVerificationCode}
-              onVerifyCode={handleVerifyCode}
+              setIsLoading={setIsLoading}
+              onVerifySuccess={handleVerifySuccess}
+              setErrors={(field: string, value: string, rules: any) => validateField(field, value, rules)}
             />
           )}
           {step === 2 && (

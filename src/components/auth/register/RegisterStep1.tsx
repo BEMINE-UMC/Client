@@ -26,8 +26,12 @@ interface RegisterStep1Props {
     emailSend: boolean;
     emailVerify: boolean;
   };
-  onSendVerificationCode: (email: string) => Promise<void>;
-  onVerifyCode: (code: string) => Promise<void>;
+  setIsLoading: React.Dispatch<React.SetStateAction<{
+    emailSend: boolean;
+    emailVerify: boolean;
+  }>>;
+  onVerifySuccess: () => void;
+  setErrors: (field: string, value: string, rules: any) => void;
 }
 
 const RegisterStep1: React.FC<RegisterStep1Props> = ({
@@ -45,8 +49,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   getValidationRules,
   isEmailVerified,
   isLoading,
-  onSendVerificationCode,
-  onVerifyCode,
+  setIsLoading,
+  onVerifySuccess,
+  setErrors,
 }) => {
   const [showTimer, setShowTimer] = useState(false);
 
@@ -54,11 +59,12 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
 
   const handleSendVerificationCode = async () => {
     try {
-      startTimer();
-      setShowTimer(true);
+      setIsLoading(prev => ({ ...prev, emailSend: true }));
+      
       const response = await api.post('/users/sendEmail', { email });
       
       if (response.data.resultType === "SUCCESS") {
+        startTimer();
         alert(response.data.success.message);
       }
     } catch (error) {
@@ -67,22 +73,25 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
         if (errorData.error.errorCode === "A018") {
           validateField("email", email, rules);
         }
+        alert(errorData.error.reason);
       }
-      setShowTimer(false);
+    } finally {
+      setIsLoading(prev => ({ ...prev, emailSend: false }));
     }
   };
 
   const handleVerifyCode = async () => {
     try {
+      setIsLoading(prev => ({ ...prev, emailVerify: true }));
+      
       const response = await api.post('/users/checkEmail', {
         email,
         code: verificationCode
       });
 
       if (response.data.resultType === "SUCCESS") {
+        onVerifySuccess();
         alert(response.data.success.message);
-        // 인증 성공 상태 업데이트
-        onVerifyCode(verificationCode);
       }
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -92,15 +101,15 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             validateField("email", email, rules);
             break;
           case "A019":
-            validateField("verificationCode", verificationCode, rules);
-            break;
           case "A020":
-            validateField("verificationCode", verificationCode, {
-              verificationCode: () => "인증번호가 올바르지 않습니다."
+            setErrors("verificationCode", verificationCode, {
+              verificationCode: () => errorData.error.reason
             });
             break;
         }
       }
+    } finally {
+      setIsLoading(prev => ({ ...prev, emailVerify: false }));
     }
   };
 

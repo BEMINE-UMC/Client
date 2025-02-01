@@ -47,13 +47,6 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
     },
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === "nickname") setNickname(value);
-    if (name === "email") setEmail(value);
-    validateField(name, value, validationRules);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -62,18 +55,15 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
 
     try {
       setIsLoading(true);
-      const response = await api.get<CheckUserResponse>(
-        `/users/search/password/check?name=${nickname}&email=${email}`
-      );
-
-      if (response.data.resultType === "SUCCESS") {
-        onNext();
-      }
+      
+      // 닉네임과 이메일이 유효한지 확인만 하고 Step2로 이동
+      onNext();
+      
     } catch (error) {
       if (isAxiosError(error)) {
-        const errorResponse = error.response?.data;
+        const errorData = error.response?.data;
         
-        switch(errorResponse?.error?.errorCode) {
+        switch(errorData?.error?.errorCode) {
           case 'A021':
             validateField('nickname', nickname, {
               nickname: () => "존재하지 않는 닉네임입니다."
@@ -86,11 +76,10 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
             break;
           default:
             validateField('email', email, {
-              email: () => errorResponse?.error?.reason || "사용자 확인에 실패했습니다."
+              email: () => errorData?.error?.reason || "사용자 확인에 실패했습니다."
             });
         }
       }
-      console.error('User check error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -105,7 +94,10 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
           name="nickname"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
-          onChange={handleChange}
+          onChange={(e) => {
+            setNickname(e.target.value);
+            validateField("nickname", e.target.value, validationRules);
+          }}
         />
         {errors.nickname && <ValidationMessage message={errors.nickname} />}
       </div>
@@ -117,12 +109,15 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
           name="email"
           placeholder="이메일을 입력해주세요."
           value={email}
-          onChange={handleChange}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            validateField("email", e.target.value, validationRules);
+          }}
         />
         {errors.email && <ValidationMessage message={errors.email} />}
       </div>
 
-      <div style={{ marginTop: "45px" }}>
+      <div>
         <AuthButton
           type="submit"
           disabled={!nickname || !email || isLoading}

@@ -71,12 +71,23 @@ const LoginForm: React.FC = () => {
     if (!isValid) return;
 
     try {
-      const response = await api.post<LoginResponse>('/users/login', {
+      const requestData = {
         email: formData.email,
         password: formData.password
-      });
+      };
+
+      console.log('로그인 요청 데이터:', requestData);
+
+      const response = await api.post<LoginResponse>('/users/login', requestData);
+
+      console.log('로그인 응답:', response.data);
 
       if (response.data.resultType === "SUCCESS" && response.data.success) {
+        console.log('로그인 성공! 토큰:', {
+          accessToken: response.data.success.accessToken,
+          refreshToken: response.data.success.refreshToken
+        });
+
         setLoggedIn(
           response.data.success.accessToken,
           response.data.success.refreshToken
@@ -84,10 +95,13 @@ const LoginForm: React.FC = () => {
         navigate("/");
       }
     } catch (error) {
+      console.error('로그인 에러:', error);
+      
       if (isAxiosError(error)) {
         const errorResponse = error.response?.data;
+        console.error('로그인 에러 응답:', errorResponse);
+
         if (errorResponse?.error?.reason) {
-          // 에러 메시지 표시
           validateField('email', formData.email, {
             email: () => errorResponse.error.reason
           });
@@ -97,7 +111,6 @@ const LoginForm: React.FC = () => {
           });
         }
       }
-      console.error('Login error:', error);
     }
   };
 

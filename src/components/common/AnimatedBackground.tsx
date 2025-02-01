@@ -23,10 +23,10 @@ const BackgroundImage = styled.div`
   width: 100vw;
   height: 100vh;
   background-image: url(${BeMine3D});
-  background-size: 150% auto;
+  background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(-30deg);
   opacity: 0.7;
 
   /* SVG 렌더링 최적화 */
