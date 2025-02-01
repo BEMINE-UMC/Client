@@ -5,6 +5,8 @@ import ValidationMessage from "../../../components/auth/ValidationMessage";
 import HorizontalInputGroup from "../../../components/auth/HorizontalInputGroup";
 import AuthButton from "../../../components/auth/AuthButton";
 import { TimerMessage } from "./Register.styles";
+import api from "../../../api/axios";
+import { isAxiosError } from "axios";
 
 interface RegisterStep1Props {
   nickname: string;
@@ -51,9 +53,55 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   const rules = getValidationRules(1);
 
   const handleSendVerificationCode = async () => {
-    startTimer();
-    setShowTimer(true);
-    await onSendVerificationCode(email);
+    try {
+      startTimer();
+      setShowTimer(true);
+      const response = await api.post('/users/sendEmail', { email });
+      
+      if (response.data.resultType === "SUCCESS") {
+        alert(response.data.success.message);
+      }
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        const errorData = error.response.data;
+        if (errorData.error.errorCode === "A018") {
+          validateField("email", email, rules);
+        }
+      }
+      setShowTimer(false);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    try {
+      const response = await api.post('/users/checkEmail', {
+        email,
+        code: verificationCode
+      });
+
+      if (response.data.resultType === "SUCCESS") {
+        alert(response.data.success.message);
+        // 인증 성공 상태 업데이트
+        onVerifyCode(verificationCode);
+      }
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        const errorData = error.response.data;
+        switch (errorData.error.errorCode) {
+          case "A018":
+            validateField("email", email, rules);
+            break;
+          case "A019":
+            validateField("verificationCode", verificationCode, rules);
+            break;
+          case "A020":
+            validateField("verificationCode", verificationCode, {
+              verificationCode: () => "인증번호가 올바르지 않습니다."
+            });
+            break;
+        }
+      }
+    }
   };
 
   return (
@@ -115,7 +163,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           />
           <AuthButton
             disabled={!!errors.verificationCode || !verificationCode || isLoading.emailVerify}
-            onClick={() => onVerifyCode(verificationCode)}
+            onClick={handleVerifyCode}
             fontSize="15px"
           >
             {isLoading.emailVerify ? "확인 중..." : "인증하기"}
