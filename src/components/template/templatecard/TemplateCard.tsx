@@ -12,6 +12,8 @@ import {
   LikeCount,
 } from "./TemplateCard.styles";
 
+import { BsBookmarkFill } from "react-icons/bs";
+
 interface TemplateCardProps {
   title: string;
   author: string;

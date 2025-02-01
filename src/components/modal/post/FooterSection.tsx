@@ -54,6 +54,10 @@ const Author = styled.h2`
   font-weight: bold;
   color: #333;
 
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
   @media (max-width: 480px) {
     font-size: 18px;
   }
@@ -81,6 +85,13 @@ const StyledImage = styled.img`
   &:hover {
     transform: scale(1.05); /* 이미지 확대 */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  }
+
+  @media (max-width: 768px) {
+    width: 50%;
+    height: 50%;
+    border-radius: 20px;
+    justify-content: center;
   }
 
   @media (max-width: 480px) {

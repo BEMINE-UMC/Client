@@ -37,7 +37,12 @@ const Container = styled.div`
   gap: 20px;
   margin-top: 2%;
   
+  @media (max-width: 768px) {
+      width: min(100vw, 100%); /* 화면 크기에 맞게 자동 조정 */
+    }
+
   @media (max-width: 480px) {
-    
+    padding-left: 0px; /* 왼쪽 간격 추가 */
+    gap: 0px;
   }
 `;

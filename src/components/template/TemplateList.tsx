@@ -2,7 +2,7 @@ import styled from "styled-components";
 import TemplateCard from "./templatecard/TemplateCard";
 import { FC, useState } from "react";
 import mockData from "../modal/template/templateMockData";
-import TemplateModal from "../modal/template/TemplateModal";
+import PdfPreview from "./PdfPreview"; // PdfPreview import 추가
 
 interface TemplateListProps {
   selectedCategory: string;
@@ -16,14 +16,14 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
     ? mockData
     : mockData.filter((template) => template.category === selectedCategory);
 
-  const openModal = (template: typeof mockData[number]) => setSelectedTemplate(template); 
-  const closeModal = () => setSelectedTemplate(null); 
+  const openModal = (template: typeof mockData[number]) => setSelectedTemplate(template);
+  const closeModal = () => setSelectedTemplate(null);
 
   // 좋아요 상태 업데이트 함수
   const toggleLike = (templateId: number) => {
-    setLikedTemplates((prev) => 
-      prev.includes(templateId) 
-        ? prev.filter((id) => id !== templateId) 
+    setLikedTemplates((prev) =>
+      prev.includes(templateId)
+        ? prev.filter((id) => id !== templateId)
         : [...prev, templateId]
     );
   };
@@ -35,23 +35,22 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
           <TemplateCard
             key={template.id}
             {...template}
-            liked={likedTemplates.includes(template.id)} // 좋아요 상태 전달
-            likesCount={likedTemplates.filter(id => id === template.id).length} // 좋아요 개수 전달
-            onClick={() => openModal(template)} // 클릭 시 모달 열기
+            liked={likedTemplates.includes(template.id)}
+            likesCount={likedTemplates.filter(id => id === template.id).length}
+            onClick={() => openModal(template)}
             onLikeToggle={() => toggleLike(template.id)}
           />
         ))}
       </ListContainer>
+
       {selectedTemplate && (
-        <TemplateModal
-          title={selectedTemplate.title}
-          author={selectedTemplate.author}
-          onClose={closeModal} 
-          file={selectedTemplate.file}
-          download={selectedTemplate.download}
-          liked={likedTemplates.includes(selectedTemplate.id)} // 좋아요 상태 전달
-          likesCount={likedTemplates.filter(id => id === selectedTemplate.id).length} // 좋아요 개수 전달
-          onLikeToggle={() => toggleLike(selectedTemplate.id)} // 좋아요 상태 변경 함수 전달
+        <PdfPreview
+        pdfUrl={selectedTemplate?.file ?? ""} // ✅ undefined 방지
+          onClose={closeModal}
+          onLike={() => toggleLike(selectedTemplate.id)}
+          onDownload={() => console.log("다운로드 기능 추가 예정")}
+          isLiked={likedTemplates.includes(selectedTemplate.id)}
+          onEdit={() => console.log("편집 기능 추가 예정")} // ✅ 추가
         />
       )}
     </>
@@ -67,8 +66,20 @@ const ListContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   padding: 16px;
-  
+
+  @media (max-width: 768px) {
+    width: min(100vw, 100%);
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3%;
+    margin-left: -5%;
+  }
+
   @media (max-width: 480px) {
     justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
   }
 `;

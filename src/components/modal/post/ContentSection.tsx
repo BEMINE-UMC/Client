@@ -37,8 +37,12 @@ const ModalTitle = styled.h4`
   font-weight: bold;
   color: black;
 
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
   @media (max-width: 480px) {
-    font-size: 20px;
+    font-size: 15px;
     margin: 10px 0;
   }
 `;
@@ -48,6 +52,7 @@ const ModalImage = styled.img`
   height: auto;
   border-radius: 10px;
   margin: 20px 0;
+  
 
   @media (max-width: 480px) {
     width: 100%;
@@ -61,6 +66,12 @@ const Content = styled.div`
   line-height: 1.6;
   white-space: pre-wrap;
   margin-bottom: 7.5%;  
+  width: 75%;
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+    margin-bottom: 10%;
+  }
 
   @media (max-width: 480px) {
     font-size: 12px;

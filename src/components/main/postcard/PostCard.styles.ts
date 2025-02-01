@@ -16,9 +16,15 @@ export const CardContainer = styled.div`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 480px) {
-    width: 185px;
-    height: 220px;
+  @media (max-width: 768px) { //375기준
+    width: 180px;
+    height: 200px;
+    margin-bottom: 20%
+  }
+
+  @media (max-width: 480px) { //375기준
+    width: 170px;
+    height: 200px;
   }
 `;
 
@@ -46,13 +52,21 @@ export const ContentSection = styled.div`
   justify-content: space-between;
   gap: 5px;
 
+  @media (max-width: 768px) {
+       
+  }
+
   @media (max-width: 480px) {
-    margin-bottom: 10px;;
+    margin-bottom: 10px;
    
   }
 `;
 
 export const Box = styled.div`
+  @media (max-width: 768px) {
+    margin-top: -20%;
+  }
+
   @media (max-width: 480px) {
     margin-bottom: 15%;
   }
@@ -62,6 +76,10 @@ export const Author = styled.p`
   font-size: 15px;
   color: #555;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 
   @media (max-width: 480px) {
     font-size: 13px;
@@ -74,6 +92,15 @@ export const Description = styled.p`
   line-height: 1.4;
   font-weight: bold;
   
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    display: -webkit-box; /* 플렉스 기반 레이아웃 */
+    -webkit-line-clamp: 1; /* 표시할 줄 수 */
+    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+   
+  }
 
   @media (max-width: 480px) {
     font-size: 14px;
@@ -90,6 +117,11 @@ export const LikeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 7px;
+
+  @media (max-width: 768px) {
+    margin-top: -20%;
+    gap: 5px;
+  }
 
   @media (max-width: 480px) {
     margin-bottom: 20%;
@@ -115,6 +147,11 @@ export const LikeButton = styled.button`
     &:hover {
       color: red;
     }
+  } 
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+   
   }
 
   @media (max-width: 480px) {
@@ -131,6 +168,10 @@ export const LikeCount = styled.span`
   transition: opacity 0.3s ease;
   margin-bottom: 10%;
 
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
   @media (max-width: 480px) {
     font-size: 14px;
   }
@@ -144,6 +185,7 @@ export const BookmarkContainer = styled.div`
   font-size: 45px;
   color: #ccc;
   transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* 기본 그림자 효과 */
 
   .bookmarked {
     color: gold;
@@ -153,7 +195,12 @@ export const BookmarkContainer = styled.div`
     color: #ccc;
     &:hover {
       color: gold;
+      text-shadow: 2px 2px 6px rgba(255, 215, 0, 0.6); /* 호버 시 강조 */
     }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 40px;
   }
 
   @media (max-width: 480px) {
