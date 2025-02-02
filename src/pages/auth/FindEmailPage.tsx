@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormContainer from "../../components/auth/FormContainer";
-import BeMineLogo from '../../assets/images/main/Logo_Text.svg';
+import TextLogo from "../../components/auth/TextLogo";
 import FindEmailStep1 from "../../components/auth/find_email/FindEmailStep1";
 import FindEmailStep2 from "../../components/auth/find_email/FindEmailStep2";
 import FindEmailLinks from "../../components/auth/find_email/FindEmailLinks";
@@ -31,19 +31,7 @@ const FindEmailPage: React.FC = () => {
         }}
       >
         <FormContainer>
-          <span>
-            <img
-              src={BeMineLogo}
-              alt="BeMine Logo"
-              style={{
-                marginBottom: "45px",
-                marginLeft: "5px",
-                display: "block",
-                width: "145px",
-                height: "32px",
-              }}
-            />
-          </span>
+          <TextLogo />
           {step === 1 && (
             <FindEmailStep1
               nickname={nickname}

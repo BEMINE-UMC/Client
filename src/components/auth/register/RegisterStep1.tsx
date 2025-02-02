@@ -32,6 +32,8 @@ interface RegisterStep1Props {
   }>>;
   onVerifySuccess: () => void;
   setErrors: (field: string, value: string, rules: any) => void;
+  onSendVerificationCode?: () => Promise<void>;
+  onVerifyCode: (code: string) => Promise<void>;
 }
 
 const RegisterStep1: React.FC<RegisterStep1Props> = ({
@@ -52,6 +54,8 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   setIsLoading,
   onVerifySuccess,
   setErrors,
+  onSendVerificationCode,
+  onVerifyCode,
 }) => {
   const [showTimer, setShowTimer] = useState(false);
 
@@ -114,8 +118,8 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   };
 
   return (
-    <>
-      <div style={{ marginBottom: "30px" }}>
+    <div style={{width: "100%"}}>
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
@@ -128,10 +132,10 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             validateField("nickname", value, rules);
           }}
         />
-        {errors.nickname && <ValidationMessage message={errors.nickname} />}
+        
       </div>
-      
-      <div style={{ marginBottom: "30px" }}>
+      {errors.nickname && <ValidationMessage message={errors.nickname} />}
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="email">이메일</Label>
         <HorizontalInputGroup>
           <InputField
@@ -153,9 +157,8 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             {isLoading.emailSend ? "전송 중..." : "인증번호 받기"}
           </AuthButton>
         </HorizontalInputGroup>
-        {errors.email && <ValidationMessage message={errors.email} />}
       </div>
-
+      {errors.email && <ValidationMessage message={errors.email} />}
       <div style={{ marginBottom: "16px" }}>
         <Label htmlFor="verificationCode">인증번호</Label>
         <HorizontalInputGroup>
@@ -178,8 +181,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             {isLoading.emailVerify ? "확인 중..." : "인증하기"}
           </AuthButton>
         </HorizontalInputGroup>
-        {errors.verificationCode && <ValidationMessage message={errors.verificationCode} />}
+        
       </div>
+      {errors.verificationCode && <ValidationMessage message={errors.verificationCode} />}
       <div>
       {isEmailVerified ? (
           <ValidationMessage 
@@ -214,7 +218,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           다음
         </AuthButton>
       </div>
-    </>
+    </div>
   );
 };
 

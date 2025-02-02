@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BREAKPOINTS } from "../../../hooks/useResponsive";
 
 /** RegisterStep1, RegisterStep2, RegisterStep3 공통 스타일 */
 export const TimerMessage = styled.div`
@@ -8,6 +9,14 @@ export const TimerMessage = styled.div`
   
   span {
     font-weight: bold;
+  }
+
+  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
+    font-size: 10px;
+  }
+
+  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
+    font-size: 10px;
   }
 `;
 

@@ -3,14 +3,14 @@ import FindPasswordStep1 from "../../components/auth/find_password/FindPasswordS
 import FindPasswordStep2 from "../../components/auth/find_password/FindPasswordStep2";
 import FindPasswordLinks from "../../components/auth/find_password/FindPasswordLinks";
 import FormContainer from "../../components/auth/FormContainer";
-import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
+import TextLogo from "../../components/auth/TextLogo";
 import AnimatedBackground from "../../components/common/AnimatedBackground";
 
 const FindPasswordPage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("password123!");
+  const [password, setPassword] = useState("");
 
   return (
     <>
@@ -26,17 +26,7 @@ const FindPasswordPage: React.FC = () => {
         }}
       >
         <FormContainer>
-          <img
-            src={BeMineLogo}
-            alt="BeMine Logo"
-            style={{ 
-              display: "block",
-              marginBottom: "45px",
-              marginLeft: "5px",
-              width: "145px",
-              height: "32px",
-            }}
-          />
+          <TextLogo />
           {step === 1 && (
             <FindPasswordStep1
               nickname={nickname}

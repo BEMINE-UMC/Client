@@ -3,7 +3,7 @@ import RegisterStep1 from "../../components/auth/register/RegisterStep1";
 import RegisterStep2 from "../../components/auth/register/RegisterStep2";
 import RegisterStep3 from "../../components/auth/register/RegisterStep3";
 import FormContainer from "../../components/auth/FormContainer";
-import BeMineLogo from "../../assets/images/main/Logo_Text.svg";
+import TextLogo from "../../components/auth/TextLogo";
 import useValidation from "../../hooks/useValidation";
 import api from '../../api/axios';
 import { isAxiosError } from 'axios';
@@ -21,10 +21,10 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // 타이머 상태
-  const [timeLeft, setTimeLeft] = useState(180); // 초기값 180초 (3분)
+  const [timeLeft, setTimeLeft] = useState(180);
   const [timerActive, setTimerActive] = useState(false);
 
-  // 이메일 인증 상태 추가
+  // 이메일 인증 상태
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isLoading, setIsLoading] = useState({
     emailSend: false,
@@ -58,17 +58,12 @@ const Register: React.FC = () => {
   }, [timerActive, timeLeft]);
 
   const startTimer = () => {
-    setTimeLeft(180); // 타이머 초기화
-    setTimerActive(true); // 타이머 시작
+    setTimeLeft(180);
+    setTimerActive(true);
   };
 
   const stopTimer = () => {
-    setTimerActive(false); // 타이머 중지
-  };
-
-  const handleVerifySuccess = () => {
-    setIsEmailVerified(true);
-    stopTimer();
+    setTimerActive(false);
   };
 
   const handleRegister = async () => {
@@ -112,10 +107,6 @@ const Register: React.FC = () => {
     }
   };
 
-  const setErrors = (field: string, value: any, rules: { [key: string]: (value: any) => string }) => {
-    validateField(field, value, rules);
-  };
-
   return (
     <>
       <AnimatedBackground />
@@ -130,15 +121,7 @@ const Register: React.FC = () => {
         }}
       >
         <FormContainer>
-          <img
-            src={BeMineLogo}
-            alt="BeMine Logo"
-            style={{ 
-              display: "block", 
-              marginBottom: "45px",
-              alignSelf: "flex-start"  // 왼쪽 정렬
-            }}
-          />
+          <TextLogo />
           {step === 1 && (
             <RegisterStep1
               nickname={nickname}
@@ -156,8 +139,13 @@ const Register: React.FC = () => {
               isEmailVerified={isEmailVerified}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              onVerifySuccess={handleVerifySuccess}
-              setErrors={(field: string, value: string, rules: any) => validateField(field, value, rules)}
+              onVerifySuccess={() => setIsEmailVerified(true)}
+              setErrors={validateField}
+              onVerifyCode={async (code: string) => {
+                setIsEmailVerified(true);
+                stopTimer();
+                return Promise.resolve();
+              }}
             />
           )}
           {step === 2 && (

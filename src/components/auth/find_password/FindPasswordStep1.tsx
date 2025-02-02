@@ -99,10 +99,9 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
             validateField("nickname", e.target.value, validationRules);
           }}
         />
-        {errors.nickname && <ValidationMessage message={errors.nickname} />}
       </div>
-
-      <div style={{ marginBottom: "15px" }}>
+      {errors.nickname && <ValidationMessage message={errors.nickname} />}
+      <div style={{ marginBottom: "20px" }}>
         <Label htmlFor="email">이메일</Label>
         <InputField
           type="email"
@@ -114,9 +113,8 @@ const FindPasswordStep1: React.FC<FindPasswordStep1Props> = ({
             validateField("email", e.target.value, validationRules);
           }}
         />
-        {errors.email && <ValidationMessage message={errors.email} />}
       </div>
-
+      {errors.email && <ValidationMessage message={errors.email} />}
       <div>
         <AuthButton
           type="submit"
