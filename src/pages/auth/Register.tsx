@@ -156,7 +156,7 @@ const Register: React.FC = () => {
           flexDirection: "column",
         }}
       >
-        <FormContainer>
+        <FormContainer width="100%">
           <img
             src={BeMineLogo}
             alt="BeMine Logo"

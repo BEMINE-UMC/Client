@@ -45,7 +45,7 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
           }}
         />
       </div>
-      <div style={{marginBottom : "45px"}}>
+      <div style={{marginBottom : "20px"}}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"

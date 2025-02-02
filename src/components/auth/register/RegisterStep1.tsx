@@ -57,7 +57,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   };
 
   return (
-    <>
+    <div style={{width: "100%"}}>
       <div style={{ marginBottom: "30px" }}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
@@ -156,7 +156,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           다음
         </AuthButton>
       </div>
-    </>
+    </div>
   );
 };
 

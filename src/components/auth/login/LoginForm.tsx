@@ -9,7 +9,7 @@ import ValidationMessage from "../../auth/ValidationMessage";
 import AuthButton from "../../auth/AuthButton";
 import Label from "../../auth/Label";
 import LinkText from "../../auth/LinkText";
-import BeMineLogo from "../../../assets/images/main/Logo_Text.svg";
+import TextLogo from "../../auth/TextLogo";
 import useValidation from "../../../hooks/useValidation";
 import api from '../../../api/axios';
 import { isAxiosError } from 'axios';
@@ -105,19 +105,9 @@ const LoginForm: React.FC = () => {
     <FormWrapper>
       <FormContainer>
         <form onSubmit={handleSubmit}>
-          <span>
-            <img
-              src={BeMineLogo}
-              alt="BeMine Logo"
-              style={{
-                marginBottom: "45px", 
-                marginLeft: "5px",
-                display: "block",
-                width: "145px",
-                height: "32px",
-              }}
-            />
-          </span>
+          <div>
+            <TextLogo />
+          </div>
           
           <div style={{ marginBottom: "15px" }}>
             <Label htmlFor="email">이메일</Label>
@@ -140,18 +130,15 @@ const LoginForm: React.FC = () => {
               onChange={handleChange}
             />
           </div>
-
+          <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
           <div
-            style={{
-              marginTop: "45px",
-            }}
           >
-            <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
+            
             <AuthButton
               type="submit"
               disabled={!formData.email || !formData.password}
               fontSize="20px"
-              width="552px"
+              width="100%"
             >
               로그인
             </AuthButton>
