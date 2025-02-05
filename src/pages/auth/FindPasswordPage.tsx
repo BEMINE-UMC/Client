@@ -27,7 +27,10 @@ const FindPasswordPage: React.FC = () => {
         }}
       >
         <FormContainer>
-          <TextLogo center={step === 3} />
+          <TextLogo 
+            center={step === 3} 
+            marginBottom={step === 3 ? "95px" : undefined}
+          />
           {step === 1 && (
             <FindPasswordStep1
               nickname={nickname}

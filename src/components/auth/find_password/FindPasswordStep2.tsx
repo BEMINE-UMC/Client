@@ -88,7 +88,7 @@ const FindPasswordStep2: React.FC<FindPasswordStep2Props> = ({ nickname, email, 
   return (
     <form onSubmit={handlePasswordChange}>
       <div style={{ marginBottom: "15px" }}>
-        <Label htmlFor="newPassword">새 비밀번호</Label>
+        <Label htmlFor="newPassword">비밀번호 재설정</Label>
         <InputField
           type="password"
           name="newPassword"
@@ -99,11 +99,10 @@ const FindPasswordStep2: React.FC<FindPasswordStep2Props> = ({ nickname, email, 
             setErrors({});
           }}
         />
-        {errors.newPassword && <ValidationMessage message={errors.newPassword} />}
       </div>
-
-      <div style={{ marginBottom: "45px" }}>
-        <Label htmlFor="confirmPassword">새 비밀번호 확인</Label>
+      {errors.newPassword && <ValidationMessage message={errors.newPassword} />}
+      <div style={{ marginBottom: "20px" }}>
+        <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
           name="confirmPassword"
@@ -114,9 +113,8 @@ const FindPasswordStep2: React.FC<FindPasswordStep2Props> = ({ nickname, email, 
             setErrors({});
           }}
         />
-        {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
       </div>
-
+      {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
       <AuthButton
         type="submit"
         disabled={!newPassword || !confirmPassword}

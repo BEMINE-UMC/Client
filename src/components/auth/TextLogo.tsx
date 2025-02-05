@@ -5,13 +5,15 @@ import { BREAKPOINTS } from '../../hooks/useResponsive';
 interface TextLogoProps {
   /** 중앙 정렬 여부 */
   center?: boolean;
+  /** 하단 여백 */
+  marginBottom?: string;
 }
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div<TextLogoProps>`
   display: flex;
-  justify-content: flex-start;  /* 기본값: 왼쪽 정렬 */
+  justify-content: ${props => props.center ? 'center' : 'flex-start'};  /* center prop에 따라 정렬 방식 변경 */
   width: 100%;
-  margin-bottom: 45px;
+  margin-bottom: ${props => props.marginBottom || '45px'};
 
   @media (max-width: ${BREAKPOINTS.MOBILE}px) {
     justify-content: center;  /* 모바일: 중앙 정렬 */
@@ -22,7 +24,7 @@ const LogoContainer = styled.div`
   }
 `;
 
-const LogoImage = styled.img<TextLogoProps>`
+const LogoImage = styled.img`
   width: 145px;
   height: 32px;
   display: block;
@@ -41,13 +43,12 @@ const LogoImage = styled.img<TextLogoProps>`
   }
 `;
 
-const TextLogo: React.FC<TextLogoProps> = ({ center = false }) => {
+const TextLogo: React.FC<TextLogoProps> = ({ center = false, marginBottom }) => {
   return (
-    <LogoContainer>
+    <LogoContainer center={center} marginBottom={marginBottom}>
       <LogoImage 
         src={BeMineLogo} 
         alt="BeMine Logo" 
-        center={center}
       />
     </LogoContainer>
   );
