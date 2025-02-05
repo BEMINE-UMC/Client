@@ -2,15 +2,15 @@ import axios from 'axios';
 import { refreshTokens } from './refresh';
 import { useAuthStore } from '../store/authStore';
 
-const instance = axios.create({
-  baseURL: 'http://3.37.241.32:3000',
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   }
 });
 
 // 요청 인터셉터 - 토큰 추가
-instance.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     const accessToken = useAuthStore.getState().accessToken;
     if (accessToken) {
@@ -24,7 +24,7 @@ instance.interceptors.request.use(
 );
 
 // 응답 인터셉터 - 토큰 갱신
-instance.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -39,7 +39,7 @@ instance.interceptors.response.use(
         
         // 새 토큰으로 원래 요청 재시도
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return instance(originalRequest);
+        return api(originalRequest);
       } catch (refreshError) {
         // 토큰 갱신 실패 시 로그아웃 상태로 변경
         useAuthStore.getState().setLoggedOut();
@@ -51,4 +51,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance; 
+export default api; 

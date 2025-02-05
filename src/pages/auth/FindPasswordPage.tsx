@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import FindPasswordStep1 from "../../components/auth/find_password/FindPasswordStep1";
 import FindPasswordStep2 from "../../components/auth/find_password/FindPasswordStep2";
+import FindPasswordStep3 from "../../components/auth/find_password/FindPasswordStep3";
 import FindPasswordLinks from "../../components/auth/find_password/FindPasswordLinks";
 import FormContainer from "../../components/auth/FormContainer";
 import TextLogo from "../../components/auth/TextLogo";
@@ -26,7 +27,7 @@ const FindPasswordPage: React.FC = () => {
         }}
       >
         <FormContainer>
-          <TextLogo />
+          <TextLogo center={step === 3} />
           {step === 1 && (
             <FindPasswordStep1
               nickname={nickname}
@@ -37,9 +38,14 @@ const FindPasswordPage: React.FC = () => {
             />
           )}
           {step === 2 && (
-            <FindPasswordStep2 nickname={nickname} email={email} />
+            <FindPasswordStep2 
+              nickname={nickname} 
+              email={email} 
+              onNext={() => setStep(3)}
+            />
           )}
-          <FindPasswordLinks />
+          {step === 3 && <FindPasswordStep3 />}
+          {step !== 3 && <FindPasswordLinks />}
         </FormContainer>
       </div>
     </>
