@@ -20,16 +20,16 @@ const BackgroundContainer = styled.div`
 
 const BackgroundImage = styled.div`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120vw;
-  height: 120vh;
+  top: 60%;
+  left: 55%;
+  width: 100vw;
+  height: 100vh;
   background-image: url(${BeMine3D});
-  background-size: 100% auto;
+  background-size: 120% auto;
   background-repeat: no-repeat;
   background-position: center;
-  transform: translate(-50%, -50%) rotate(-30deg);
-  opacity: 0.7;
+  transform: translate(-50%, -50%) rotate(-15deg) scale(1.4);
+  opacity: 0.5;
 
   /* SVG 렌더링 최적화 */
   image-rendering: -webkit-optimize-contrast;
@@ -37,11 +37,11 @@ const BackgroundImage = styled.div`
 
   /* 반응형 스타일 추가 */
   @media (max-width: ${BREAKPOINTS.MOBILE}px) {
-    width: 200vw;  /* 더 넓게 조정 */
-    height: 200vh;  /* 더 높게 조정 */
+    width: 200vw;
+    height: 200vh;
     background-image: url(${BeMine3DSmall});
-    background-size: 130% auto;  /* 크기 조정 */
-    transform: translate(-50%, -50%) rotate(-20deg) scale(0.7);  /* scale 추가 */
+    background-size: 130% auto;
+    transform: translate(-50%, -50%) rotate(-20deg) scale(0.7);
   }
 
   @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
