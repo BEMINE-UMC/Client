@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BREAKPOINTS } from '../../hooks/useResponsive';
 
 interface ValidationMessageProps {
   /** 표시할 유효성 메시지 */
@@ -16,6 +17,15 @@ const StyledValidationMessage = styled.p<StyledMessageProps>`
   color: ${props => props.$type === 'success' ? '#00C31A' : 'red'};
   margin-top: -10px;
   margin-bottom: 15px;
+  margin-left: 6px;
+
+  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
+    font-size: 10px;
+  }
+
+  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
+    font-size: 10px;
+  }
 `;
 
 const ValidationMessage: React.FC<ValidationMessageProps> = ({ message, type = 'error' }) => {

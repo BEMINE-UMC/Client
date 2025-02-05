@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { BREAKPOINTS } from '../../hooks/useResponsive';
 interface FormContainerProps {
   $height?: string;
 }
@@ -12,40 +12,89 @@ const FormContainer = styled.div<FormContainerProps>`
   justify-content: center;
   flex-direction: column;
   width: 616px;
+  max-width: 95%;  /* 화면 너비의 95%로 제한 */
   height: ${props => props.$height || 'auto'};
   margin: 0 auto;
   overflow: hidden;
-  padding: 34px 32px;
+  padding: 45px 32px;
   border-radius: 20px;
   background-color: #fff;
-  box-sizing: border-box; 
-  max-width: 100%;
+  box-sizing: border-box;
   max-height: 100%;
   min-height: 409px;
-  
-  /* 부드러운 테두리 효과 */
   position: relative;
+  font-size: 19px;
   
-  &::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 20px;
-    background: linear-gradient(
-      to right,
-      rgba(255, 225, 0, 0.5),
-      rgba(255, 225, 0, 0.7)
-    );
-    z-index: -1;
-    filter: blur(4px);
+  /* 내부 요소들이 컨테이너를 벗어나지 않도록 설정 */
+  & > * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* form 요소도 최대 너비 제한 */
+  & form {
+    width: 100%;
+    max-width: 100%;
+    
+    /* form 내부의 모든 요소도 최대 너비 제한 */
+    & > * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  
+  /* box-shadow를 사용한 블러 테두리 효과 */
+  box-shadow: 
+    0 0 5px 3px rgba(255, 225, 0, 0.6),
+    0 0 10px 8px rgba(255, 225, 0, 0.3);
+  
+  background: #ffffff;
+
+  /* 반응형 스타일 추가 */
+  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
+    width: 361px;
+    min-width: 320px;
+    max-width: 95%;
+    padding: 8% 5%;
+    font-size: 12px;
+    
+    & > * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    & form {
+      width: 100%;
+      max-width: 100%;
+      
+      & > * {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+    }
   }
 
-  /* 배경색이 테두리와 자연스럽게 어우러지도록 */
-  background: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 225, 0, 0.2);
+  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
+    width: 566px;
+    max-width: 95%;
+    padding: 7% 6%;
+    font-size: 12px;
+
+    & > * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    & form {
+      width: 100%;
+      max-width: 100%;
+      
+      & > * {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  }
 `;
 
 //내부 padding props로 받아오기

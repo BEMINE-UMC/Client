@@ -28,8 +28,8 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
   const rules = getValidationRules(2, password);
 
   return (
-    <>
-      <div style={{ marginBottom: "30px" }}>
+    <div style={{width: "100%"}}>
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
@@ -43,11 +43,9 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           }}
         />
       </div>
-      <div>
-        {errors.password && <ValidationMessage message={errors.password} />}
-      </div>
+      {errors.password && <ValidationMessage message={errors.password} />}
 
-      <div style={{ marginBottom: "73px" }}>
+      <div style={{ marginBottom: "20px" }}>
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
@@ -60,12 +58,10 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
             validateField("confirmPassword", value, rules);
           }}
         />
-        <div style={{ marginTop: "20px" }}></div>
-        {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
       </div>
-      
+      {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
 
-      <div style={{ width:"100%", display: "flex", justifyContent: "flex-end",}}>
+      <div style={{ width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
         <AuthButton
           onClick={onNext}
           disabled={!password || !confirmPassword || Object.values(errors).some((error) => error !== "")}
@@ -76,7 +72,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           다음
         </AuthButton>
       </div>
-    </>
+    </div>
   );
 };
 
