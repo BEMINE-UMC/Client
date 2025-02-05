@@ -25,8 +25,14 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
   const [error, setError] = React.useState("");
 
   const handleFindEmail = async () => {
+    // 입력값 검증
+    if (!nickname.trim() || !password.trim()) {
+      setError("닉네임과 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
     try {
-      const response = await api.post('/users/search/email', {
+      const response = await api.patch('/users/search/email', {
         name: nickname,
         password: password
       });
@@ -34,6 +40,8 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
       if (response.data.resultType === "SUCCESS") {
         const { email } = response.data.success;
         onNext(email);
+      } else {
+        setError("이메일 찾기에 실패했습니다.");
       }
     } catch (error) {
       console.error('Error:', error);
@@ -79,9 +87,8 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
             setError("");
           }}
         />
-        {error && <ValidationMessage message={error} />}
       </div>
-      
+      {error && <ValidationMessage message={error} />}
       <AuthButton 
         width="100%" 
         onClick={handleFindEmail} 

@@ -47,7 +47,7 @@ const FindEmailPage: React.FC = () => {
               email={foundEmail} 
             />
           )}
-          <FindEmailLinks />
+          {step === 1 && <FindEmailLinks />}
         </FormContainer>
       </div>
     </>
