@@ -1,11 +1,12 @@
+import styled from "styled-components";
+import { useState } from "react";
 import CustomColumn from "../../components/CustomColumn";
 import CustomRow from "../../components/CustomRow";
 import CustomFont from "../../components/CustomFont";
 import StyledImg from "../../components/StyledImg";
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/CustomButton";
 import { IoPencilOutline } from "react-icons/io5";
 import mockProfileImg from "../../../../assets/images/mockData/mockData_mine_ProfileImg.png";
+import CustomButton from "../../components/CustomButton";
 
 // 초기 프로필 데이터 관리
 const initialProfileData = {
@@ -35,6 +36,23 @@ const initialProfileData = {
 };
 
 const MobileProfilePage = () => {
+	const [profileData, setProfileData] = useState(initialProfileData);
+	const [isEditing, setIsEditing] = useState(false);
+	const [editedTagline, setEditedTagline] = useState(profileData.tagline);
+
+	const handleEditClick = () => {
+		setIsEditing(true);
+	};
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEditedTagline(e.target.value);
+	};
+
+	const handleSaveClick = () => {
+		setProfileData({ ...profileData, tagline: editedTagline });
+		setIsEditing(false);
+	};
+
 	return (
 		<CustomColumn $width="90%" $minHeight="100vh" $alignitems="center" $justifycontent="center">
 			{/* 상단 프로필 정보 */}
@@ -42,30 +60,50 @@ const MobileProfilePage = () => {
 				<StyledImg src={mockProfileImg} $width="40%" $height="auto" />
 				<CustomColumn $width="60%" $height="auto" $gap="1rem" $alignitems="flex-start" $justifycontent="center">
 					<CustomFont $font="1.5rem" $color="black" $fontweight="bold">
-						{initialProfileData.name}
+						{profileData.name}
 					</CustomFont>
-					<CustomRow $width="100%" $gap="0.5rem" $alignitems="center">
-						<CustomFont $font="0.8rem" $color="black">
-							{initialProfileData.tagline}
-						</CustomFont>
-						<CustomButton $width="auto" $height="auto" $backgroundColor="transparent" $padding="0">
-							<IoPencilOutline style={{ fontSize: "1rem", color: "#666666" }} />
-						</CustomButton>
-					</CustomRow>
+					<CustomColumn $width="100%" $gap="0.5rem" $alignitems="flex-end" $justifycontent="center">
+						{isEditing ? (
+							<>
+								<StyledInput
+									type="text"
+									value={editedTagline}
+									placeholder="소개글을 입력해주세요"
+									onChange={handleInputChange}
+								/>
+								<ThisCustomButton
+									$disabled={!editedTagline}
+									onClick={handleSaveClick}
+								>
+									<CustomFont $color="black" $font="0.8rem">
+										저장
+									</CustomFont>
+								</ThisCustomButton>
+							</>
+						) : (
+							<>
+								<CustomFont $font="0.8rem" $color="black">
+									{profileData.tagline || "소개글을 입력해주세요"}
+								</CustomFont>
+								<button
+									onClick={handleEditClick}
+									style={{
+										backgroundColor: "transparent",
+										border: "none",
+										cursor: "pointer",
+									}}
+								>
+									<IoPencilOutline style={{ fontSize: "1rem", color: "#666666" }} />
+								</button>
+							</>
+						)}
+					</CustomColumn>
 				</CustomColumn>
 			</CustomRow>
 
 			{/* 연혁 섹션 */}
 			<CustomColumn $width="100%" $gap="1.5rem" $alignitems="flex-end">
-				<CustomButton
-					$width="auto"
-					$height="auto"
-					$backgroundColor="transparent"
-					$padding="0"
-				>
-					<IoPencilOutline style={{ fontSize: "1rem", color: "#666666" }} />
-				</CustomButton>
-				{initialProfileData.sections.map((section, index) => (
+				{profileData.sections.map((section, index) => (
 					<CustomColumn key={index} $width="100%" $gap="0.5rem">
 						<CustomRow $width="100%" $alignitems="center" $gap="0.5rem" $justifycontent="flex-start">
 							<CustomFont $font="1rem" $color="black" $fontweight="bold">
@@ -83,3 +121,38 @@ const MobileProfilePage = () => {
 };
 
 export default MobileProfilePage;
+
+const ThisCustomButton = styled(CustomButton) <{ $disabled?: boolean }>`
+  background-color: ${({ $disabled }) => ($disabled ? "#D9D9D9" : "#FFD700")};
+  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  color: black;
+  width: auto;
+  height: auto;
+
+  &:hover {
+    background-color: ${({ $disabled }) => ($disabled ? "#D9D9D9" : "#FFC107")};
+  }
+`;
+
+const StyledInput = styled.input`
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  background-color: white;
+  color: black;
+
+  &:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 4px rgba(255, 215, 0, 0.8);
+  }
+
+  &::placeholder {
+    color: #aaa;
+  }
+`;
