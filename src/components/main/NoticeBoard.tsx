@@ -12,7 +12,7 @@ const NoticeBoard = () => {
 
   return (
     <NoticeBoardContainer>
-        <NoticeCategory onCategorySelect={handleCategorySelect} />
+        <NoticeCategory onCategorySelect={handleCategorySelect} selectedCategory={selectedCategory}/>
         <PostList selectedCategory={selectedCategory} />
     </NoticeBoardContainer>
   );

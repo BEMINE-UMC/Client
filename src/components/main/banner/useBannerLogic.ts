@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Template } from "../../../store/template/templateStore";
+import { Template } from "../../../store/template/popularTemplateStore";
 
 export const useBannerLogic = (templates: Template[]) => {
   const [currentIndex, setCurrentIndex] = useState(0);

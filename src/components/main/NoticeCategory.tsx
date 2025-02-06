@@ -5,29 +5,32 @@ import BeMine3D from "../../assets/images/main/BeMine_3D.png";
 
 interface NoticeCategoryProps {
   onCategorySelect: (category: string) => void;
+  selectedCategory: string;
 }
 
-const NoticeCategory: React.FC<NoticeCategoryProps> = ({ onCategorySelect }) => {
+const NoticeCategory: React.FC<NoticeCategoryProps> = ({ onCategorySelect, selectedCategory }) => {
   const categories = [
-    { name: "전체", image: BeMine3D }, // 이미지 사용
-    { name: "콘텐츠 마케터", image: BeMine3D }, // 배경색만 지정
-    { name: "브랜드 마케터", image: BeMine3D },
-    { name: "퍼포먼스 마케터", image: BeMine3D },
-    { name: "바이럴 마케터", image: BeMine3D },
+    { categoryName: "전체", image: BeMine3D }, // 이미지 사용
+    { categoryName: "콘텐츠 마케터", image: BeMine3D }, // 배경색만 지정
+    { categoryName: "브랜드 마케터", image: BeMine3D },
+    { categoryName: "퍼포먼스 마케터", image: BeMine3D },
+    { categoryName: "바이럴 마케터", image: BeMine3D },
   ];
 
   return (
+
     <CategoryContainer>
       {categories.map((category, index) => (
         <CategoryButton
           key={index}
-          onClick={() => onCategorySelect(category.name)}
+          onClick={() => onCategorySelect(category.categoryName)}
+          selected={selectedCategory === category.categoryName}
         >
           <CategoryImage
             src={category.image}
 
           />
-          {category.name}
+          {category.categoryName}
         </CategoryButton>
       ))}
     </CategoryContainer>
@@ -86,22 +89,21 @@ const CategoryContainer = styled.div`
   }
 `;
 
-const CategoryButton = styled.button`
+// 수정 필요
+const CategoryButton = styled.button<{ selected?: boolean }>` // ✅ selected prop 추가
   display: flex;
   align-items: center;
-
-
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid ${({ selected }) => (selected ? "#333" : "#ddd")}; // ✅ 선택된 경우 테두리 강조
   border-radius: 20px;
-  background-color: #fff;
+  background-color: ${({ selected }) => (selected ? "#0E003E" : "#fff")}; // ✅ 선택된 경우 배경 변경
   font-size: 14px;
-  color: #333;
+  color: ${({ selected }) => (selected ? "#fff" : "#333")}; // ✅ 선택된 경우 텍스트 색상 변경
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #f3f3f3;
+    background-color: ${({ selected }) => (selected ? "#0C002E" : "#f3f3f3")}; // ✅ hover 시 색상 변화
   }
 
   @media (max-width: 768px) {

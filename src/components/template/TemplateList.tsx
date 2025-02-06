@@ -1,59 +1,88 @@
-import styled from "styled-components";
+import { FC, useCallback, useEffect, useState } from "react";
+import { useTemplateStore } from "../../store/template/templateStore";
 import TemplateCard from "./templatecard/TemplateCard";
-import { FC, useState } from "react";
-import mockData from "../modal/template/templateMockData";
-import PdfPreview from "./PdfPreview"; // PdfPreview import 추가
+import styled from "styled-components";
+import { useAuthStore } from "../../store/authStore";
+import { Template } from "./types/templateTypes";
+import { getImageOrDefault } from "../../utils/imageUtils";
+import { useTemplateDetailStore } from "../../store/template/templateDetailStore";
+import PdfPreview from "./PdfPreview";
+
+
 
 interface TemplateListProps {
   selectedCategory: string;
 }
 
 const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<typeof mockData[number] | null>(null);
-  const [likedTemplates, setLikedTemplates] = useState<number[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const filteredData = selectedCategory === "전체"
-    ? mockData
-    : mockData.filter((template) => template.category === selectedCategory);
+  const {templates, fetchTemplates} = useTemplateStore();
 
-  const openModal = (template: typeof mockData[number]) => setSelectedTemplate(template);
-  const closeModal = () => setSelectedTemplate(null);
+  const { fetchTemplateDetail } = useTemplateDetailStore();
+  
+  const{isLoggedIn} = useAuthStore();
+  
+  const fetchCategoryTemplates = useCallback(() => {
+    const categoryId = selectedCategory === "전체" ? undefined : Number(selectedCategory);
+    console.log ("선택된 카테고리:", selectedCategory);
+    console.log("변환된 카테고리ID:", categoryId);
 
-  // 좋아요 상태 업데이트 함수
-  const toggleLike = (templateId: number) => {
-    setLikedTemplates((prev) =>
-      prev.includes(templateId)
-        ? prev.filter((id) => id !== templateId)
-        : [...prev, templateId]
-    );
-  };
+    fetchTemplates(categoryId);
+  }, [selectedCategory, fetchTemplates]);
+
+  useEffect(() => {
+    fetchCategoryTemplates();
+  }, [fetchCategoryTemplates]);
+
+  useEffect(() => {
+    console.log("불러온 템플릿 데이터:", templates);
+  }, [templates]);
+
+  const openModal = async (template: Template) => {
+    setSelectedTemplate(template);
+    setIsModalOpen(true);
+    await fetchTemplateDetail(template.templateId); // 디테일 api 연결시
+  }
+
+  const closeModal = () => {
+    setSelectedTemplate(null);
+    setIsModalOpen(false);
+  }
 
   return (
-    <>
-      <ListContainer>
-        {filteredData.map((template) => (
-          <TemplateCard
-            key={template.id}
-            {...template}
-            liked={likedTemplates.includes(template.id)}
-            likesCount={likedTemplates.filter(id => id === template.id).length}
-            onClick={() => openModal(template)}
-            onLikeToggle={() => toggleLike(template.id)}
-          />
-        ))}
-      </ListContainer>
-
-      {selectedTemplate && (
-        <PdfPreview
-        pdfUrl={selectedTemplate?.file ?? ""} // ✅ undefined 방지
+      <>
+        <ListContainer>
+          {templates && templates.length > 0 ? (
+            templates.map((template) => (
+              <TemplateCard
+                key={template.templateId}
+                data={{
+                  ...template,
+                  thumbnail: getImageOrDefault(template.thumbnail),
+                  likedStatus: template.likedStatus || false,
+                  likeCount: template.likesCount || 0,
+                }}
+                onCardClick={() => openModal(template)}
+                isLoggedIn={isLoggedIn} // 로그인 상태 전달
+              />
+            ))
+          ) : (
+            <p>게시물이 없습니다.</p>
+          )}
+        </ListContainer>
+        {isModalOpen && selectedTemplate && (
+          <PdfPreview
+          isOpen={isModalOpen}
           onClose={closeModal}
-          onLike={() => toggleLike(selectedTemplate.id)}
-          onDownload={() => console.log("다운로드 기능 추가 예정")}
-          isLiked={likedTemplates.includes(selectedTemplate.id)}
-          onEdit={() => console.log("편집 기능 추가 예정")} // ✅ 추가
-        />
-      )}
-    </>
+          filePDF={selectedTemplate.file || ""} // `data.file`을 `pdfUrl`로 전달
+          isLiked={selectedTemplate.likedStatus || false}
+          onLike={() => console.log("좋아요 클릭")}
+          onDownload={() => console.log("다운로드 클릭")} thumbnail={""} templateCreatedAt={""} templateId={0} title={""} authorId={0} authorName={""} categoryId={0} categoryName={""} likesCount={0}        />
+        )}
+
+      </>
   );
 };
 
@@ -64,22 +93,12 @@ const ListContainer = styled.div`
   flex-wrap: wrap;
   gap: 30px;
   justify-content: flex-start;
-  align-items: flex-start;
   padding: 16px;
+`;
 
-  @media (max-width: 768px) {
-    width: min(100vw, 100%);
-    justify-content: center;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 3%;
-    margin-left: -5%;
-  }
-
-  @media (max-width: 480px) {
-    justify-content: center;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-  }
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
 `;

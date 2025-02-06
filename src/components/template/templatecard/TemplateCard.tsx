@@ -1,59 +1,63 @@
-
+import React, { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import {
-  CardContainer,
-  ImageSection,
-  ContentSection,
-  Description,
-  Author,
-  Title,
-  LikeSection,
-  LikeButton,
-  LikeCount,
-} from "./TemplateCard.styles";
+import { CardContainer, ImageSection, ContentSection, Description, Author, Title, LikeSection, LikeButton, LikeCount } from "./TemplateCard.styles";
+import Empty from "../../../assets/images/main/Empty.png";
+import { useTemplateStore } from "../../../store/template/templateStore";
 
-import { BsBookmarkFill } from "react-icons/bs";
-
-interface TemplateCardProps {
+interface TemplateCardData {
+  templateId: number;
   title: string;
-  author: string;
-  image: string;
-  liked: boolean;
-  likesCount: number;
-  onClick: () => void;
-  onLikeToggle: () => void;
+  authorId: number;
+  authorName: string;
+  thumbnail?: string;
+  likedStatus?: boolean;
+  likeCount?: number;
+  categoryId: number;
+  categoryName: string;
 }
 
-const TemplateCard: React.FC<TemplateCardProps> = ({
-  title,
-  author,
-  image,
-  liked,
-  likesCount,
-  onClick,
-  onLikeToggle,
-}) => {
-  // const [isLiked, setIsLiked] = useState(liked);
-  // const [likeCount, setLikeCount] = useState(likesCount);
+interface TemplateCardProps {
+  data: TemplateCardData;
+  isLoggedIn: boolean;
+  onCardClick: () => void;
+}
 
-  // const toggleLike = () => {
-  //   setIsLiked(!isLiked);
-  //   setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
-  // };
+const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLoggedIn }) => {
+  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0 } = data;
+  const { likeTemplate } = useTemplateStore();
+
+  const [isLiked, setIsLiked] = useState<boolean>(likedStatus);
+  const [likes, setLikes] = useState<number>(likeCount);
+
+  const handleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const updatedLikeStatus = !isLiked;
+    setIsLiked(updatedLikeStatus);
+    setLikes((prev) => (updatedLikeStatus ? prev + 1 : prev - 1));
+
+    await likeTemplate(templateId);
+  };
 
   return (
-    <CardContainer onClick={onClick}>
-      <ImageSection backgroundImage={image} />
+    <CardContainer onClick={onCardClick} style={{ cursor: "pointer" }}>
+      <ImageSection backgroundImage={thumbnail || Empty} />
       <ContentSection>
         <Description>
-          <Author>{author}</Author>
+          <Author>{authorName}</Author>
           <Title>{title}</Title>
         </Description>
         <LikeSection>
-          <LikeButton liked={liked} onClick={onLikeToggle}>
-            {liked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
-          </LikeButton>
-          <LikeCount>{likesCount}</LikeCount>
+          {isLoggedIn ? (
+            <LikeButton onClick={handleLike} liked={isLiked}>
+              {isLiked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
+            </LikeButton>
+          ) : null}
+          <LikeCount>{likes}</LikeCount>
         </LikeSection>
       </ContentSection>
     </CardContainer>

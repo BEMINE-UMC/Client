@@ -109,6 +109,7 @@ export const Info = styled.div`
   color: #fff;
   display: flex;
   flex-direction: column;
+  color: black;
 `;
 
 export const Title = styled.h3`
