@@ -11,19 +11,22 @@ import CustomButton from "../../components/CustomButton";
 const MobileProfile = () => {
 	const navigate = useNavigate();
 
-	const template = () => { navigate('/writetemplatepage'); }
-	const content = () => { navigate('/writecontentpage'); }
+	const profile = () => { navigate('/mobileprofilepage'); }
+	const template = () => { navigate('/mobiletemplatepage'); }
+	const content = () => { navigate('/mobilecontentpage'); }
 
 	return (
 		<CustomColumn $width="90%" $height="auto" $alignitems="center" $justifycontent="center" $gap="1rem">
-			<CustomRow $width="100%" $height="auto" $padding="1rem" $gap="1rem">
-				<StyledImg src={mockProfileImg} $width="40%" $height="40%" />
-				<CustomColumn $width="60%" $height="auto" $gap="1rem" $alignitems="flex-start" $justifycontent="center">
-					<CustomFont $font="1.5rem" $color="black" $fontweight="bold">유궁둔</CustomFont>
-					<CustomFont $font="0.8rem" $color="black" $fontweight="bold">멋진 콘텐츠 마케터가 되고싶은</CustomFont>
-				</CustomColumn>
-				<IoIosArrowForward style={{ fontSize: '3rem', color: '#D9D9D9' }} />
-			</CustomRow>
+			<CustomButton $width='auto' $height='auto' $backgroundColor="transparent" $padding="0" onClick={profile}>
+				<CustomRow $width="100%" $height="auto" $padding="1rem" $gap="1rem">
+					<StyledImg src={mockProfileImg} $width="40%" $height="40%" />
+					<CustomColumn $width="60%" $height="auto" $gap="1rem" $alignitems="flex-start" $justifycontent="center">
+						<CustomFont $font="1.5rem" $color="black" $fontweight="bold">유궁둔</CustomFont>
+						<CustomFont $font="0.8rem" $color="black">멋진 콘텐츠 마케터가 되고싶은</CustomFont>
+					</CustomColumn>
+					<IoIosArrowForward style={{ fontSize: '3rem', color: '#D9D9D9' }} />
+				</CustomRow>
+			</CustomButton>
 
 			<CustomColumn $width="100%" $height="auto" $gap="0.5rem" $alignitems="flex-start" $justifycontent="center">
 				<CustomFont $font="1rem" $color="black" $fontweight="bold">1. 학력 및 전공</CustomFont>
