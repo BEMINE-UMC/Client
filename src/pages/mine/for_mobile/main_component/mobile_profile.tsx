@@ -13,7 +13,7 @@ const MobileProfile = () => {
 
 	const profile = () => { navigate('/mobileprofilepage'); }
 	const template = () => { navigate('/mobiletemplatepage'); }
-	const content = () => { navigate('/writecontentpage'); }
+	const content = () => { navigate('/mobilecontentpage'); }
 
 	return (
 		<CustomColumn $width="90%" $height="auto" $alignitems="center" $justifycontent="center" $gap="1rem">
