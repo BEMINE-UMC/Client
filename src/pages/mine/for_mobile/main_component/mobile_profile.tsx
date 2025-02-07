@@ -12,7 +12,7 @@ const MobileProfile = () => {
 	const navigate = useNavigate();
 
 	const profile = () => { navigate('/mobileprofilepage'); }
-	const template = () => { navigate('/writetemplatepage'); }
+	const template = () => { navigate('/mobiletemplatepage'); }
 	const content = () => { navigate('/writecontentpage'); }
 
 	return (

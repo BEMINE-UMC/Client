@@ -6,6 +6,7 @@ import MyPage from "../../pages/mine/MyPage";
 import WriteContentPage from "../../pages/mine/Write_Content_Page";
 import WriteTemplatePage from "../../pages/mine/Write_Template_Page";
 import MobileProfilePage from "../../pages/mine/for_mobile/profilePage/profilePage";
+import MobileTemplatePage from "../../pages/mine/for_mobile/profilePage/mobileTemplateUploadPage";
 
 import Login from "../../pages/auth/Login";
 import TemplatePage from "../../pages/template/TemplatePage";
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: '/mobileprofilepage',
         element: <MobileProfilePage />
+      },
+      {
+        path: '/mobiletemplatepage',
+        element: <MobileTemplatePage />
       },
     ],
   },
