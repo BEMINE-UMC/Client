@@ -39,6 +39,26 @@ const MobileProfilePage = () => {
 	const [profileData, setProfileData] = useState(initialProfileData);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editedTagline, setEditedTagline] = useState(profileData.tagline);
+	const [isEditingSections, setIsEditingSections] = useState(false);
+	const [editedSections, setEditedSections] = useState(profileData.sections);
+
+	const handleSectionEditClick = () => {
+		setIsEditingSections(true);
+	};
+
+	const handleSectionInputChange = (index: number, value: string) => {
+		const updatedSections = [...editedSections];
+		updatedSections[index].content = value;
+		setEditedSections(updatedSections);
+	};
+
+	const handleSectionSaveClick = () => {
+		setProfileData({ ...profileData, sections: editedSections });
+		setIsEditingSections(false);
+	};
+
+	const allSectionsFilled = editedSections.every((section) => section.content.trim() !== "");
+
 
 	const handleEditClick = () => {
 		setIsEditing(true);
@@ -101,21 +121,52 @@ const MobileProfilePage = () => {
 				</CustomColumn>
 			</CustomRow>
 
-			{/* 연혁 섹션 */}
-			<CustomColumn $width="100%" $gap="1.5rem" $alignitems="flex-end">
-				{profileData.sections.map((section, index) => (
-					<CustomColumn key={index} $width="100%" $gap="0.5rem">
-						<CustomRow $width="100%" $alignitems="center" $gap="0.5rem" $justifycontent="flex-start">
-							<CustomFont $font="1rem" $color="black" $fontweight="bold">
-								{section.title}
-							</CustomFont>
-						</CustomRow>
-						<CustomFont $font="0.9rem" $color="#666666">
-							{section.content}
-						</CustomFont>
-					</CustomColumn>
-				))}
+			<CustomColumn $width="100%" $height="auto" $alignitems="flex-end" $justifycontent="center">
+				{isEditingSections ? (
+					<>
+						{editedSections.map((section, index) => (
+							<CustomColumn key={index} $width="100%" $gap="0.5rem">
+								<StyledInput
+									type="text"
+									value={section.content}
+									placeholder="내용을 입력해주세요"
+									onChange={(e) => handleSectionInputChange(index, e.target.value)}
+								/>
+							</CustomColumn>
+						))}
+						<ThisCustomButton
+							$disabled={!allSectionsFilled}
+							onClick={handleSectionSaveClick}
+						>
+							저장
+						</ThisCustomButton>
+					</>
+				) : (
+					<>
+						{profileData.sections.map((section, index) => (
+							<CustomColumn key={index} $width="100%" $gap="0.5rem" $justifycontent="center" $alignitems="flex-start">
+								<CustomFont $font="1rem" $color="black" $fontweight="bold">
+									{section.title}
+								</CustomFont>
+								<CustomFont $font="0.9rem" $color="#666666">
+									{section.content}
+								</CustomFont>
+							</CustomColumn>
+						))}
+						<button
+							onClick={handleSectionEditClick}
+							style={{
+								backgroundColor: "transparent",
+								border: "none",
+								cursor: "pointer",
+							}}
+						>
+							<IoPencilOutline style={{ fontSize: "1rem", color: "#666666" }} />
+						</button>
+					</>
+				)}
 			</CustomColumn>
+
 		</CustomColumn>
 	);
 };
