@@ -55,6 +55,25 @@ const MobileTemplatePage = () => {
 				<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
 			</CustomColumn>
 
+			<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
+				<CustomFont $color="#D9D9D9" $font="1rem">파일 저장 가능 여부</CustomFont>
+				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+					<label>
+						<input type="radio" name="visibility" value="save" />
+						<CustomFont $color="black">저장가능</CustomFont>
+					</label>
+					<label>
+						<input type="radio" name="visibility" value="readable" />
+						<CustomFont $color="black">열람가능</CustomFont>
+					</label>
+					<label>
+						<input type="radio" name="visibility" value="private" />
+						<CustomFont $color="black">비공개</CustomFont>
+					</label>
+				</CustomRow>
+			</CustomColumn>
+
+
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="center">
 				<CustomBox
 					$width="80%"

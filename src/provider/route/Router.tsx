@@ -65,7 +65,10 @@ export const router = createBrowserRouter([
         path: '/mobiletemplatepage',
         element: <MobileTemplatePage />
       },
-
+      {
+        path: '/mobilecontentpage',
+        element: <MobileContentPage />
+      },
       {
         path: '/mobileeachworkspacepage',
         element: <MobileEachWorkspace />

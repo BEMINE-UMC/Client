@@ -47,6 +47,33 @@ const MobileContentPage = () => {
 				<CustomFont $color="black">{getCurrentDate()}</CustomFont>
 				<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
 			</CustomColumn>
+			<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
+				<CustomFont $color="#D9D9D9" $font="1rem">파일 저장 가능 여부</CustomFont>
+				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+					<label>
+						<input type="radio" name="visibility" value="save" />
+						<CustomFont $color="black">콘텐츠 마케터</CustomFont>
+					</label>
+					<label>
+						<input type="radio" name="visibility" value="readable" />
+						<CustomFont $color="black">바이럴 마케터</CustomFont>
+					</label>
+					<label>
+						<input type="radio" name="visibility" value="readable" />
+						<CustomFont $color="black">브랜드 마케터</CustomFont>
+					</label>
+				</CustomRow>
+				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+					<label>
+						<input type="radio" name="visibility" value="private" />
+						<CustomFont $color="black">퍼포먼스 마케터</CustomFont>
+					</label>
+					<label>
+						<input type="radio" name="visibility" value="private" />
+						<CustomFont $color="black">기타</CustomFont>
+					</label>
+				</CustomRow>
+			</CustomColumn>
 
 			<TextEditor editorState={editorState} onEditorStateChange={handleEditorChange} />
 			<CustomColumn $height="3rem" />
