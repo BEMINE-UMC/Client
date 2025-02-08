@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import Empty from "../../../assets/images/main/Empty.png"
+
 interface ContentSectionProps {
   title: string;
   contentImage: string;
@@ -8,10 +10,12 @@ interface ContentSectionProps {
 }
 
 const ContentSection: React.FC<ContentSectionProps> = ({ title, contentImage, content }) => {
+  const imageSrc = contentImage || Empty;
+  
   return (
     <Wrapper>
       <ModalTitle>{title}</ModalTitle>
-      <ModalImage src={contentImage} alt="Content Image" />
+      <ModalImage src={imageSrc} alt="Content Image" />
       <Content>{content}</Content>
     </Wrapper>
   );

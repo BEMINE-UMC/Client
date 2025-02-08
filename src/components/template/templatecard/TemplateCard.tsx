@@ -45,7 +45,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
 
   return (
     <CardContainer onClick={onCardClick} style={{ cursor: "pointer" }}>
-      <ImageSection backgroundImage={thumbnail || Empty} />
+      <ImageSection style={{ backgroundImage: `url(${thumbnail || Empty})` }} />
       <ContentSection>
         <Description>
           <Author>{authorName}</Author>

@@ -96,7 +96,7 @@
 
   const PostCardContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 자동 줄바꿈 */
     justify-content: center;
     gap: 10px;
     width: 100%;

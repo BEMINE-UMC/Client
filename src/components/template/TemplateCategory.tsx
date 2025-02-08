@@ -50,7 +50,7 @@ const CategoryContainer = styled.div`
     overflow-x: auto; /* 가로 스크롤 활성화 */
     -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 (iOS) */
     white-space: nowrap; /* 자식 요소가 한 줄로 배치되도록 설정 */
-    margin-left: 5%;
+    margin-left: 2.5%;
 
   }
 `;

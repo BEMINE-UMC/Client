@@ -3,26 +3,16 @@ import instance from "../../api/axios";
 
 // Template 데이터 타입 정의
 export interface PopularTemplate {
-    likedStatus: boolean;
-    likesCount: number;
-    categoryName: string;
-    templateId: number;
-    image: string;
+    id: number;   // API 응답에 맞게 `templateId` -> `id`로 변경
     title: string;
-    file: string; // 추가된 속성
-    templateCreatedAt?: string; // 추가된 속성
-    thumbnail?: string; // 추가된 속성
-    authorId?: number; // 추가된 속성
-    categoryId: number;
-    authorName: string;
+    image: string;  // `thumbnail`을 `image`로 저장
 }
 
 // Zustand 스토어 타입 정의
 interface PopularTemplateStore {
-    likeTemplate: (templateId: number) => void;
-    error: string | null;
-    loading: boolean;
     templates: PopularTemplate[];
+    loading: boolean;
+    error: string | null;
     fetchPopularTemplates: () => Promise<void>;
 }
 
@@ -37,31 +27,19 @@ export const usePopularTemplateStore = create<PopularTemplateStore>((set) => ({
         
         try {
             const response = await instance.get("/templates/popular");
+            
             const templates = response.data.success.map((template: any) => ({
-                templateId: template.templateId,
+                id: template.id,  // API에서 제공하는 `id`
                 title: template.title,
-                image: template.thumbnail,  // API에서 받은 `thumbnail`을 `image`로 저장
-                likedStatus: template.likedStatus || false,  // 기본 값 설정
-                likesCount: template.likesCount || 0,  // 기본 값 설정
-                categoryName: template.categoryName || "",  // 기본 값 설정
+                image: template.thumbnail,  // `thumbnail`을 `image`로 사용
             }));
+
+            console.log("✅ 배너 응답:", response.data);
 
             set({ templates, loading: false }); // 데이터 성공적으로 로드 후 상태 업데이트
         } catch (error) {
             set({ loading: false, error: "템플릿 데이터를 가져오지 못했습니다." });
             console.error("API 요청 실패: 템플릿 데이터를 가져오지 못했습니다.", error);
         }
-    },
-
-    // 좋아요 상태를 토글하는 함수
-    likeTemplate: (templateId: number) => {
-        set((state) => {
-            const updatedTemplates = state.templates.map((template) =>
-                template.templateId === templateId
-                    ? { ...template, likedStatus: !template.likedStatus }
-                    : template
-            );
-            return { templates: updatedTemplates };
-        });
     },
 }));

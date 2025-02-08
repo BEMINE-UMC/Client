@@ -94,16 +94,16 @@ const CategoryButton = styled.button<{ selected?: boolean }>` // ✅ selected pr
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  border: 1px solid ${({ selected }) => (selected ? "#333" : "#ddd")}; // ✅ 선택된 경우 테두리 강조
+  border: 1px solid ${({ selected }) => (selected ? "#ddd" : "#ddd")}; // ✅ 선택된 경우 테두리 강조
   border-radius: 20px;
-  background-color: ${({ selected }) => (selected ? "#0E003E" : "#fff")}; // ✅ 선택된 경우 배경 변경
+  background-color: ${({ selected }) => (selected ? "#f3f3f3" : "#fff")}; // ✅ 선택된 경우 배경 변경
   font-size: 14px;
-  color: ${({ selected }) => (selected ? "#fff" : "#333")}; // ✅ 선택된 경우 텍스트 색상 변경
+  color: black;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: ${({ selected }) => (selected ? "#0C002E" : "#f3f3f3")}; // ✅ hover 시 색상 변화
+    background-color: ${({ selected }) => (selected ? "#f3f3f3" : "#f3f3f3")}; // ✅ hover 시 색상 변화
   }
 
   @media (max-width: 768px) {
@@ -112,6 +112,7 @@ const CategoryButton = styled.button<{ selected?: boolean }>` // ✅ selected pr
 
     height: auto; /* 버튼 높이 조정 */
     gap: 4px; /* 이미지와 텍스트 간 간격 조정 */
+    margin-left: 5%;
     
   }
 

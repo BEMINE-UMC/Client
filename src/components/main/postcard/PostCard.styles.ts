@@ -16,15 +16,25 @@ export const CardContainer = styled.div`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 768px) { //375기준
-    width: 180px;
-    height: 200px;
+  @media (max-width: 768px) {
+    width: 21vw;
+    height: 28vh;
     margin-bottom: 20%
   }
 
   @media (max-width: 480px) { //375기준
-    width: 170px;
+    width: 40vw;
     height: 200px;
+  }
+
+  @media (max-width: 376px) { //375기준
+    width: 40vw;
+    height: 150px;
+  }
+
+  @media (max-width: 321px) { //375기준
+    width: 40vw;
+    height: 150px;
   }
 `;
 
@@ -170,6 +180,7 @@ export const LikeCount = styled.span`
 
   @media (max-width: 768px) {
     font-size: 13px;
+    margin-top: -5px;
   }
 
   @media (max-width: 480px) {

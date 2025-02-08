@@ -94,11 +94,20 @@ const ListContainer = styled.div`
   gap: 30px;
   justify-content: flex-start;
   padding: 16px;
-`;
+  grid-template-columns: repeat(4, 1fr) ;
 
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 18px;
-  text-align: center;
-  margin-top: 20px;
+  @media (max-width: 768px) {
+    display: grid !important;
+    
+    justify-content: center;
+    margin-left: -7%;
+  }
+
+  @media (max-width: 480px) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) ;
+    justify-content: center;
+    margin-left: 5vw;
+  }
+
 `;

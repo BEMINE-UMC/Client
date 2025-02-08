@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { getImageOrDefault } from "../../../utils/imageUtils"; // 유틸 함수 import
+
+import Empty from "../../../assets/images/main/Empty.png"
 
 interface FooterProps {
   author: string;
@@ -8,6 +9,8 @@ interface FooterProps {
 }
 
 const FooterSection: React.FC<FooterProps> = ({ author, contentImage }) => {
+  const imageSrc = contentImage || Empty;
+  
   return (
     <>
         <Container>
@@ -17,7 +20,7 @@ const FooterSection: React.FC<FooterProps> = ({ author, contentImage }) => {
         
             <ImageContainer>
                 {/* 유틸 함수 적용 */}
-                <StyledImage src={getImageOrDefault(contentImage || "")} alt={`${author}님의 게시물`} />
+                <StyledImage src={imageSrc} alt={`${author}님의 게시물`} />
             </ImageContainer>
 
         </Container>
@@ -59,7 +62,7 @@ const Author = styled.h2`
   }
 
   @media (max-width: 480px) {
-    font-size: 18px;
+    font-size: 12.5px;
   }
 `;
 

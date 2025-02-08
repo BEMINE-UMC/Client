@@ -91,10 +91,10 @@ export const BannerItem = styled.div`
   }
 `;
 
-export const Image = styled.div<{ backgroundImage: string }>`
+export const Image = styled.div<{ $backgroundImage: string }>`
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: ${(props) => `url(${props.$backgroundImage})`};
   background-size: cover;
   background-position: center;
   filter: brightness(0.7);

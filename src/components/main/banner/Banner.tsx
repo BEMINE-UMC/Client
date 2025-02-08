@@ -8,7 +8,6 @@ import {
   Image,
   Info,
   Title,
-  Author,
   ArrowButton,
 } from "./Banner.styles";
 import { usePopularTemplateStore } from "../../../store/template/popularTemplateStore";
@@ -26,12 +25,12 @@ const Banner: React.FC = () => {
 
   const { visibleTemplates, handlePrev, handleNext } = useBannerLogic(templates); // 로직 분리
 
-  if (templates.length === 0) {
+  if (!templates || templates.length === 0) {
     return (
       <Container>
         <BannerContainer>
           <BannerItem>
-            <Image backgroundImage={Empty} />
+            <Image $backgroundImage={Empty} />
             <Info>
               <Title>데이터가 없습니다</Title>
             </Info>
@@ -49,7 +48,7 @@ const Banner: React.FC = () => {
       <BannerContainer>
         {visibleTemplates.map((template) => (
           <BannerItem key={template.id}>
-            <Image backgroundImage={template.image} />
+            <Image $backgroundImage={template.image || Empty} />
             <Info>
               <Title>{template.title}</Title>
             </Info>

@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import Empty from "../../../assets/images/main/Empty.png"
+
 interface UserSectionProps {
   userImage: string;
   author: string;
@@ -8,9 +10,12 @@ interface UserSectionProps {
 }
 
 const UserSection: React.FC<UserSectionProps> = ({ userImage, author, userInformation }) => {
+  const imageSrc = userImage || Empty;
+
+
   return (
     <Wrapper>
-      <UserImage src={userImage} alt={`${author}'s profile`} />
+      <UserImage src={imageSrc} alt={`${author}'s profile`} />
       <UserInfoWrapper>
         <ModalAuthor>{author}</ModalAuthor>
         <UserInformation>{userInformation}</UserInformation>
@@ -22,7 +27,7 @@ const UserSection: React.FC<UserSectionProps> = ({ userImage, author, userInform
 export default UserSection;
 
 const Wrapper = styled.div`
-  display: flex;
+  display: flex;  
   margin-bottom: 20px;
   gap: 20px;
   padding-bottom: 20px;
@@ -49,8 +54,8 @@ const UserImage = styled.img`
   @media (max-width: 480px) {
     margin-top: 10%;
     justify-content: center;
-    width: 140px;
-    height: 140px;
+    width: 100px;
+    height: 100px;
   }
 `;
 
@@ -72,9 +77,9 @@ const ModalAuthor = styled.h3`
   }
 
   @media (max-width: 480px) {
-    margin-top: -25px;
+    margin-top: 10px;
     gap: 10px;
-    font-size: 25px;
+    font-size: 15px;
   }
 `;
 
@@ -90,7 +95,7 @@ const UserInformation = styled.pre`
   }
 
   @media (max-width: 480px) {
-    margin-top: -20px;
+    margin-top: -10px;
     font-size: 5px;
   }
 `;
