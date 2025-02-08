@@ -1,6 +1,8 @@
 import React from "react";
 import LinkText from "../../auth/LinkText";
 import { StepContainer, HighlightedText } from "./FindEmail.styles";
+import AuthButton from "../AuthButton";
+import { useNavigate } from "react-router-dom";
 
 interface FindEmailStep2Props {
   nickname: string;
@@ -8,6 +10,8 @@ interface FindEmailStep2Props {
 }
 
 const FindEmailStep2: React.FC<FindEmailStep2Props> = ({ nickname, email }) => {
+  const navigate = useNavigate();
+
   return (
     <StepContainer>
     <div
@@ -26,9 +30,13 @@ const FindEmailStep2: React.FC<FindEmailStep2Props> = ({ nickname, email }) => {
             <HighlightedText>{email}</HighlightedText>
             <span> 입니다.</span>
         </div>
-        <LinkText to="/login" fontSize="20px" bold={true} color="#707070">
-            로그인 하러가기
-        </LinkText>
+        <AuthButton
+          onClick={() => navigate("/login")}
+          fontSize="20px"
+          width="100%"
+        >
+          로그인 하러가기
+        </AuthButton>
     </div>
     </StepContainer>
   );

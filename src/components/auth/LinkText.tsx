@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { BREAKPOINTS } from '../../hooks/useResponsive';
 
 interface LinkTextProps {
   /** 이동할 경로 */
@@ -51,6 +52,14 @@ const StyledLink = styled(Link)<StyledLinkProps>`
   &:hover {
     color: ${({ color }) => color || "#6c757d"};
     text-decoration: none;
+  }
+
+  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
+    font-size: 8px;
+  }
+
+  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
+    font-size: 8px;
   }
 `;
 

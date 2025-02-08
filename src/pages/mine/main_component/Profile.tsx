@@ -8,9 +8,76 @@ import CustomFont from "../components/CustomFont";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
-import Modal from "../components/Modal";
+// import Modal from "../components/Modal";
+import styled from "styled-components";
 
 import mockProfileImg from '../../../assets/images/mockData/mockData_mine_ProfileImg.png';
+
+const ResponsiveColumn = styled(CustomColumn)`
+  width: 25%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3rem;
+
+  @media (max-width: 1024px) {
+    width: 80%;
+    min-height: auto;
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+    min-height: auto;
+    gap: 1.5rem;
+  }
+`;
+
+const ResponsiveInnerColumn = styled(CustomColumn)`
+  width: 70%;
+  height: auto;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 0.3rem;
+  }
+`;
+
+const ResponsiveImg = styled(StyledImg)`
+  width: 100%;
+  border-radius: 0.5rem;
+
+  @media (max-width: 768px) {
+    border-radius: 0.3rem;
+  }
+`;
+
+const ResponsiveButtonRow = styled(CustomRow)`
+  width: 70%;
+  height: auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.3rem;
+  }
+`;
 
 const initialProfileData = {
 	name: "유궁둔",
@@ -86,82 +153,63 @@ const Profile = () => {
 	};
 
 	return (
-		<CustomColumn $width="25%" $minHeight="100vh" $alignitems="center" $justifycontent="flex-start" $gap="3rem">
-			<CustomColumn $width="70%" $height="auto" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
-				<StyledImg src={profileImage} $width="100%" $borderradius="0.5rem" />
+		<ResponsiveColumn>
+			<ResponsiveInnerColumn>
+				<ResponsiveImg src={profileImage} />
 				<CustomRow $width="100%" $justifycontent="flex-end">
-					<CustomButton as="label" $backgroundColor="black" $padding="0.5rem" $width='auto' $height='auto'>
+					<CustomButton as="label" $backgroundColor="black" $padding="0.5rem" $width="auto" $height="auto">
 						<CustomFont $color="white" $fontweight="bold">수정하기</CustomFont>
-						<input type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+						<input type="file" onChange={handleImageUpload} style={{ display: "none" }} />
 					</CustomButton>
 				</CustomRow>
-			</CustomColumn>
+			</ResponsiveInnerColumn>
 
-			<CustomColumn $width="70%" $height="auto" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
+			<ResponsiveInnerColumn>
 				<CustomFont $color="black" $font="2rem" $fontweight="bold">{profileData.name}</CustomFont>
 				<CustomFont $color="black" $font="1rem" $fontweight="bold">{profileData.tagline}</CustomFont>
-			</CustomColumn>
+			</ResponsiveInnerColumn>
 
-			<CustomColumn $width="70%" $height="auto" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
-				{isEditing ? (
-					tempData.sections.map((section, index) => (
+			<ResponsiveInnerColumn>
+				{isEditing
+					? tempData.sections.map((section, index) => (
 						<>
-							<CustomInput key={`title-${index}`} value={section.title} onChange={(e) => handleInputChange(index, 'title', e.target.value)} placeholder={`${section.title}`} />
-							<CustomInput key={`content-${index}`} value={section.content} onChange={(e) => handleInputChange(index, 'content', e.target.value)} placeholder={`${section.content}`} />
+							<CustomInput key={`title-${index}`} value={section.title} onChange={(e) => handleInputChange(index, "title", e.target.value)} placeholder={`${section.title}`} />
+							<CustomInput key={`content-${index}`} value={section.content} onChange={(e) => handleInputChange(index, "content", e.target.value)} placeholder={`${section.content}`} />
 						</>
 					))
-				) : (
-					profileData.sections.map((section, index) => (
+					: profileData.sections.map((section, index) => (
 						<>
 							<CustomFont key={`title-${index}`} $color="#686868" $font="0.8rem" $fontweight="bold">{section.title}</CustomFont>
 							<CustomFont key={`content-${index}`} $color="#686868" $font="0.8rem">{section.content}</CustomFont>
 						</>
-					))
-				)}
-			</CustomColumn>
+					))}
+			</ResponsiveInnerColumn>
 
-			<CustomRow $width="70%" $height="auto" $alignitems="center" $justifycontent="flex-end" $gap="0.5rem">
+			<ResponsiveButtonRow>
 				{isEditing ? (
 					<>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width='7rem' $height='auto' onClick={handleCancelEdit}>
+						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={handleCancelEdit}>
 							<CustomFont $color="white" $font="0.7rem">수정 취소</CustomFont>
 						</CustomButton>
-						<CustomButton $backgroundColor={allFieldsFilled ? "yellow" : "#D9D9D9"} $padding="0.5rem" $width='7rem' $height='auto' onClick={handleEdit} disabled={!allFieldsFilled}>
+						<CustomButton $backgroundColor={allFieldsFilled ? "yellow" : "#D9D9D9"} $padding="0.5rem" $width="7rem" $height="auto" onClick={handleEdit} disabled={!allFieldsFilled}>
 							<CustomFont $color={allFieldsFilled ? "black" : "white"} $font="0.7rem">수정 완료</CustomFont>
 						</CustomButton>
 					</>
 				) : (
-					<CustomButton $backgroundColor="black" $padding="0.5rem" $width='7rem' $height='auto' onClick={handleEditClick}>
-						<CustomFont $color="white" $font="0.7rem">연혁 수정</CustomFont>
-					</CustomButton>
-				)}
-
-				{isEditing ? (<></>) : (
 					<>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width='7rem' $height='auto' onClick={GoWriteContent}>
+						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={handleEditClick}>
+							<CustomFont $color="white" $font="0.7rem">연혁 수정</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
 							<CustomFont $color="white" $font="0.7rem">게시물 작성</CustomFont>
 						</CustomButton>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width='7rem' $height='auto' onClick={GoWriteTemplate}>
+						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteTemplate}>
 							<CustomFont $color="white" $font="0.7rem">템플릿 등록</CustomFont>
 						</CustomButton>
 					</>
 				)}
-			</CustomRow>
-
-			<Modal isOpen={editModal} onClose={() => setEditModal(false)}>
-				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
-					<CustomFont $color='black' $fontweight='bold'>정말 수정하시겠습니까?</CustomFont>
-					<CustomRow $width="90%">
-						<CustomButton $backgroundColor="transparent" onClick={Back}>
-							<CustomFont $color='black' $fontweight='bold'>취소</CustomFont>
-						</CustomButton>
-						<CustomButton $backgroundColor="#FFE100" onClick={handleConfirmEdit}>
-							<CustomFont $color='black' $fontweight='bold'>수정하기</CustomFont>
-						</CustomButton>
-					</CustomRow>
-				</CustomColumn>
-			</Modal>
-		</CustomColumn>
+			</ResponsiveButtonRow>
+		</ResponsiveColumn>
 	);
 };
 

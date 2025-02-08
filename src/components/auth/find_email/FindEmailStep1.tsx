@@ -4,13 +4,15 @@ import ValidationMessage from "../../auth/ValidationMessage";
 import AuthButton from "../../auth/AuthButton";
 import Label from "../../auth/Label";
 import { StepContainer } from "./FindEmail.styles";
+import api from "../../../api/axios";
+import { isAxiosError } from "axios";
 
 interface FindEmailStep1Props {
   nickname: string;
   setNickname: (value: string) => void;
   password: string;
   setPassword: (value: string) => void;
-  onNext: () => void;
+  onNext: (email: string) => void;
 }
 
 const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
@@ -22,11 +24,39 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
 }) => {
   const [error, setError] = React.useState("");
 
-  const handleNext = () => {
-    if (nickname === "test" && password === "password123") {
-      onNext();
-    } else {
-      setError("해당 정보의 이메일이 존재하지 않습니다.");
+  const handleFindEmail = async () => {
+    // 입력값 검증
+    if (!nickname.trim() || !password.trim()) {
+      setError("닉네임과 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await api.patch('/users/search/email', {
+        name: nickname,
+        password: password
+      });
+
+      if (response.data.resultType === "SUCCESS") {
+        const { email } = response.data.success;
+        onNext(email);
+      } else {
+        setError("이메일 찾기에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      
+      if (isAxiosError(error)) {
+        const errorData = error.response?.data;
+        
+        if (errorData?.error?.errorCode === "A030") {
+          setError(errorData.error.reason);
+        } else {
+          setError("해당 정보의 이메일이 존재하지 않습니다.");
+        }
+      } else {
+        setError("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
     }
   };
 
@@ -45,7 +75,7 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
           }}
         />
       </div>
-      <div style={{marginBottom : "45px"}}>
+      <div style={{marginBottom : "20px"}}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
@@ -61,7 +91,7 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
       {error && <ValidationMessage message={error} />}
       <AuthButton 
         width="100%" 
-        onClick={handleNext} 
+        onClick={handleFindEmail} 
         disabled={!nickname || !password}
         fontSize="20px"
       >

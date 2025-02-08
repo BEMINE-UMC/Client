@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BREAKPOINTS } from '../../hooks/useResponsive';
 
 interface AuthButtonProps {
   /** 버튼 활성화 여부 */
@@ -37,6 +38,19 @@ const AuthButton = styled.button<AuthButtonProps>`
 
   &:active {
     background-color: ${props => props.disabled ? '#D3D3D3' : '#FFC000'};
+  }
+
+  /* 반응형 스타일 추가 */
+  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
+    width: 100% !important;
+    height: 34px !important;
+    font-size: 10px !important;
+  }
+
+  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
+    width: 100% !important;  /* 다시 고정 너비로 변경 */
+    height: 43px !important;
+    font-size: 12px !important;
   }
 `;
 
