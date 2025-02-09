@@ -166,9 +166,7 @@ const WriteContentPage = () => {
 			</CustomColumn>
 
 			<TextEditor
-				editorState={editorState}
-				onEditorStateChange={handleEditorChange}
-				onThumbnailSelect={handleThumbnailSelection}
+
 			/>
 
 			<CustomRow $width="90%" $justifycontent="flex-end">

@@ -1,61 +1,67 @@
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./TextEditor.css";
+import { useState, useRef } from "react";
+import CustomColumn from "./CustomColumn";
+import CustomRow from "./CustomRow";
+import CustomFont from "./CustomFont";
+import CustomBox from "./CustomBox";
 
 interface TextEditorProps {
-	editorState: EditorState | null;
-	onEditorStateChange: (editorState: EditorState) => void;
-	onThumbnailSelect: (imageSrc: string) => void;
+	onChange?: (content: string) => void;
 }
 
-const TextEditor = ({ editorState, onEditorStateChange, onThumbnailSelect }: TextEditorProps) => {
-	const safeEditorState = editorState || EditorState.createEmpty();
+const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
+	const [content, setContent] = useState<string>("");
+	const editorRef = useRef<HTMLDivElement | null>(null);
 
-	const handleEditorChange = (newEditorState: EditorState) => {
-		onEditorStateChange(newEditorState);
+	// 텍스트 변경 핸들러
+	const handleInputChange = (e: React.FormEvent<HTMLDivElement>) => {
+		const newContent = e.currentTarget.innerHTML;
+		setContent(newContent);
+		onChange && onChange(newContent);
 	};
 
-	const handleImageClick = (imageSrc: string) => {
-		if (window.confirm("이 이미지를 대표 이미지로 설정하시겠습니까?")) {
-			onThumbnailSelect(imageSrc);
+	// 이미지 삽입 핸들러
+	const handleImageInsert = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				if (reader.result) {
+					const imgTag = `<img src='${reader.result}' alt='uploaded-image' />`;
+					setContent((prev) => prev + imgTag);
+					onChange && onChange(content + imgTag);
+				}
+			};
+			reader.readAsDataURL(file);
 		}
 	};
 
-	const renderContentWithThumbnailButton = () => {
-		const rawContent = convertToRaw(safeEditorState.getCurrentContent());
-		const htmlContent = draftToHtml(rawContent);
-
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(htmlContent, "text/html");
-		const images = doc.querySelectorAll("img");
-
-		images.forEach((image) => {
-			const button = document.createElement("button");
-			button.textContent = "대표 이미지로 선택";
-			button.style.marginLeft = "10px";
-			button.onclick = () => handleImageClick(image.src);
-			image.insertAdjacentElement("afterend", button);
-		});
-
-		return { __html: doc.body.innerHTML };
-	};
-
 	return (
-		<div>
-			<Editor
-				editorState={safeEditorState}
-				onEditorStateChange={handleEditorChange}
-				toolbarClassName="toolbarClassName"
-				wrapperClassName="wrapperClassName"
-				editorClassName="editorClassName"
-			/>
-			<div
-				className="preview"
-				dangerouslySetInnerHTML={renderContentWithThumbnailButton()}
-			></div>
-		</div>
+		<CustomBox $width="90%" $height="10rem" $alignitems="center" $justifycontent="center" $border="1px solid #666666" $padding="1rem" $backgroundcolor="white">
+			<CustomColumn $width="100%" $height="10rem" $alignitems="flex-start" $justifycontent="flex-start">
+				{/* 이미지 업로드 버튼 */}
+				<input
+					width='100%'
+					type="file"
+					accept="image/*"
+					onChange={handleImageInsert}
+					style={{ marginBottom: "10px" }}
+				/>
+
+				{/* 텍스트 입력 영역 */}
+				<div
+					ref={editorRef}
+					contentEditable
+					onInput={handleInputChange}
+					style={{
+						border: "1px solid #ccc",
+						minHeight: "200px",
+						padding: "10px",
+						width: "90%"
+					}}
+					dangerouslySetInnerHTML={{ __html: content }}
+				/>
+			</CustomColumn>
+		</CustomBox>
 	);
 };
 
