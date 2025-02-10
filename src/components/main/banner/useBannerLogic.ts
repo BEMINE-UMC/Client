@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Template } from "../../../store/template/popularTemplateStore";
+import { PopularTemplate } from "../../../store/template/popularTemplateStore";
 
-export const useBannerLogic = (templates: Template[]) => {
+export const useBannerLogic = (templates: PopularTemplate[]) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const sortedTemplates = templates
     .slice()
-    .sort((a: Template, b: Template) => b.likesCount - a.likesCount)
+    .sort((a: PopularTemplate, b: PopularTemplate) => b.likesCount - a.likesCount)
     .slice(0, 7);
 
   const visibleTemplates = sortedTemplates.slice(

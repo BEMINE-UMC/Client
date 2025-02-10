@@ -29,7 +29,7 @@ export const CardContainer = styled.div`
 
   @media (max-width: 376px) { //375기준
     width: 40vw;
-    height: 150px;
+    height: 180px;
   }
 
   @media (max-width: 321px) { //375기준

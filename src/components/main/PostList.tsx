@@ -96,7 +96,7 @@
 
   const PostCardContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 자동 줄바꿈 */
+    grid-template-columns: repeat(5, minmax(200px, 1fr)); /* 자동 줄바꿈 */
     justify-content: center;
     gap: 10px;
     width: 100%;
@@ -105,12 +105,12 @@
 
     @media (max-width: 768px) {
       grid-template-columns: repeat(4, 1fr);
-      margin-left: 0px;
+      margin-left: -3%;
     }
 
     @media (max-width: 480px) {
       grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
+
       margin-left: 0px;
     }
   `;
