@@ -27,12 +27,13 @@ export const fetchPosts = async (
 
 			// '/myPage/posts'의 경우 응답 구조가 다름
 			if (endpoint === "/myPage/posts") {
-				const data = response.data.success.data; // API 문서 참고
+				const data = response.data.success; // API 문서 참고
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({
-						postId: post.postId,
-						url: post.picture, // 'picture' 필드를 URL로 사용
+						postId: post.id,
+						url: post.thumbnail,
 					}));
+					// console.log('/myPage/posts의 반환값에서 id와 url은:', posts);
 				}
 			} else {
 				// 다른 엔드포인트는 동일한 방식 처리
@@ -41,6 +42,11 @@ export const fetchPosts = async (
 
 			if (posts.length > 0) {
 				setImageList(posts.map((post) => post.url));
+
+				// 디버깅 코드임
+				// const imageUrls = posts.map((post) => post.url);
+				// console.log('imageList에 담긴 애들은', imageUrls);
+
 				setMessage("");
 				console.log("성공!");
 			} else {
