@@ -36,8 +36,8 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 	};
 
 	return (
-		<CustomBox $width="90%" $height="10rem" $alignitems="center" $justifycontent="center" $border="1px solid #666666" $padding="1rem" $backgroundcolor="white">
-			<CustomColumn $width="100%" $height="10rem" $alignitems="flex-start" $justifycontent="flex-start">
+		<CustomBox $width="90%" $height='auto' $alignitems="center" $justifycontent="center" $border="1px solid #666666" $padding="1rem" $backgroundcolor="white" $overflowy="hidden">
+			<CustomColumn $width="100%" $height="30rem" $alignitems="flex-start" $justifycontent="flex-start">
 				{/* 이미지 업로드 버튼 */}
 				<input
 					width='100%'
@@ -54,9 +54,11 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 					onInput={handleInputChange}
 					style={{
 						border: "1px solid #ccc",
-						minHeight: "200px",
+						height: "30rem",
 						padding: "10px",
-						width: "90%"
+						width: "95%",
+						alignItems: "center",
+						justifyContent: "center"
 					}}
 					dangerouslySetInnerHTML={{ __html: content }}
 				/>

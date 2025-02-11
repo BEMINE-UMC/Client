@@ -13,10 +13,6 @@ import { BiSolidPencil } from "react-icons/bi";
 import { IoMdChatbubbles } from "react-icons/io";
 import logo from '../../../assets/images/main/BeMine_3D.png';
 
-import template1 from '../../../assets/images/mockData/mockData_mine_template_1.png';
-import template2 from '../../../assets/images/mockData/mockData_mine_template_2.png';
-import template3 from '../../../assets/images/mockData/mockData_mine_template_3.png';
-import template4 from '../../../assets/images/mockData/mockData_mine_template_4.png';
 import pdfMock from '../../../assets/images/mine/mine_PDF_mockData.pdf';
 import CustomRow from '../components/CustomRow';
 import StyledImg from '../components/StyledImg';
@@ -35,12 +31,8 @@ import rank_after_4 from '../../../assets/images/mine/rank_img/mine_rank_after_4
 import rank_after_5 from '../../../assets/images/mine/rank_img/mine_rank_after_5.svg';
 import rank_after_6 from '../../../assets/images/mine/rank_img/mine_rank_after_6.svg';
 
-const mockDataTemplates = [
-	template1,
-	template2,
-	template3,
-	template4
-];
+import { useAuthStore } from "../../../store/authStore";
+import axios from "axios";
 
 const rankBeforeImages = [
 	rank_before_1,
@@ -68,6 +60,10 @@ const Workspace = () => {
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const navigate = useNavigate();
+
+	const [imageList, setImageList] = useState<string[]>([]);
+	const [message, setMessage] = useState("아직 담긴 게시물이 없어요.");
+	const accessToken = useAuthStore((state) => state.accessToken);
 
 	const GoTemplateShow = () => { // 템플릿 보기
 		setIsOverlayVisible(true);
@@ -120,6 +116,36 @@ const Workspace = () => {
 		setIsDownloadModal(false);
 	};
 
+	const fetchPosts = async (endpoint: string, buttonText: string): Promise<void> => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${endpoint}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			if (response.data.success) {
+				const posts: { postId: number; url: string }[] = response.data.success.post;
+				if (posts.length > 0) {
+					setImageList(posts.map((post) => post.url));
+					setMessage("");
+					console.log('성공!');
+				} else {
+					console.log('성공!');
+					setImageList([]);
+					setMessage(`${buttonText}이 아직 없어요.`);
+				}
+			}
+		} catch (error) {
+			console.error("Error fetching posts:", error);
+			setImageList([]);
+			setMessage("데이터를 불러오는 중 오류가 발생했습니다.");
+			console.log(accessToken);
+		}
+	};
+
+
 
 	return (
 		<CustomColumn $width="50%" $minHeight="100vh" $alignitems="flex-start" $justifycontent="flex-start">
@@ -132,13 +158,13 @@ const Workspace = () => {
 				{isDropdownOpen && (
 					<DropdownMenu>
 						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center'>
-							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+							<CustomButton onClick={() => fetchPosts('/myPage/recentPost', '최근 본 게시물')}>
 								<CustomFont $color="black" $fontweight='bold'>최근 본 게시물</CustomFont>
 							</CustomButton>
-							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+							<CustomButton onClick={() => fetchPosts('/myPage/likePost', '좋아요 누른 게시물')}>
 								<CustomFont $color="black" $fontweight='bold'>좋아요 누른 게시물</CustomFont>
 							</CustomButton>
-							<CustomButton $backgroundColor="transparent" $width='auto' $height='auto' $padding="0">
+							<CustomButton onClick={() => fetchPosts('/myPage/bookMark', '북마크한 게시물')}>
 								<CustomFont $color="black" $fontweight='bold'>북마크한 게시물</CustomFont>
 							</CustomButton>
 						</CustomColumn>
@@ -147,11 +173,15 @@ const Workspace = () => {
 			</DropdownWrapper>
 
 			<GridContainer>
-				{mockDataTemplates.map((src, index) => (
-					<CustomButton $width='auto' $height='auto' $padding='0' $backgroundColor='transparent' onClick={GoTemplateShow} key={index}>
-						<ImageItem src={src} alt={`Template ${index + 1}`} />
-					</CustomButton>
-				))}
+				{imageList.length > 0 ? (
+					imageList.map((src, index) => (
+						<CustomButton key={index} $width='auto' $height='auto' $padding='0' $backgroundColor='transparent'>
+							<ImageItem src={src} alt={`Template ${index + 1}`} />
+						</CustomButton>
+					))
+				) : (
+					message && <CustomFont $color='gray' $font='1rem'>{message}</CustomFont>
+				)}
 			</GridContainer>
 
 			{isOverlayVisible && (

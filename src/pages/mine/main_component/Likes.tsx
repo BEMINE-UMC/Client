@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useAuthStore } from "../../../store/authStore";
 import CustomColumn from "../components/CustomColumn";
 import CustomFont from "../components/CustomFont";
 import CustomBox from "../components/CustomBox";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
-
-import mockDataLikes1 from '../../../assets/images/mockData/mockData_mine_Likes_1.png';
-import mockDataLikes2 from '../../../assets/images/mockData/mockData_mine_Likes_2.png';
-
-const mockDataLikes = [mockDataLikes1, mockDataLikes2];
 
 // Styled-components for responsiveness
 const ResponsiveColumn = styled(CustomColumn)`
@@ -39,7 +37,7 @@ const ResponsiveImg = styled(StyledImg)`
 
 const ResponsiveBox = styled(CustomBox)`
   display: grid;
-  grid-template-columns: 1fr; /* 기본적으로 한 줄 */
+  grid-template-columns: 1fr;
   gap: 1rem;
   width: 80%;
   height: auto;
@@ -52,46 +50,77 @@ const ResponsiveBox = styled(CustomBox)`
 
   @media (max-width: 1024px) {
     width: 90%;
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2열 */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 768px) {
     width: 100%;
-    grid-template-columns: repeat(2, 1fr); /* 모바일에서도 2열 */
+    grid-template-columns: repeat(2, 1fr);
     border-radius: 0.8rem;
   }
 `;
 
 const Likes = () => {
-	const navigate = useNavigate();
-	const GoLikesTemplate = () => {
-		navigate('/my'); // 실제 경로로 나중에 바꾸기 - 좋아요 누른 게시물 버튼
-	};
+  const navigate = useNavigate();
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const [imageList, setImageList] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
 
-	return (
-		<ResponsiveColumn>
-			<CustomColumn $height="1vh"></CustomColumn>
-			<CustomFont $color="black" $font="0.9rem" $fontweight="bold">
-				좋아요 누른 템플릿
-			</CustomFont>
+  useEffect(() => {
+    const fetchLikedPosts = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/myPage/likePost`, {
+          headers: {
+            "Accept": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-			<ResponsiveBox>
-				{mockDataLikes.map((src, index) => (
-					<CustomButton
-						key={index}
-						$width="100%" /* 그리드 아이템이 가로 영역을 채우도록 설정 */
-						$height="auto"
-						$padding="0"
-						$backgroundColor="transparent"
-						onClick={GoLikesTemplate}
-					>
-						<ResponsiveImg src={src} />
-					</CustomButton>
-				))}
-			</ResponsiveBox>
-		</ResponsiveColumn>
-	);
+        if (response.data.success) {
+          const posts: { postId: number; url: string }[] = response.data.success.post;
+          if (posts.length > 0) {
+            setImageList(posts.map((post) => post.url));
+            setMessage("");
+          } else {
+            setImageList([]);
+            setMessage("좋아요 누른 게시물이 아직 없어요.");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching liked posts:", error);
+        setImageList([]);
+        setMessage("데이터를 불러오는 중 오류가 발생했습니다.");
+      }
+    };
+    fetchLikedPosts();
+  }, [accessToken]);
+
+  return (
+    <ResponsiveColumn>
+      <CustomColumn $height="1vh"></CustomColumn>
+      <CustomFont $color="black" $font="0.9rem" $fontweight="bold">
+        좋아요 누른 템플릿
+      </CustomFont>
+
+      <ResponsiveBox>
+        {imageList.length > 0 ? (
+          imageList.map((src, index) => (
+            <CustomButton
+              key={index}
+              $width="100%"
+              $height="auto"
+              $padding="0"
+              $backgroundColor="transparent"
+            >
+              <ResponsiveImg src={src} />
+            </CustomButton>
+          ))
+        ) : (
+          <CustomFont $color='gray' $font='1rem'>{message}</CustomFont>
+        )}
+      </ResponsiveBox>
+    </ResponsiveColumn>
+  );
 };
-
 
 export default Likes;

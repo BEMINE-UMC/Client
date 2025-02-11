@@ -1,17 +1,15 @@
-// 마이페이지의 프로필과 연혁 컴포넌트, 나영 담당
-
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import axios from "axios";
+import { useAuthStore } from "../../../store/authStore";
 import CustomColumn from "../components/CustomColumn";
 import CustomRow from "../components/CustomRow";
 import CustomFont from "../components/CustomFont";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
-import CustomInput from "../components/CustomInput";
-// import Modal from "../components/Modal";
 import styled from "styled-components";
-
-import mockProfileImg from '../../../assets/images/mockData/mockData_mine_ProfileImg.png';
+import defaultImg from '../../../assets/images/mine/default_img.png';
+import CustomDivider from "../components/CustomDivider";
 
 const ResponsiveColumn = styled(CustomColumn)`
   width: 25%;
@@ -38,7 +36,7 @@ const ResponsiveInnerColumn = styled(CustomColumn)`
   height: auto;
   align-items: flex-start;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 1rem;
 
   @media (max-width: 1024px) {
     width: 90%;
@@ -50,53 +48,16 @@ const ResponsiveInnerColumn = styled(CustomColumn)`
     gap: 0.3rem;
   }
 `;
-
-const ResponsiveImg = styled(StyledImg)`
-  width: 100%;
-  border-radius: 0.5rem;
-
-  @media (max-width: 768px) {
-    border-radius: 0.3rem;
-  }
-`;
-
-const ResponsiveButtonRow = styled(CustomRow)`
-  width: 70%;
-  height: auto;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-
-  @media (max-width: 1024px) {
-    width: 90%;
-    gap: 0.4rem;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0.3rem;
-  }
-`;
-
-const initialProfileData = {
-	name: "유궁둔",
-	tagline: "멋진 콘텐츠 마케터가 되고싶은",
-	sections: [
-		{ title: "1. 학력 및 전공", content: "여기에 데이터 데이터..." },
-		{ title: "2. 주요 경험", content: "경험 1 경험 2 경험 3~" },
-		{ title: "3. 기타 활동", content: "인턴, 대외활동, 공모전..." },
-		{ title: "4. 주요 역량 및 성과", content: "수상 1, 수상 2, 수상 3, 수상 4..." }
-	]
-};
 
 const Profile = () => {
 	const navigate = useNavigate();
-	const [isEditing, setIsEditing] = useState(false);
-	const [profileData, setProfileData] = useState(initialProfileData);
-	const [tempData, setTempData] = useState({ ...initialProfileData });
-	const [profileImage, setProfileImage] = useState(mockProfileImg);
-	const [editModal, setEditModal] = useState(false);
+	const accessToken = useAuthStore((state) => state.accessToken);
+	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({
+		name: "",
+		introduction: "",
+		photo: "",
+		history: []
+	});
 
 	const GoWriteContent = () => {
 		navigate('/writecontentpage');
@@ -106,109 +67,101 @@ const Profile = () => {
 		navigate('/writetemplatepage');
 	}
 
-	const handleEdit = () => {
-		setEditModal(true);
-	};
+	useEffect(() => {
+		const fetchProfileData = async () => {
+			try {
+				const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/myPage`, {
+					headers: {
+						"Accept": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
 
-	const Back = () => {
-		setEditModal(false);
-	};
-
-	const handleInputChange = (index: number, key: 'title' | 'content', value: string) => {
-		setTempData(prevTempData => {
-			const updatedSections = [...prevTempData.sections];
-			updatedSections[index] = { ...updatedSections[index], [key]: value };
-			return { ...prevTempData, sections: updatedSections };
-		});
-	};
-
-	const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.files && event.target.files[0]) {
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				if (e.target?.result) {
-					setProfileImage(e.target.result.toString());
+				if (response.status === 200 && response.data.success) {
+					// setProfileData(response.data.success);
+					setProfileData({
+						...response.data.success,
+						photo: response.data.success.photo || defaultImg
+					});
 				}
-			};
-			reader.readAsDataURL(event.target.files[0]);
+			} catch (error) {
+				console.error("마이페이지 정보 조회 실패:", error);
+				console.log(accessToken);
+			}
+		};
+		fetchProfileData();
+	}, [accessToken]);
+
+	const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files && event.target.files[0]) {
+			const file = event.target.files[0];
+			const formData = new FormData();
+			formData.append("photo", file);
+
+			try {
+				const response = await axios.patch(
+					`${import.meta.env.VITE_API_BASE_URL}/profile/modify`,
+					formData,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${accessToken}`,
+						},
+					}
+				);
+
+				if (response.status === 200 && response.data.success) {
+					console.log("성공!");
+					console.log(response.data.success.photo)
+					setProfileData((prev) => ({ ...prev, photo: response.data.success.photo }));
+				}
+			} catch (error) {
+				console.error("프로필 이미지 업로드 실패:", error);
+			}
 		}
-	};
-
-	const allFieldsFilled = tempData.sections.every(section => section.title.trim() !== "" && section.content.trim() !== "");
-
-	const handleEditClick = () => {
-		setIsEditing(true);
-		setTempData({ ...profileData });
-	};
-
-	const handleCancelEdit = () => {
-		setIsEditing(false);
-		setTempData({ ...profileData });
-	};
-
-	const handleConfirmEdit = () => {
-		setEditModal(false);
-		setProfileData(tempData);
-		setIsEditing(false);
 	};
 
 	return (
 		<ResponsiveColumn>
 			<ResponsiveInnerColumn>
-				<ResponsiveImg src={profileImage} />
+				<StyledImg src={profileData.photo || "default-profile.png"} style={{ maxWidth: '100%', minWidth: '80%' }} />
 				<CustomRow $width="100%" $justifycontent="flex-end">
 					<CustomButton as="label" $backgroundColor="black" $padding="0.5rem" $width="auto" $height="auto">
 						<CustomFont $color="white" $fontweight="bold">수정하기</CustomFont>
 						<input type="file" onChange={handleImageUpload} style={{ display: "none" }} />
 					</CustomButton>
 				</CustomRow>
-			</ResponsiveInnerColumn>
-
-			<ResponsiveInnerColumn>
 				<CustomFont $color="black" $font="2rem" $fontweight="bold">{profileData.name}</CustomFont>
-				<CustomFont $color="black" $font="1rem" $fontweight="bold">{profileData.tagline}</CustomFont>
+				<CustomFont $color="black" $font="1rem" $fontweight="bold">{profileData.introduction}</CustomFont>
 			</ResponsiveInnerColumn>
 
 			<ResponsiveInnerColumn>
-				{isEditing
-					? tempData.sections.map((section, index) => (
-						<>
-							<CustomInput key={`title-${index}`} value={section.title} onChange={(e) => handleInputChange(index, "title", e.target.value)} placeholder={`${section.title}`} />
-							<CustomInput key={`content-${index}`} value={section.content} onChange={(e) => handleInputChange(index, "content", e.target.value)} placeholder={`${section.content}`} />
-						</>
+				{profileData.history.length > 0 ? (
+					profileData.history.map((entry, index) => (
+						<CustomColumn key={index} $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
+							<CustomFont $color="#686868" $font="0.8rem" $fontweight="bold">{entry.title}</CustomFont>
+							<CustomFont $color="#686868" $font="0.8rem">{entry.body}</CustomFont>
+						</CustomColumn>
 					))
-					: profileData.sections.map((section, index) => (
-						<>
-							<CustomFont key={`title-${index}`} $color="#686868" $font="0.8rem" $fontweight="bold">{section.title}</CustomFont>
-							<CustomFont key={`content-${index}`} $color="#686868" $font="0.8rem">{section.content}</CustomFont>
-						</>
-					))}
+				) : (
+					<CustomColumn $width="100%" $minHeight="20rem" $alignitems="center" $justifycontent="center">
+						<CustomFont $color='gray' $font='1rem'>아직 연혁을 작성하지 않으셨어요!</CustomFont>
+						<CustomButton $backgroundColor="black" $padding="0.5rem" $width='auto' $height='auto'>
+							<CustomFont $color="white" $fontweight="bold">연혁 생성하기</CustomFont>
+						</CustomButton>
+					</CustomColumn>
+				)}
 			</ResponsiveInnerColumn>
 
-			<ResponsiveButtonRow>
-				{isEditing ? (
-					<>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={handleCancelEdit}>
-							<CustomFont $color="white" $font="0.7rem">수정 취소</CustomFont>
-						</CustomButton>
-						<CustomButton $backgroundColor={allFieldsFilled ? "yellow" : "#D9D9D9"} $padding="0.5rem" $width="7rem" $height="auto" onClick={handleEdit} disabled={!allFieldsFilled}>
-							<CustomFont $color={allFieldsFilled ? "black" : "white"} $font="0.7rem">수정 완료</CustomFont>
-						</CustomButton>
-					</>
-				) : (
-					<>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={handleEditClick}>
-							<CustomFont $color="white" $font="0.7rem">연혁 수정</CustomFont>
-						</CustomButton>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
-							<CustomFont $color="white" $font="0.7rem">게시물 작성</CustomFont>
-						</CustomButton>
-						<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteTemplate}>
-							<CustomFont $color="white" $font="0.7rem">템플릿 등록</CustomFont>
-						</CustomButton>
-					</>
-				)}
-			</ResponsiveButtonRow>
+			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
+				<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
+					<CustomFont $color="white" $font="0.7rem">게시물 작성</CustomFont>
+				</CustomButton>
+				<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteTemplate}>
+					<CustomFont $color="white" $font="0.7rem">템플릿 등록</CustomFont>
+				</CustomButton>
+			</CustomRow>
 		</ResponsiveColumn>
 	);
 };
