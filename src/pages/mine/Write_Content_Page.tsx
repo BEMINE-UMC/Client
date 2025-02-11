@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
+import { useAuthStore } from "../../store/authStore";
+
 import CustomColumn from "./components/CustomColumn";
 import CustomRow from "./components/CustomRow";
 import StyledImg from "./components/StyledImg";
@@ -10,11 +12,10 @@ import CustomInput from "./components/CustomInput";
 import Modal from "./components/Modal";
 import profile from "../../assets/images/mockData/mockData_mine_ProfileImg.png";
 import TextEditor from "./components/TextEditor";
+
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-import { useAuthStore } from "../../store/authStore";
 
 const categories = [
 	"콘텐츠 마케터",
@@ -33,14 +34,15 @@ const WriteContentPage = () => {
 	// useAuthStore를 최상단에서 호출하여 accessToken 가져오기
 	const accessToken = useAuthStore((state) => state.accessToken);
 
-	const handleEditorChange = (newEditorState: EditorState) => {
-		setEditorState(newEditorState);
-	};
+	// const handleEditorChange = (newEditorState: EditorState) => {
+	// 	setEditorState(newEditorState);
+	// };
 
-	const handleThumbnailSelection = (imageSrc: string) => {
-		setThumbnail(imageSrc);
-	};
+	// const handleThumbnailSelection = (imageSrc: string) => {
+	// 	setThumbnail(imageSrc);
+	// };
 
+	// 게시글 작성 API 요청 함수 
 	const handleSubmit = async () => {
 		const rawContent = convertToRaw(editorState.getCurrentContent());
 		const bodyContent = draftToHtml(rawContent);

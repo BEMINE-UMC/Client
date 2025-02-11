@@ -157,14 +157,17 @@ const Workspace = () => {
 				</CustomButton>
 				{isDropdownOpen && (
 					<DropdownMenu>
-						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center'>
-							<CustomButton onClick={() => fetchPosts('/myPage/recentPost', '최근 본 게시물')}>
+						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center' $gap="0.5rem">
+							<CustomButton onClick={() => fetchPosts('/myPage/recentPost', '최근 본 게시물')}
+								$padding="0.5rem" $backgroundColor="white" $border="1px solid #D9D9D9" $height='auto'>
 								<CustomFont $color="black" $fontweight='bold'>최근 본 게시물</CustomFont>
 							</CustomButton>
-							<CustomButton onClick={() => fetchPosts('/myPage/likePost', '좋아요 누른 게시물')}>
+							<CustomButton onClick={() => fetchPosts('/myPage/likePost', '좋아요 누른 게시물')}
+								$padding="0.5rem" $backgroundColor="white" $border="1px solid #D9D9D9" $height='auto'>
 								<CustomFont $color="black" $fontweight='bold'>좋아요 누른 게시물</CustomFont>
 							</CustomButton>
-							<CustomButton onClick={() => fetchPosts('/myPage/bookMark', '북마크한 게시물')}>
+							<CustomButton onClick={() => fetchPosts('/myPage/bookMark', '북마크한 게시물')}
+								$padding="0.5rem" $backgroundColor="white" $border="1px solid #D9D9D9" $height='auto'>
 								<CustomFont $color="black" $fontweight='bold'>북마크한 게시물</CustomFont>
 							</CustomButton>
 						</CustomColumn>
@@ -175,7 +178,7 @@ const Workspace = () => {
 			<GridContainer>
 				{imageList.length > 0 ? (
 					imageList.map((src, index) => (
-						<CustomButton key={index} $width='auto' $height='auto' $padding='0' $backgroundColor='transparent'>
+						<CustomButton key={index} $width='auto' $height='auto' $padding='0' $backgroundColor='transparent' onClick={GoTemplateShow}>
 							<ImageItem src={src} alt={`Template ${index + 1}`} />
 						</CustomButton>
 					))

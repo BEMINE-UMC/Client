@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "../../../store/authStore";
 import CustomColumn from "../components/CustomColumn";
 import CustomFont from "../components/CustomFont";
@@ -9,63 +9,15 @@ import CustomBox from "../components/CustomBox";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
 
-// Styled-components for responsiveness
-const ResponsiveColumn = styled(CustomColumn)`
-  width: 25%;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: flex-start;
-
-  @media (max-width: 1024px) {
-    width: 80%;
-    min-height: auto;
-  }
-
-  @media (max-width: 768px) {
-    width: 90%;
-    min-height: auto;
-  }
-`;
-
-const ResponsiveImg = styled(StyledImg)`
-  width: 100%;
-
-  @media (max-width: 768px) {
-    border-radius: 0.5rem;
-  }
-`;
-
-const ResponsiveBox = styled(CustomBox)`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  width: 80%;
-  height: auto;
-  padding: 0.5rem;
-  background-color: transparent;
-  border: 1.5px solid #d9d9d9;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1rem;
-
-  @media (max-width: 1024px) {
-    width: 90%;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    grid-template-columns: repeat(2, 1fr);
-    border-radius: 0.8rem;
-  }
-`;
+// 스타일 코드 하단 분리 
 
 const Likes = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const accessToken = useAuthStore((state) => state.accessToken);
   const [imageList, setImageList] = useState<string[]>([]);
   const [message, setMessage] = useState("");
 
+  // 좋아요 누른 게시물 조회 API 요청 함수 
   useEffect(() => {
     const fetchLikedPosts = async () => {
       try {
@@ -124,3 +76,53 @@ const Likes = () => {
 };
 
 export default Likes;
+
+const ResponsiveColumn = styled(CustomColumn)`
+  width: 25%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: flex-start;
+
+  @media (max-width: 1024px) {
+    width: 80%;
+    min-height: auto;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+    min-height: auto;
+  }
+`;
+
+const ResponsiveImg = styled(StyledImg)`
+  width: 100%;
+
+  @media (max-width: 768px) {
+    border-radius: 0.5rem;
+  }
+`;
+
+const ResponsiveBox = styled(CustomBox)`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 80%;
+  height: auto;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 1.5px solid #d9d9d9;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 0.8rem;
+  }
+`;
