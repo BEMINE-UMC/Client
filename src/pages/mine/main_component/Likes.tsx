@@ -8,6 +8,7 @@ import CustomFont from "../components/CustomFont";
 import CustomBox from "../components/CustomBox";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
+import CustomRow from "../components/CustomRow";
 
 // 스타일 코드 하단 분리 
 
@@ -50,7 +51,7 @@ const Likes = () => {
   return (
     <ResponsiveColumn>
       <CustomColumn $height="1vh"></CustomColumn>
-      <CustomFont $color="black" $font="0.9rem" $fontweight="bold">
+      <CustomFont $color="#666666" $font="0.8rem" $fontweight="bold">
         좋아요 누른 템플릿
       </CustomFont>
 
@@ -68,7 +69,9 @@ const Likes = () => {
             </CustomButton>
           ))
         ) : (
-          <CustomFont $color='gray' $font='1rem'>{message}</CustomFont>
+          <CustomRow $width="100%" $alignitems="center" $justifycontent="center">
+            <CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont>
+          </CustomRow>
         )}
       </ResponsiveBox>
     </ResponsiveColumn>
@@ -82,6 +85,7 @@ const ResponsiveColumn = styled(CustomColumn)`
   min-height: 100vh;
   align-items: center;
   justify-content: flex-start;
+  gap: 1rem;
 
   @media (max-width: 1024px) {
     width: 80%;
@@ -108,9 +112,10 @@ const ResponsiveBox = styled(CustomBox)`
   gap: 1rem;
   width: 80%;
   height: auto;
+  min-height: 5rem;
   padding: 0.5rem;
   background-color: transparent;
-  border: 1.5px solid #d9d9d9;
+  border: 1px solid #d9d9d9;
   align-items: center;
   justify-content: center;
   border-radius: 1rem;

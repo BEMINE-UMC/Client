@@ -94,10 +94,10 @@ const Profile = () => {
 	return (
 		<ResponsiveColumn>
 			<ResponsiveInnerColumn>
-				<StyledImg src={profileData.photo || "default-profile.png"} style={{ maxWidth: '100%', minWidth: '80%' }} />
+				<StyledImg src={profileData.photo || "default-profile.png"} style={{ maxWidth: '100%', minWidth: '80%' }} $borderradius="0.5rem" />
 				<CustomRow $width="100%" $justifycontent="flex-end">
 					<CustomButton as="label" $backgroundColor="black" $padding="0.5rem" $width="auto" $height="auto">
-						<CustomFont $color="white" $fontweight="bold">수정하기</CustomFont>
+						<CustomFont $color="white">수정하기</CustomFont>
 						<input type="file" onChange={handleImageUpload} style={{ display: "none" }} />
 					</CustomButton>
 				</CustomRow>
@@ -111,7 +111,7 @@ const Profile = () => {
 			</ResponsiveInnerColumn>
 
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
-			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
+			<CustomRow $width="80%" $alignitems="center" $justifycontent="flex-end">
 				<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
 					<CustomFont $color="white" $font="0.7rem">게시물 작성</CustomFont>
 				</CustomButton>
@@ -146,7 +146,7 @@ const ResponsiveColumn = styled(CustomColumn)`
 `;
 
 const ResponsiveInnerColumn = styled(CustomColumn)`
-  width: 70%;
+  width: 80%;
   height: auto;
   align-items: flex-start;
   justify-content: center;

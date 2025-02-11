@@ -96,7 +96,7 @@ const HistoryForm = () => {
 					$width="auto"
 					$height="auto"
 				>
-					<CustomFont $color="white" $fontweight="bold">
+					<CustomFont $color="white">
 						{showForm ? "추가 취소" : "연혁 생성하기"}
 					</CustomFont>
 				</CustomButton>

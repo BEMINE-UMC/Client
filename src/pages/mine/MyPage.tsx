@@ -6,7 +6,7 @@ import CustomDivider from "./components/CustomDivider";
 import Profile from "./main_component/Profile";
 import MobileProfile from "./for_mobile/main_component/mobile_profile";
 import Likes from "./main_component/Likes";
-import Workspace from "./main_component/Workspace";
+import Workspace from "./main_component/workspaces/Workspace";
 import MobileWorkspace from "./for_mobile/main_component/mobile_workspace";
 
 // Styled-component를 사용해 반응형 디자인 적용
