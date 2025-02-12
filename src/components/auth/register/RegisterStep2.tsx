@@ -13,6 +13,7 @@ interface RegisterStep2Props {
   validateField: (field: string, value: string, rules: any) => void;
   errors: Record<string, string>;
   getValidationRules: (step: number, password?: string) => any;
+  isLoading: boolean;
 }
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({
@@ -24,8 +25,14 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
   validateField,
   errors,
   getValidationRules,
+  isLoading,
 }) => {
   const rules = getValidationRules(2, password);
+
+  const handleSubmit = () => {
+    // Implement the logic to handle form submission
+    onNext();
+  };
 
   return (
     <div style={{width: "100%"}}>
@@ -43,9 +50,11 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           }}
         />
       </div>
-      {errors.password && <ValidationMessage message={errors.password} />}
-
-      <div style={{ marginBottom: "20px" }}>
+      <ValidationMessage 
+        message={errors.password || " "}
+        visible={!!errors.password}
+      />
+      <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
@@ -59,17 +68,24 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           }}
         />
       </div>
-      {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} />}
-
-      <div style={{ width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+      <ValidationMessage 
+        message={errors.confirmPassword || " "}
+        visible={!!errors.confirmPassword}
+      />
+      <div style={{width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
         <AuthButton
-          onClick={onNext}
-          disabled={!password || !confirmPassword || Object.values(errors).some((error) => error !== "")}
+          onClick={handleSubmit}
+          disabled={
+            !password || 
+            !confirmPassword || 
+            Object.values(errors).some((error) => error !== "") ||
+            isLoading
+          }
           width="130px"
           height="65px"
           fontSize="20px"
         >
-          다음
+          {isLoading ? "가입중..." : "가입하기"}
         </AuthButton>
       </div>
     </div>

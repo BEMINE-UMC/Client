@@ -132,9 +132,11 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             validateField("nickname", value, rules);
           }}
         />
-        
       </div>
-      {errors.nickname && <ValidationMessage message={errors.nickname} />}
+      <ValidationMessage 
+        message={errors.nickname || " "}
+        visible={!!errors.nickname}
+      />
       <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="email">이메일</Label>
         <HorizontalInputGroup>
@@ -158,7 +160,10 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
           </AuthButton>
         </HorizontalInputGroup>
       </div>
-      {errors.email && <ValidationMessage message={errors.email} />}
+      <ValidationMessage 
+        message={errors.email || " "}
+        visible={!!errors.email}
+      />
       <div style={{ marginBottom: "16px" }}>
         <Label htmlFor="verificationCode">인증번호</Label>
         <HorizontalInputGroup>
@@ -181,27 +186,29 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             {isLoading.emailVerify ? "확인 중..." : "인증하기"}
           </AuthButton>
         </HorizontalInputGroup>
-        
       </div>
-      {errors.verificationCode && <ValidationMessage message={errors.verificationCode} />}
-      <div>
       {isEmailVerified ? (
-          <ValidationMessage 
-            type="success" 
-            message="인증되었습니다." 
-          />
-        ) : (
-          showTimer && timeLeft > 0 && (
-            <TimerMessage>
-              <span>{`남은시간 ${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, "0")}`}</span>
-            </TimerMessage>
-          )
-        )}
-        {showTimer && timeLeft === 0 && !isEmailVerified && (
-          <ValidationMessage message="인증 시간이 초과되었습니다. 다시 시도하세요." />
-        )}
-      </div>
-      <div style={{  width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
+        <ValidationMessage 
+          type="success" 
+          message="인증되었습니다." 
+          visible={true}
+        />
+      ) : (
+        <ValidationMessage 
+          message={errors.verificationCode || (
+            showTimer && timeLeft === 0 
+              ? "인증 시간이 초과되었습니다. 다시 시도하세요." 
+              : " "
+          )}
+          visible={!!errors.verificationCode || (showTimer && timeLeft === 0)}
+        />
+      )}
+      {!isEmailVerified && showTimer && timeLeft > 0 && (
+        <TimerMessage>
+          <span>{`남은시간 ${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, "0")}`}</span>
+        </TimerMessage>
+      )}
+      <div style={{width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
         <AuthButton
           onClick={onNext}
           disabled={

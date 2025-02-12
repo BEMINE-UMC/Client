@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import InputField from "../../auth/InputField";
 import ValidationMessage from "../../auth/ValidationMessage";
 import AuthButton from "../../auth/AuthButton";
@@ -22,15 +22,44 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
   setPassword,
   onNext,
 }) => {
-  const [error, setError] = React.useState("");
+  const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFindEmail = async () => {
-    // 입력값 검증
-    if (!nickname.trim() || !password.trim()) {
-      setError("닉네임과 비밀번호를 모두 입력해주세요.");
-      return;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'nickname') {
+      setNickname(value);
+    } else if (name === 'password') {
+      setPassword(value);
     }
 
+    if (showError) {
+      setError("");
+      setShowError(false);
+    }
+  };
+
+  const validateForm = () => {
+    if (!nickname.trim()) {
+      setError("닉네임을 입력해주세요.");
+      return false;
+    }
+
+    if (!password.trim()) {
+      setError("비밀번호를 입력해주세요.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleFindEmail = async () => {
+    setShowError(true);
+    
+    if (!validateForm()) return;
+
+    setIsLoading(true);
     try {
       const response = await api.patch('/users/search/email', {
         name: nickname,
@@ -44,58 +73,47 @@ const FindEmailStep1: React.FC<FindEmailStep1Props> = ({
         setError("이메일 찾기에 실패했습니다.");
       }
     } catch (error) {
-      console.error('Error:', error);
-      
-      if (isAxiosError(error)) {
-        const errorData = error.response?.data;
-        
-        if (errorData?.error?.errorCode === "A030") {
-          setError(errorData.error.reason);
-        } else {
-          setError("해당 정보의 이메일이 존재하지 않습니다.");
-        }
-      } else {
-        setError("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-      }
+      setError("해당 정보의 이메일이 존재하지 않습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <StepContainer>
-      <div style={{marginBottom : "11px"}}>
+      <div style={{marginBottom: "15px"}}>
         <Label htmlFor="nickname">닉네임</Label>
         <InputField
           type="text"
           name="nickname"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
-          onChange={(e) => {
-            setNickname(e.target.value);
-            setError("");
-          }}
+          onChange={handleChange}
         />
       </div>
-      <div style={{marginBottom : "20px"}}>
+      
+      <div style={{marginBottom: "15px"}}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
           name="password"
           placeholder="비밀번호를 입력해주세요."
           value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setError("");
-          }}
+          onChange={handleChange}
         />
       </div>
-      {error && <ValidationMessage message={error} />}
+      <ValidationMessage 
+        message={error || " "}
+        visible={showError && !!error}
+      />
+      
       <AuthButton 
         width="100%" 
         onClick={handleFindEmail} 
-        disabled={!nickname || !password}
+        disabled={!nickname || !password || isLoading}
         fontSize="20px"
       >
-        이메일 찾기
+        {isLoading ? "확인중..." : "이메일 찾기"}
       </AuthButton>
     </StepContainer>
   );

@@ -29,7 +29,7 @@ const BackgroundImage = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   transform: translate(-50%, -50%) rotate(-15deg) scale(1.4);
-  opacity: 0.5;
+  opacity: 0.4;
 
   /* SVG 렌더링 최적화 */
   image-rendering: -webkit-optimize-contrast;

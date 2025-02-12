@@ -11,7 +11,16 @@ const FindPasswordPage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userId, setUserId] = useState<number | null>(null);
+
+  const handleStep1Success = (verifiedUserId: number) => {
+    setUserId(verifiedUserId);
+    setStep(2);
+  };
+
+  const handleStep2Success = () => {
+    setStep(3);
+  };
 
   return (
     <>
@@ -37,14 +46,13 @@ const FindPasswordPage: React.FC = () => {
               setNickname={setNickname}
               email={email}
               setEmail={setEmail}
-              onNext={() => setStep(2)}
+              onSuccess={handleStep1Success}
             />
           )}
-          {step === 2 && (
+          {step === 2 && userId && (
             <FindPasswordStep2 
-              nickname={nickname} 
-              email={email} 
-              onNext={() => setStep(3)}
+              userId={userId}
+              onSuccess={handleStep2Success}
             />
           )}
           {step === 3 && <FindPasswordStep3 />}

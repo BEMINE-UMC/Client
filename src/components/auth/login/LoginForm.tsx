@@ -35,25 +35,10 @@ const LoginForm: React.FC = () => {
     email: "",
     password: "",
   });
-  const { errors, validateField, validate, getValidationRules } = useValidation();
+  const [error, setError] = useState<string>("");  // 단일 에러 메시지로 변경
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
   const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
-
-  const validationRules = {
-    email: (value: string) => {
-      if (!value) return "다시 입력해주세요.";
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) return "다시 입력해주세요.";
-      return "";
-    },
-    password: (value: string) => {
-      if (!value) return "다시 입력해주세요.";
-      if (value.length < 4 || value.length > 15) {
-        return "다시 입력해주세요.";
-      }
-      return "";
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,33 +46,46 @@ const LoginForm: React.FC = () => {
       ...prev,
       [name]: value
     }));
-    validateField(name, value, validationRules);
+    
+    if (showError) {
+      setError("");
+      setShowError(false);
+    }
+  };
+
+  const validateForm = () => {
+    if (!formData.email) {
+      setError("이메일을 입력해주세요.");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("올바른 이메일 형식이 아닙니다.");
+      return false;
+    }
+
+    if (!formData.password) {
+      setError("비밀번호를 입력해주세요.");
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShowError(true);
     
-    const { isValid } = validate(formData, validationRules);
-    if (!isValid) return;
+    if (!validateForm()) return;
 
     try {
-      const requestData = {
+      const response = await api.post<LoginResponse>('/users/login', {
         email: formData.email,
         password: formData.password
-      };
-
-      console.log('로그인 요청 데이터:', requestData);
-
-      const response = await api.post<LoginResponse>('/users/login', requestData);
-
-      console.log('로그인 응답:', response.data);
+      });
 
       if (response.data.resultType === "SUCCESS" && response.data.success) {
-        console.log('로그인 성공! 토큰:', {
-          accessToken: response.data.success.accessToken,
-          refreshToken: response.data.success.refreshToken
-        });
-
         setLoggedIn(
           response.data.success.accessToken,
           response.data.success.refreshToken
@@ -95,22 +93,7 @@ const LoginForm: React.FC = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error('로그인 에러:', error);
-      
-      if (isAxiosError(error)) {
-        const errorResponse = error.response?.data;
-        console.error('로그인 에러 응답:', errorResponse);
-
-        if (errorResponse?.error?.reason) {
-          validateField('email', formData.email, {
-            email: () => errorResponse.error.reason
-          });
-        } else {
-          validateField('email', formData.email, {
-            email: () => "로그인에 실패했습니다."
-          });
-        }
-      }
+      setError("이메일 또는 비밀번호를 다시 입력해주세요.");
     }
   };
 
@@ -142,9 +125,12 @@ const LoginForm: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
             />
-            
           </div>
-          <div>{errors.email && <ValidationMessage message={errors.email} />}</div>
+          <ValidationMessage 
+            message={error || " "}
+            visible={showError && !!error}
+          />
+          
           <div>
             <AuthButton
               type="submit"
