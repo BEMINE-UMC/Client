@@ -13,10 +13,6 @@ import Modal from "./components/Modal";
 import profile from "../../assets/images/mockData/mockData_mine_ProfileImg.png";
 import TextEditor from "./components/TextEditor";
 
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 const categories = [
 	"콘텐츠 마케터",
 	"브랜드 마케터",
@@ -27,29 +23,16 @@ const categories = [
 const WriteContentPage = () => {
 	const [title, setTitle] = useState("");
 	const [category, setCategory] = useState(categories[0]);
-	const [editorState, setEditorState] = useState(EditorState.createEmpty());
+	const [editorContent, setEditorContent] = useState("");
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const [writeModal, setWriteModal] = useState(false);
 
-	// useAuthStore를 최상단에서 호출하여 accessToken 가져오기
 	const accessToken = useAuthStore((state) => state.accessToken);
 
-	// const handleEditorChange = (newEditorState: EditorState) => {
-	// 	setEditorState(newEditorState);
-	// };
-
-	// const handleThumbnailSelection = (imageSrc: string) => {
-	// 	setThumbnail(imageSrc);
-	// };
-
-	// 게시글 작성 API 요청 함수 
 	const handleSubmit = async () => {
-		const rawContent = convertToRaw(editorState.getCurrentContent());
-		const bodyContent = draftToHtml(rawContent);
-
 		const data = {
 			title,
-			body: bodyContent,
+			body: editorContent,
 			categoryId: categories.indexOf(category) + 1,
 			thumbnail,
 		};
@@ -77,7 +60,7 @@ const WriteContentPage = () => {
 		}
 	};
 
-	const isContentEmpty = !editorState.getCurrentContent().hasText();
+	const isContentEmpty = !editorContent.trim();
 	const isTitleEmpty = title.trim() === "";
 	const isButtonDisabled = isContentEmpty || isTitleEmpty;
 
@@ -120,14 +103,8 @@ const WriteContentPage = () => {
 						$alignitems="flex-start"
 						$justifycontent="center"
 					>
-						<CustomFont $color="black">
-							{new Date().toLocaleDateString()}
-						</CustomFont>
-						<CustomDivider
-							$width="100%"
-							$height="1px"
-							$backgroundcolor="#C9C9C9"
-						/>
+						<CustomFont $color="black">{new Date().toLocaleDateString()}</CustomFont>
+						<CustomDivider $width="100%" $height="1px" $backgroundcolor="#C9C9C9" />
 						<CustomFont $color="black">유궁둔</CustomFont>
 					</CustomColumn>
 				</CustomColumn>
@@ -148,9 +125,7 @@ const WriteContentPage = () => {
 								checked={category === cat}
 								onChange={() => setCategory(cat)}
 							/>
-							<CustomFont $color="black" $fontweight="bold">
-								{cat}
-							</CustomFont>
+							<CustomFont $color="black" $fontweight="bold">{cat}</CustomFont>
 						</label>
 					))}
 				</CustomColumn>
@@ -167,9 +142,7 @@ const WriteContentPage = () => {
 				</CustomFont>
 			</CustomColumn>
 
-			<TextEditor
-
-			/>
+			<TextEditor onChange={setEditorContent} />
 
 			<CustomRow $width="90%" $justifycontent="flex-end">
 				<CustomButton
@@ -180,27 +153,19 @@ const WriteContentPage = () => {
 					disabled={isButtonDisabled}
 					onClick={() => setWriteModal(true)}
 				>
-					<CustomFont $color="black" $fontweight="bold">
-						게시
-					</CustomFont>
+					<CustomFont $color="black" $fontweight="bold">게시</CustomFont>
 				</CustomButton>
 			</CustomRow>
 
 			<Modal isOpen={writeModal} onClose={() => setWriteModal(false)}>
 				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
-					<CustomFont $color="black" $fontweight="bold">
-						게시하시겠습니까?
-					</CustomFont>
+					<CustomFont $color="black" $fontweight="bold">게시하시겠습니까?</CustomFont>
 					<CustomRow $width="90%">
 						<CustomButton $backgroundColor="transparent" onClick={() => setWriteModal(false)}>
-							<CustomFont $color="black" $fontweight="bold">
-								취소
-							</CustomFont>
+							<CustomFont $color="black" $fontweight="bold">취소</CustomFont>
 						</CustomButton>
 						<CustomButton $backgroundColor="#FFE100" onClick={handleSubmit}>
-							<CustomFont $color="black" $fontweight="bold">
-								게시하기
-							</CustomFont>
+							<CustomFont $color="black" $fontweight="bold">게시하기</CustomFont>
 						</CustomButton>
 					</CustomRow>
 				</CustomColumn>
