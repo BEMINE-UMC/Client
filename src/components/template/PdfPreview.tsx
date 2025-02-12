@@ -5,19 +5,31 @@ import { BiSolidPencil } from "react-icons/bi";
 import { IoMdChatbubbles } from "react-icons/io";
 
 interface PdfPreviewProps {
-  pdfUrl: string;
+  isOpen: boolean;
   onClose: () => void;
-  onLike: () => void;
-  onDownload: () => void;
-  isLiked: boolean;
-  onEdit?: () => void; // ✅ 선택적 프로퍼티로 변경
+  onLike: () => void; // ✅ 추가: 좋아요 클릭 이벤트 핸들러
+  onDownload: () => void; // ✅ 추가: 다운로드 클릭 이벤트 핸들러
+  onEdit?: () => void; // ✅ 추가: 편집 버튼 (선택적)
+    thumbnail: string;
+    filePDF?: string; // PDF 파일 경로
+    templateCreatedAt: string;
+    templateId: number;
+    title: string;
+    authorId: number;
+    authorName: string;
+    categoryId: number;
+    categoryName: string;
+    isLiked?: boolean;
+    likesCount: number;
 }
 
-const PdfPreview: React.FC<PdfPreviewProps> = ({ pdfUrl, onClose, onLike, onDownload, onEdit, isLiked }) => {
+const PdfPreview: React.FC<PdfPreviewProps> = ({ isOpen, filePDF, onClose, onLike, onDownload, onEdit, isLiked }) => {
+  if (!isOpen) return null;
+  
   return (
     <Overlay onClick={onClose}>
       <PdfContainer onClick={(e) => e.stopPropagation()}>
-        <embed src={pdfUrl} type="application/pdf" width="100%" height="100%" />
+        <embed src={filePDF} type="application/pdf" width="100%" height="100%" />
 
         <FloatingButtons>
           <IoIosHeart

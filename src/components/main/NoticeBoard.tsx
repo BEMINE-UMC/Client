@@ -12,7 +12,7 @@ const NoticeBoard = () => {
 
   return (
     <NoticeBoardContainer>
-        <NoticeCategory onCategorySelect={handleCategorySelect} />
+        <NoticeCategory onCategorySelect={handleCategorySelect} selectedCategory={selectedCategory}/>
         <PostList selectedCategory={selectedCategory} />
     </NoticeBoardContainer>
   );
@@ -22,8 +22,8 @@ export default NoticeBoard;
 
 const NoticeBoardContainer = styled.div`
   display: flex; 
-  flex-direction: column; /* 자식 요소를 세로로 배치 */
-  justify-content: flex-start; /* 세로 방향 상단 정렬 */
+  flex-direction: column; 
+  justify-content: flex-start; 
   align-items: center;
   width: 100vw; 
   margin: 0; /* 부모의 중앙 정렬 영향 제거 (중요!) */
@@ -34,7 +34,7 @@ const NoticeBoardContainer = styled.div`
   gap: 10px;
 
 
-  /* 모바일 해상도 (최대 480px) 대응 */
+  
   @media (max-width: 480px) {
     gap: 0px;
 

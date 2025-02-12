@@ -1,41 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import templateMockData from "../../modal/template/templateMockData";
+
 import {
   Container,
   BannerContainer,
   BannerItem,
   Image,
   Info,
-  Title,
-  Author,
+  Title,  
   ArrowButton,
 } from "./Banner.styles";
+import { usePopularTemplateStore } from "../../../store/template/popularTemplateStore";
+import { useBannerLogic } from "./useBannerLogic";
+
+import Empty from "../../../assets/images/main/Empty.png"; // 기본 이미지 가져오기
 
 const Banner: React.FC = () => {
-  const topTemplates = templateMockData
-    .slice()
-    .sort((a, b) => b.likesCount - a.likesCount)
-    .slice(0, 7);
+  const { templates, fetchPopularTemplates } = usePopularTemplateStore(); // Zustand에서 데이터 가져오기
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? topTemplates.length - 3 : prevIndex - 1
+  useEffect(() => {
+    fetchPopularTemplates(); // 템플릿 데이터 로드
+    // console.log("Loaded Templates:", templates); // 로드된 템플릿 출력
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // 한번만 실행
+
+  const { visibleTemplates, handlePrev, handleNext } = useBannerLogic(templates); // 로직 분리
+
+  if (!templates || templates.length === 0) {
+    return (
+      <Container>
+        <BannerContainer>
+          <BannerItem>
+            <Image $backgroundImage={Empty} />
+            <Info>
+              <Title>데이터가 없습니다</Title>
+            </Info>
+          </BannerItem>
+        </BannerContainer>
+      </Container>
     );
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === topTemplates.length - 3 ? 0 : prevIndex + 1
-    );
-  };
-
-  const visibleTemplates = topTemplates.slice(
-    currentIndex,
-    currentIndex + 3
-  );
+  }
 
   return (
     <Container>
@@ -45,10 +56,9 @@ const Banner: React.FC = () => {
       <BannerContainer>
         {visibleTemplates.map((template) => (
           <BannerItem key={template.id}>
-            <Image backgroundImage={template.image} />
+            <Image $backgroundImage={template.image || Empty} />
             <Info>
               <Title>{template.title}</Title>
-              <Author>{template.author}</Author>
             </Info>
           </BannerItem>
         ))}
