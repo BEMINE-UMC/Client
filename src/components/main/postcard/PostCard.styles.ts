@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  width: 300px; /* 원래 크기의 1.25배 */
-  height: 380px; /* 원래 크기의 1.25배 */
+  width: 16vw; /* 기본 너비 */
+  aspect-ratio: 9 / 11 ; /* 가로 세로 비율 유지 */
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -16,25 +16,20 @@ export const CardContainer = styled.div`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 768px) { /* 태블릿 */
     width: 21vw;
-    height: 28vh;
-    margin-bottom: 20%
   }
 
-  @media (max-width: 480px) { //375기준
+  @media (max-width: 480px) { /* 모바일 (375px 기준) */
     width: 40vw;
-    height: 200px;
   }
 
-  @media (max-width: 376px) { //375기준
-    width: 40vw;
-    height: 180px;
+  @media (max-width: 376px) { /* 작은 모바일 */
+    width: 45vw;
   }
 
-  @media (max-width: 321px) { //375기준
-    width: 40vw;
-    height: 150px;
+  @media (max-width: 321px) { /* 초소형 모바일 */
+    width: 50vw;
   }
 `;
 
@@ -46,6 +41,7 @@ export const ImageSection = styled.div<{ image: string }>`
   background-size: cover;
   background-position: center;
   margin: 12px auto 0;
+  margin-top: 10%;
 
   @media (max-width: 480px) {
     width: 85%;
@@ -55,7 +51,7 @@ export const ImageSection = styled.div<{ image: string }>`
 
 export const ContentSection = styled.div`
   padding: 12px;
-  height: 35%;
+  height: 30%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -63,12 +59,11 @@ export const ContentSection = styled.div`
   gap: 5px;
 
   @media (max-width: 768px) {
-       
+       height: 35%;
   }
 
   @media (max-width: 480px) {
-    margin-bottom: 10px;
-   
+    margin-top: 5%;
   }
 `;
 
@@ -101,6 +96,7 @@ export const Description = styled.p`
   color: #333;
   line-height: 1.4;
   font-weight: bold;
+  margin-bottom: 10%;
   
 
   @media (max-width: 768px) {
@@ -126,7 +122,8 @@ export const LikeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 0px;
+  margin-top: -10%;
 
   @media (max-width: 768px) {
     margin-top: -20%;
@@ -143,7 +140,7 @@ export const LikeButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 35px;
+  font-size: clamp(24px, 2vw, 32px); /* 최소 24px, 최대 32px, 화면 너비에 따라 조정 */
   display: flex;
   align-items: center;
 
@@ -158,7 +155,7 @@ export const LikeButton = styled.button`
       color: red;
     }
   } 
-
+  
   @media (max-width: 768px) {
     font-size: 24px;
    
@@ -171,7 +168,7 @@ export const LikeButton = styled.button`
 `;
 
 export const LikeCount = styled.span`
-  font-size: 16px;
+  font-size: clamp(12px, 1.5vw, 16px); /* 최소 12px, 최대 16px, 화면 너비에 따라 조정 */
   color: #777;
   font-weight: bold;
   opacity: 1;

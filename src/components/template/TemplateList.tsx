@@ -24,17 +24,25 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
   
   const{isLoggedIn} = useAuthStore();
   
+  const categoryMap: Record<string, number> = {
+    "콘텐츠 마케터": 1,
+    "브랜드 마케터": 2,
+    "퍼포먼스 마케터": 3,
+    "바이럴 마케터": 4,
+  };
+
+  const categoryId = selectedCategory === "전체" ? undefined : categoryMap[selectedCategory];
+
   const fetchCategoryTemplates = useCallback(() => {
-    const categoryId = selectedCategory === "전체" ? undefined : Number(selectedCategory);
     console.log ("선택된 카테고리:", selectedCategory);
     console.log("변환된 카테고리ID:", categoryId);
 
-    fetchTemplates(categoryId);
+    fetchTemplates(categoryId === undefined ? undefined : categoryId);
   }, [selectedCategory, fetchTemplates]);
 
   useEffect(() => {
     fetchCategoryTemplates();
-  }, [fetchCategoryTemplates]);
+  }, [fetchCategoryTemplates, fetchTemplates]);
 
   useEffect(() => {
     console.log("불러온 템플릿 데이터:", templates);
@@ -63,6 +71,7 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
                   thumbnail: getImageOrDefault(template.thumbnail),
                   likedStatus: template.likedStatus || false,
                   likeCount: template.likesCount || 0,
+                  surveyCount: template.surveyCount || 0, // ✅ 추가된 필드 전달
                 }}
                 onCardClick={() => openModal(template)}
                 isLoggedIn={isLoggedIn} // 로그인 상태 전달
@@ -92,15 +101,16 @@ const ListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  justify-content: flex-start;
+  justify-content: center;
   padding: 16px;
   grid-template-columns: repeat(4, 1fr) ;
+  margin-left: -6%;
 
   @media (max-width: 768px) {
     display: grid !important;
     
     justify-content: center;
-    margin-left: -7%;
+    margin-left: -3%;
   }
 
   @media (max-width: 480px) {

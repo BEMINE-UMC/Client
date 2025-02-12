@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { CardContainer, ImageSection, ContentSection, Description, Author, Title, LikeSection, LikeButton, LikeCount } from "./TemplateCard.styles";
+import { AiFillHeart } from "react-icons/ai";
+import { CardContainer, ImageSection, ContentSection, Description, Author, Title, LikeSection, LikeButton, LikeCount, Badge } from "./TemplateCard.styles";
 import Empty from "../../../assets/images/main/Empty.png";
 import { useTemplateStore } from "../../../store/template/templateStore";
+
+import BadgeSVG from "../../../assets/images/template/Badge.svg"; // Badge.svg 경로로 불러오기
 
 interface TemplateCardData {
   templateId: number;
@@ -14,6 +16,7 @@ interface TemplateCardData {
   likeCount?: number;
   categoryId: number;
   categoryName: string;
+  surveyCount: number; // ✅ 추가된 필드 전달
 }
 
 interface TemplateCardProps {
@@ -23,7 +26,7 @@ interface TemplateCardProps {
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLoggedIn }) => {
-  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0 } = data;
+  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0, surveyCount } = data;
   const { likeTemplate } = useTemplateStore();
 
   const [isLiked, setIsLiked] = useState<boolean>(likedStatus);
@@ -45,6 +48,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
 
   return (
     <CardContainer onClick={onCardClick} style={{ cursor: "pointer" }}>
+      {surveyCount > 0 && <Badge><img src={BadgeSVG} alt="Badge" /></Badge>} {/* SVG 이미지로 Badge 표시 */}
       <ImageSection style={{ backgroundImage: `url(${thumbnail || Empty})` }} />
       <ContentSection>
         <Description>
@@ -54,7 +58,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
         <LikeSection>
           {isLoggedIn ? (
             <LikeButton onClick={handleLike} liked={isLiked}>
-              {isLiked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
+              {isLiked ? <AiFillHeart className="liked" /> : <AiFillHeart className="not-liked" />}
             </LikeButton>
           ) : null}
           <LikeCount>{likes}</LikeCount>

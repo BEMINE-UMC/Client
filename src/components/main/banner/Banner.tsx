@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import {
@@ -7,7 +7,7 @@ import {
   BannerItem,
   Image,
   Info,
-  Title,
+  Title,  
   ArrowButton,
 } from "./Banner.styles";
 import { usePopularTemplateStore } from "../../../store/template/popularTemplateStore";
@@ -18,9 +18,17 @@ import Empty from "../../../assets/images/main/Empty.png"; // 기본 이미지 �
 const Banner: React.FC = () => {
   const { templates, fetchPopularTemplates } = usePopularTemplateStore(); // Zustand에서 데이터 가져오기
 
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
   useEffect(() => {
     fetchPopularTemplates(); // 템플릿 데이터 로드
     // console.log("Loaded Templates:", templates); // 로드된 템플릿 출력
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []); // 한번만 실행
 
   const { visibleTemplates, handlePrev, handleNext } = useBannerLogic(templates); // 로직 분리

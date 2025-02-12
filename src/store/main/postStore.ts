@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import instance from "../../api/axios";
 import { useAuthStore } from "../authStore";
+import { refreshTokens } from "../../api/refresh";
+
+//토큰 재발급
+
 
 interface Post {
   postCreatedAt: string;
@@ -88,8 +92,15 @@ export const usePostStore = create<PostStore>((set) => ({
         console.log("✅ Zustand 상태 업데이트, 받은 데이터:", posts);
         set({ posts, loading: false });
       } else {
-        console.error("❌ 게시물 조회 실패:", response.data.error);
-        set({ error: response.data.error, loading: false });
+        // 토큰 만료 체크
+        if (response.data.error?.errorCode === 'TOKEN_EXPIRED') {
+          console.log("❌ 토큰 만료됨, 재발급 시도...");
+          await refreshTokens();  // 토큰 재발급 함수 호출
+          await usePostStore.getState().fetchPosts(categoryId, offset, limit);  // 갱신된 토큰으로 다시 시도
+        } else {
+          console.error("❌ 게시물 조회 실패:", response.data.error);
+          set({ error: response.data.error, loading: false });
+        } 
       }
     } catch (error) {
       console.error("❌ API 호출 오류:", error);
@@ -125,6 +136,10 @@ export const usePostStore = create<PostStore>((set) => ({
               : post
           ),
         });
+      } else if (response.data.error?.errorCode === 'TOKEN_EXPIRED') {
+        console.log("❌ 토큰 만료됨, 재발급 시도...");
+        await refreshTokens();  // 토큰 갱신 후 다시 호출
+        await usePostStore.getState().likePost(postId);  // 갱신된 토큰으로 다시 좋아요 API 호출
       } else {
         console.error("❌ 좋아요 실패:", response.data.error);
       }
@@ -132,7 +147,6 @@ export const usePostStore = create<PostStore>((set) => ({
       console.error("❌ 좋아요 API 오류:", error);
     }
   },
-
   //게시물 스크랩 api
   scrapPost: async (postId: number) => {
     const { posts } = usePostStore.getState();
@@ -155,13 +169,17 @@ export const usePostStore = create<PostStore>((set) => ({
           posts: posts.map((post) =>
             post.postId === postId
               ? { ...post, scrapStatus: !post.scrapStatus }
-              : post
+              : post  
           ),
         });
+      } else if (response.data.error?.errorCode === 'TOKEN_EXPIRED') {
+        console.log("❌ 토큰 만료됨, 재발급 시도...");
+        await refreshTokens();  // 토큰 갱신 후 다시 호출
+        await usePostStore.getState().scrapPost(postId);  // 갱신된 토큰으로 다시 스크랩 API 호출
       } else {
         alert("스크랩 실패");
         console.error("❌ 스크랩 실패:", response.data.error);
-      } 
+      }
     } catch (error) {
       console.error("❌ 스크랩 API 오류:", error);
     }

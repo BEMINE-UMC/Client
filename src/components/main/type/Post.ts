@@ -13,4 +13,5 @@ export interface Post {
     content?: string;  // 추가: 게시물 내용
     userImage?: string;  // 추가: 사용자 이미지 URL
     userInformation?: string;  // 추가: 사용자 정보
+    body?: string;
   }

@@ -6,7 +6,7 @@
   import { usePostStore } from "../../store/main/postStore";
   import { Post } from "./type/Post";
   import { useAuthStore } from "../../store/authStore";
-  import { usePostDetailStore } from "../../store/main/postDetailStore";
+  import { usePostDetailStore } from "../../store/main/postDetailStore";  
 
 
   interface PostListProps {
@@ -16,15 +16,25 @@
   const PostList: React.FC<PostListProps> = ({ selectedCategory }) => {
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [likedStatus, setLikedStatus] = useState<{ [key: number]: boolean }>({}); // ✅ 수정됨: 좋아요 상태 관리
     
     const { posts , fetchPosts } = usePostStore();
     
-    const { fetchPostDetail } =usePostDetailStore();
+    const { fetchPostDetail, postDetail } =usePostDetailStore();
 
     const {isLoggedIn} = useAuthStore();
 
+    const categoryMap: Record<string, number> = {
+      "콘텐츠 마케터": 1,
+      "브랜드 마케터": 2,
+      "퍼포먼스 마케터": 3,
+      "바이럴 마케터": 4,
+    };
+
+    const categoryId = selectedCategory === "전체" ? undefined : categoryMap[selectedCategory];
+
     const fetchCategoryPosts = useCallback(() => {
-      const categoryId = selectedCategory === "전체" ? undefined : Number(selectedCategory);
       
       console.log("📡 선택된 카테고리:", selectedCategory);
       console.log("📡 변환된 categoryId:", categoryId);
@@ -34,13 +44,13 @@
 
     useEffect(() => {
       fetchCategoryPosts();
-    }, [fetchCategoryPosts]);
+    }, [fetchCategoryPosts, selectedCategory]); // 변경될 때 마다 실행
 
     useEffect(() => {
       console.log("✅ 불러온 게시물 데이터:", posts);
     }, [posts]);
 
-    const openModal = async (post: Post) => { // 수정: 타입 any 추가
+    const openModal = async (post: Post) => { 
       setSelectedPost(post);
       setIsModalOpen(true);
       await fetchPostDetail(post.postId);
@@ -49,6 +59,14 @@
     const closeModal = () => {
       setSelectedPost(null);
       setIsModalOpen(false);
+    };
+
+    const handleLikeClick = (postId: number) => {
+      setLikedStatus((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+      console.log(`👍 Post ${postId} 좋아요 상태 변경:`, !likedStatus[postId]);
     };
 
     return (
@@ -62,7 +80,7 @@
                 ...post,
                 thumbnail: getImageOrDefault(post.thumbnail),
                 liked: post.likedStatus || false,
-                likesCount: post.likesCount || 0, //현재 데이터 베이스에 없는 데이터?
+                likesCount: post.likesCount || 0, 
               }}
               onCardClick={() => openModal(post)}
               isLoggedIn={isLoggedIn} // 로그인 상태 전달
@@ -77,9 +95,11 @@
             isOpen={isModalOpen}
             onClose={closeModal}
             data={{
+              ...postDetail, // 상세 정보 받아오기              
               ...selectedPost,
-              thumbnail: getImageOrDefault(selectedPost.thumbnail),
             }}
+            onLikeClick={() => handleLikeClick(selectedPost.postId)} // ✅ 수정됨: 좋아요 클릭 핸들러 전달
+          liked={likedStatus[selectedPost.postId] || false} // ✅ 수정됨: liked 상태 전달
           />
         )}
       </PostListWrapper>
@@ -96,7 +116,7 @@
 
   const PostCardContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(5, minmax(200px, 1fr)); /* 자동 줄바꿈 */
+    grid-template-columns: repeat(5, minmax(200px, 1fr)); 
     justify-content: center;
     gap: 10px;
     width: 100%;

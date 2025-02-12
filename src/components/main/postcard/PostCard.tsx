@@ -11,7 +11,7 @@ import {
   BookmarkContainer,
   Box,
 } from "./PostCard.styles";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import { BsBookmarkFill } from "react-icons/bs";
 import { usePostStore } from "../../../store/main/postStore";
 
@@ -38,13 +38,6 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) =>
   const [likeCount, setLikeCount] = useState(likesCount);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  // const toggleLike = (e: React.MouseEvent) => { // 수정: 이벤트 타입 추가
-  //   e.stopPropagation();
-  //   if (!isLoggedIn) return; // 로그인 안 되어 있으면 클릭 무시
-  //   setIsLiked((prev) => !prev);
-  //   setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-  // };
-
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isLoggedIn) {
@@ -56,12 +49,6 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) =>
     setIsLiked((prev) => !prev);
     setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
   }
-
-  // const toggleBookmark = (e: React.MouseEvent) => { // 수정: 이벤트 타입 추가
-  //   e.stopPropagation();
-  //   if (!isLoggedIn) return; // 로그인 안되어 있을 시 클릭 무시 
-  //   setIsBookmarked((prev) => !prev);
-  // };
 
   const handleScrap = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -94,11 +81,11 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) =>
         <LikeContainer>
         {isLoggedIn ? (
             <LikeButton onClick={handleLike}>
-              {isLiked ? <AiFillHeart className="liked" /> : <AiOutlineHeart className="not-liked" />}
+              {isLiked ? <AiFillHeart className="liked" /> : <AiFillHeart className="not-liked" />}
             </LikeButton>
           ) : (
             <LikeButton style={{ opacity: 0.5, cursor: "not-allowed" }}>
-              <AiOutlineHeart className="not-liked" />
+              <AiFillHeart className="not-liked" />
             </LikeButton>
           )}
           <LikeCount>{likeCount}</LikeCount>

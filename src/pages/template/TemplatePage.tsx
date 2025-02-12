@@ -33,7 +33,7 @@ const Container = styled.div`
   min-height: 100vh; /* 화면 높이 */
   position: relative; /* 부모로부터의 정렬 영향 제거 */
   box-sizing: border-box; 
-  padding-left: 7%; /* 왼쪽 간격 추가 */
+  padding-left: 5%; /* 왼쪽 간격 추가 */
   gap: 20px;
   margin-top: 2%;
   

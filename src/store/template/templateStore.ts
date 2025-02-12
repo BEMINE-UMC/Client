@@ -13,6 +13,7 @@ export interface Template {
   categoryName: string;
   likedStatus?: boolean;  // 로그인 후에만 사용
   likesCount: number; // 아직 백엔드에 반영이 안됨(예상)
+  surveyCount: number;
 }
 
 interface TemplateStore {
@@ -63,6 +64,7 @@ export const useTemplateStore = create<TemplateStore>((set) => ({
             categoryName: template.categoryName,
             likedStatus: isLoggedIn ? template.likedStatus : undefined,
             likesCount: template.likesCount || 0,
+            surveyCount: template.surveyCount || 0, // ✅ 추가된 필드 반영
           }));
         } else if (Array.isArray(successData?.data)) {
           templates = successData.data.map((template: any) => ({
@@ -76,6 +78,7 @@ export const useTemplateStore = create<TemplateStore>((set) => ({
             categoryName: template.categoryName,
             likedStatus: template.likedStatus,
             likesCount: template.likesCount || 0,
+            surveyCount: template.surveyCount || 0, // ✅ 추가된 필드 반영
           }));
         } else {
           throw new Error("API 응답 형식이 예상과 다릅니다.");
