@@ -4,7 +4,10 @@ import { CardContainer, ImageSection, ContentSection, Description, Author, Title
 import Empty from "../../../assets/images/main/Empty.png";
 import { useTemplateStore } from "../../../store/template/templateStore";
 
-import BadgeSVG from "../../../assets/images/template/Badge.svg"; // Badge.svg 경로로 불러오기
+import Badge_D from "../../../assets/images/template/Badge_D.svg";
+import Badge_C from "../../../assets/images/template/Badge_C.svg";
+import Badge_U from "../../../assets/images/template/Badge_U.svg";
+
 
 interface TemplateCardData {
   templateId: number;
@@ -16,7 +19,10 @@ interface TemplateCardData {
   likeCount?: number;
   categoryId: number;
   categoryName: string;
-  surveyCount: number; // ✅ 추가된 필드 전달
+
+  surveyCountDesign: number;  // 인증 뱃지
+  surveyCountCredible: number; // 식에 넣어야 함 (디자인 완성 후) 
+  surveyCountUseful: number;  // 식에 넣어야함 (디자인 완성 후)
 }
 
 interface TemplateCardProps {
@@ -26,7 +32,7 @@ interface TemplateCardProps {
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLoggedIn }) => {
-  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0, surveyCount } = data;
+  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0, surveyCountDesign, surveyCountCredible, surveyCountUseful } = data;
   const { likeTemplate } = useTemplateStore();
 
   const [isLiked, setIsLiked] = useState<boolean>(likedStatus);
@@ -48,7 +54,9 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
 
   return (
     <CardContainer onClick={onCardClick} style={{ cursor: "pointer" }}>
-      {surveyCount > 0 && <Badge><img src={BadgeSVG} alt="Badge" /></Badge>} {/* SVG 이미지로 Badge 표시 */}
+      {surveyCountDesign > 0 && <Badge><img src={Badge_D} alt="Design Badge" /></Badge>}
+      {surveyCountCredible > 0 && <Badge><img src={Badge_C} alt="Credible Badge" /></Badge>}
+      {surveyCountUseful > 0 && <Badge><img src={Badge_U} alt="Useful Badge" /></Badge>}  
       <ImageSection style={{ backgroundImage: `url(${thumbnail || Empty})` }} />
       <ContentSection>
         <Description>

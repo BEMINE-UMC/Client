@@ -3,6 +3,7 @@ import instance from "../../api/axios";
 
 // Template 데이터 타입 정의
 export interface PopularTemplate {
+    likesCount: any;
     id: number;   // API 응답에 맞게 `templateId` -> `id`로 변경
     title: string;
     image: string;  // `thumbnail`을 `image`로 저장

@@ -105,7 +105,7 @@ export const Description = styled.p`
     -webkit-line-clamp: 1; /* 표시할 줄 수 */
     -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
     overflow: hidden; /* 넘치는 텍스트 숨김 */
-   
+    
   }
 
   @media (max-width: 480px) {
