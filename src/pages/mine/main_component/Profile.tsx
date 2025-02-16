@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/authStore";
+import CustomInput from "../components/CustomInput";
 
 import CustomColumn from "../components/CustomColumn";
 import CustomRow from "../components/CustomRow";
@@ -18,6 +19,8 @@ import defaultImg from '../../../assets/images/mine/default_img.png';
 const Profile = () => {
 	const navigate = useNavigate();
 	const accessToken = useAuthStore((state) => state.accessToken);
+	const [isEditing, setIsEditing] = useState(false);
+	const [introduction, setIntroduction] = useState(""); // 한줄소개 값 상태
 
 	// 프로필 데이터 전체 상태로 관리
 	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({
@@ -90,6 +93,34 @@ const Profile = () => {
 		}
 	};
 
+	// 한줄소개 추가/수정 API 요청
+	const updateIntroduction = async () => {
+		try {
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_BASE_URL}/myPage/history/create`,
+				{ introduction },
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+
+			if (response.status === 200 && response.data.success) {
+				alert("한줄소개가 추가/수정되었습니다!");
+				setProfileData((prev) => ({
+					...prev,
+					introduction, // 한줄소개 업데이트 즉시 반영
+				}));
+				setIsEditing(false); // 수정 완료 후 input 필드 닫음
+			}
+		} catch (error) {
+			console.error("한줄소개 추가/수정 실패:", error);
+		}
+	};
+
+
 
 	return (
 		<ResponsiveColumn>
@@ -102,7 +133,48 @@ const Profile = () => {
 					</CustomButton>
 				</CustomRow>
 				<CustomFont $color="black" $font="2rem" $fontweight="bold">{profileData.name}</CustomFont>
-				<CustomFont $color="black" $font="1rem" $fontweight="bold">{profileData.introduction}</CustomFont>
+				{/* <CustomFont $color="black" $font="1rem" $fontweight="bold">{profileData.introduction}</CustomFont> */}
+				{/* 한줄소개 표시 부분 */}
+				<CustomRow $width='100%' $alignitems='center' $justifycontent='flex-end'>
+					{isEditing ? (
+						<>
+							<CustomInput
+								placeholder="한줄소개를 입력하세요"
+								value={introduction}
+								onChange={(e) => setIntroduction(e.target.value)}
+							/>
+							<CustomButton
+								onClick={updateIntroduction}
+								$backgroundColor="#FFE100"
+								$padding="0.5rem"
+								$width="auto"
+								$height="auto"
+							>
+								<CustomFont $color="black" $fontweight='bold'>확인</CustomFont>
+							</CustomButton>
+						</>
+					) : (
+						<CustomRow $width="100%" $alignitems="center" $justifycontent="space-between">
+							<CustomFont
+								$color={profileData.introduction ? "black" : "#D9D9D9"}
+								$font="1rem"
+								$fontweight="bold"
+							>
+								{profileData.introduction || "아직 등록한 한줄소개가 없어요."}
+							</CustomFont>
+							<CustomButton
+								onClick={() => setIsEditing(true)}
+								$backgroundColor="#FFE100"
+								$padding="0.5rem"
+								$width="auto"
+								$height="auto"
+							>
+								<CustomFont $color="black" $fontweight='bold'>한줄소개 추가/수정하기</CustomFont>
+							</CustomButton>
+						</CustomRow>
+					)}
+				</CustomRow>
+
 			</ResponsiveInnerColumn>
 
 			<ResponsiveInnerColumn>
@@ -112,11 +184,11 @@ const Profile = () => {
 
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
 			<CustomRow $width="80%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
-					<CustomFont $color="white" $font="0.7rem">게시물 작성</CustomFont>
+				<CustomButton $backgroundColor="#FFE100" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteContent}>
+					<CustomFont $color="black" $fontweight='bold'>게시물 작성</CustomFont>
 				</CustomButton>
-				<CustomButton $backgroundColor="black" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteTemplate}>
-					<CustomFont $color="white" $font="0.7rem">템플릿 등록</CustomFont>
+				<CustomButton $backgroundColor="#FFE100" $padding="0.5rem" $width="7rem" $height="auto" onClick={GoWriteTemplate}>
+					<CustomFont $color="black" $fontweight='bold'>템플릿 등록</CustomFont>
 				</CustomButton>
 			</CustomRow>
 		</ResponsiveColumn>

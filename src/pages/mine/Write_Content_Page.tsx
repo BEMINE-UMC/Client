@@ -29,6 +29,7 @@ const WriteContentPage = () => {
 
 	const accessToken = useAuthStore((state) => state.accessToken);
 
+	// 게시물 작성 시, 'url이 유효하지 않다'는 오류 발생 중 !!
 	const handleSubmit = async () => {
 		const data = {
 			title,
@@ -54,7 +55,8 @@ const WriteContentPage = () => {
 				setWriteModal(false);
 			}
 		} catch (error) {
-			console.log(accessToken);
+			console.log('body에 담긴 내용은:', editorContent);
+			// console.log(accessToken);
 			console.error("Error submitting post:", error);
 			alert("게시글 작성에 실패했습니다. 다시 시도해주세요.");
 		}

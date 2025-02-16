@@ -10,6 +10,7 @@ import { DropdownWrapper, DropdownMenu, GridContainer, ImageItem } from './WorkS
 import { FaChevronDown } from 'react-icons/fa';
 import { fetchPosts } from "../../apis/fetchPosts";
 import pdfMock from '../../../../assets/images/mine/mine_PDF_mockData.pdf';
+import emptySpace from '../../../../assets/images/mine/icon_if_workspace_is_empty.svg';
 
 import rank_before_1 from '../../../../assets/images/mine/rank_img/mine_rank_before_1.svg';
 import rank_before_2 from '../../../../assets/images/mine/rank_img/mine_rank_before_2.svg';
@@ -25,6 +26,7 @@ import rank_after_4 from '../../../../assets/images/mine/rank_img/mine_rank_afte
 import rank_after_5 from '../../../../assets/images/mine/rank_img/mine_rank_after_5.svg';
 import rank_after_6 from '../../../../assets/images/mine/rank_img/mine_rank_after_6.svg';
 import CustomDivider from "../../components/CustomDivider";
+import StyledImg from "../../components/StyledImg";
 
 const rankBeforeImages = [
 	rank_before_1,
@@ -121,25 +123,25 @@ const Workspace = () => {
 						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center' $gap="0.2rem">
 							<CustomButton onClick={() => fetchPosts('/myPage/posts', '내가 쓴 게시물', setImageList, setMessage)}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
-								<CustomFont $color="black">내가 쓴 게시물</CustomFont>
+								<CustomFont $color="black">내가 쓴 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
 							<CustomButton onClick={() => fetchPosts('/myPage/recentPost', '최근 본 게시물', setImageList, setMessage)}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
-								<CustomFont $color="black">최근 본 게시물</CustomFont>
+								<CustomFont $color="black">최근 본 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
 							<CustomButton onClick={() => fetchPosts('/myPage/likePost', '좋아요 누른 게시물', setImageList, setMessage)}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
-								<CustomFont $color="black">좋아요 누른 게시물</CustomFont>
+								<CustomFont $color="black">좋아요 누른 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
 							<CustomButton onClick={() => fetchPosts('/myPage/bookMark', '북마크한 게시물', setImageList, setMessage)}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
-								<CustomFont $color="black">북마크한 게시물</CustomFont>
+								<CustomFont $color="black">북마크한 포스트</CustomFont>
 							</CustomButton>
 
 						</CustomColumn>
@@ -158,7 +160,8 @@ const Workspace = () => {
 			) : (
 				message && (
 					<CustomColumn $width="100%" $minHeight="90vh" $alignitems="center" $justifycontent="center">
-						<CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont>
+						{/* <CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont> */}
+						<StyledImg src={emptySpace} />
 					</CustomColumn>
 				))}
 

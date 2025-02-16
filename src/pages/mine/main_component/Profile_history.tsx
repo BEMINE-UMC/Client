@@ -71,6 +71,7 @@ const HistoryForm = () => {
 
 	return (
 		<CustomColumn $width="100%" $alignitems="center" $gap="1rem" $justifycontent='center'>
+
 			{/* 연혁 데이터 렌더링 */}
 			{loading ? (
 				<CustomFont $color="gray">불러오는 중...</CustomFont>
@@ -91,12 +92,12 @@ const HistoryForm = () => {
 				{/* 연혁 추가 버튼 */}
 				<CustomButton
 					onClick={() => setShowForm(!showForm)}
-					$backgroundColor="black"
+					$backgroundColor="#FFE100"
 					$padding="0.5rem"
 					$width="auto"
 					$height="auto"
 				>
-					<CustomFont $color="white">
+					<CustomFont $color="black" $fontweight='bold'>
 						{showForm ? "추가 취소" : "연혁 생성하기"}
 					</CustomFont>
 				</CustomButton>
@@ -118,7 +119,7 @@ const HistoryForm = () => {
 					<CustomButton
 						onClick={() => addHistory(title, content)}
 						disabled={isButtonDisabled}
-						$backgroundColor={isButtonDisabled ? "#D9D9D9" : "yellow"}
+						$backgroundColor={isButtonDisabled ? "#D9D9D9" : "#FFE100"}
 						$padding="0.5rem"
 						$width="auto"
 						$height="auto"
