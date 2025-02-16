@@ -1,0 +1,16 @@
+.wrapperClassName {
+	border: 1px solid #ccc;
+	padding: 10px;
+	border-radius: 8px;
+	width: 90%;
+}
+
+.editorClassName {
+	min-height: 300px;
+	color: black;
+	background: white;
+}
+
+.toolbarClassName {
+	border-bottom: 1px solid #ccc;
+}
