@@ -22,11 +22,15 @@ export const fetchPosts = async (
 			},
 		});
 
+		console.log("🔍 API 요청 URL:", `${endpoint}`);
+		//추가 2
+		console.log("✅ API 응답 데이터:", response.data);
+
 		if (response.data.success) {
 			let posts: Post[] = [];
 
 			// '/myPage/posts'의 경우 응답 구조가 다름
-			if (endpoint === "/myPage/posts") {
+			if (endpoint === "/posts") {
 				const data = response.data.success; // API 문서 참고
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({

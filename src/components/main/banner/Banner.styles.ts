@@ -22,11 +22,11 @@ export const BannerContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 30px;
-  width: max(100vw, 150%); /* 가로 스크롤 허용 */
+  width: max(100vw, 150%); /* 가로 스크롤 허용 */ 
   height: 100%;
   padding: 0 40px;
   scroll-snap-type: x mandatory;
-  overflow-x: auto;
+  overflow-x: visible;
   white-space: nowrap;
   scroll-behavior: smooth;
 
@@ -40,6 +40,29 @@ export const BannerContainer = styled.div`
     gap: 10px;
   }
 `;
+
+// export const BannerContainer = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-start; /* 왼쪽 정렬 */
+//   gap: 30px;
+//   min-width: 100vw;
+//   width: ${({ itemCount }) => `calc(${itemCount} * (clamp(250px, 60%, 500px) + 30px))`}; /* 동적 너비 설정 */
+//   height: 100%;
+//   padding: 0 40px;
+//   scroll-snap-type: x mandatory;
+//   overflow-x: auto;
+//   white-space: nowrap;
+//   scroll-behavior: smooth;
+
+//   &::-webkit-scrollbar {
+//     display: none; /* 스크롤바 숨기기 */
+//   }
+
+//   @media (max-width: 768px) {
+//     width: ${({ itemCount }) => `calc(${itemCount} * (clamp(200px, 70%, 400px) + 10px))`}; /* 모바일에서 조정 */
+//   }
+// `;
 
 export const BannerItem = styled.div`
   width: clamp(250px, 60%, 500px);  /* 최소 250px, 최대 500px, 기본 60% */
@@ -93,6 +116,7 @@ export const Title = styled.h3`
   font-size: 20px;
   font-weight: 800;
   margin: 0;
+  color: yellow;
 
   @media (max-width: 768px) {
     font-size: 18px;

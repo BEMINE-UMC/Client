@@ -5,9 +5,8 @@
   import styled from "styled-components";
   import { usePostStore } from "../../store/main/postStore";
   import { Post } from "./type/Post";
-  import { useAuthStore } from "../../store/authStore";
+  import { useAuthStore } from "../../store/authStore"; 
   import { usePostDetailStore } from "../../store/main/postDetailStore";  
-
 
   interface PostListProps {
     selectedCategory: string;
@@ -35,13 +34,15 @@
     const categoryId = selectedCategory === "전체" ? undefined : categoryMap[selectedCategory];
 
     const fetchCategoryPosts = useCallback(() => {
-      
       console.log("📡 선택된 카테고리:", selectedCategory);
       console.log("📡 변환된 categoryId:", categoryId);
-      
-      fetchPosts(categoryId);
+    
+      if (categoryId !== undefined) {
+        fetchPosts(categoryId);
+      } else {
+        fetchPosts(); // 전체 게시물을 가져오는 기본 API 엔드포인트를 호출
+      }
     }, [selectedCategory, fetchPosts]);
-
     useEffect(() => {
       fetchCategoryPosts();
     }, [fetchCategoryPosts, selectedCategory]); // 변경될 때 마다 실행

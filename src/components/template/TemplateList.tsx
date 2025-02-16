@@ -71,7 +71,9 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
                   thumbnail: getImageOrDefault(template.thumbnail),
                   likedStatus: template.likedStatus || false,
                   likeCount: template.likesCount || 0,
-                  surveyCount: template.surveyCount || 0, // ✅ 추가된 필드 전달
+                  surveyCountDesign: template.surveyCountDesign || 0,  // 인증 뱃지
+                  surveyCountCredible: template.surveyCountCredible || 0,
+                  surveyCountUseful: template.surveyCountUseful || 0,
                 }}
                 onCardClick={() => openModal(template)}
                 isLoggedIn={isLoggedIn} // 로그인 상태 전달
@@ -104,7 +106,6 @@ const ListContainer = styled.div`
   justify-content: center;
   padding: 16px;
   grid-template-columns: repeat(4, 1fr) ;
-  margin-left: -6%;
 
   @media (max-width: 768px) {
     display: grid !important;

@@ -34,7 +34,7 @@ export const usePostStore = create<PostStore>((set) => ({
   loading: false,
   error: null,
 
-  fetchPosts: async (categoryId = 1, offset = 0, limit = 20) => {
+  fetchPosts: async (categoryId = undefined, offset = 0, limit = 20) => {
     set({ loading: true, error: null });
 
     const isLoggedIn = useAuthStore.getState().isLoggedIn;

@@ -53,7 +53,7 @@ const Banner: React.FC = () => {
       <ArrowButton onClick={handlePrev} aria-label="Previous">
         <FaChevronLeft size={20} />
       </ArrowButton>
-      <BannerContainer>
+      <BannerContainer > 
         {visibleTemplates.map((template) => (
           <BannerItem key={template.id}>
             <Image $backgroundImage={template.image || Empty} />
