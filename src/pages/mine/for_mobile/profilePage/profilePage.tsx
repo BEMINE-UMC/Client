@@ -1,64 +1,175 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useAuthStore } from "../../../../store/authStore";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+import defaultImg from '../../../../assets/images/mine/default_img.png';
 import CustomColumn from "../../components/CustomColumn";
 import CustomRow from "../../components/CustomRow";
 import CustomFont from "../../components/CustomFont";
 import StyledImg from "../../components/StyledImg";
 import { IoPencilOutline } from "react-icons/io5";
-import mockProfileImg from "../../../../assets/images/mockData/mockData_mine_ProfileImg.png";
 import CustomButton from "../../components/CustomButton";
+import CustomInput from "../../components/CustomInput";
 
-// 초기 프로필 데이터 관리
-const initialProfileData = {
-	name: "유궁둔",
-	tagline: "멋진 콘텐츠 마케터가 되고싶은",
-	sections: [
-		{
-			title: "1. 학력 및 전공",
-			content: "전공: 미디어 커뮤니케이션 학과\n관련 과목: 디지털 마케팅, 콘텐츠 기획, 커뮤니케이션 전략",
-		},
-		{
-			title: "2. 주요 경험",
-			content:
-				"인턴십: 스타트업 A사 (6개월):SNS 콘텐츠 기획 및 운영. 주요 플랫폼: Instagram, YouTube.\n\n2개월 만에 팔로워 3,000명 증가 성과.\n대기업 B사 (4개월):디지털 광고 캠페인 분석 및 보고서 작성. 구글 애널리틱스를 활용한 성과 분석.",
-		},
-		{
-			title: "3. 기타 활동",
-			content:
-				"개인 프로젝트: '커피 브랜드 C' 가상 마케팅 캠페인 기획. Google Ads와 페이스북 광고 시뮬레이션 제작.\n온라인 강의 수료:구글 디지털 마케팅 전문가 과정. Meta Blueprint: Facebook 마케팅.",
-		},
-		{
-			title: "4. 주요 역량 및 성과",
-			content:
-				"마케팅 툴: Google Analytics, Facebook Ads Manager, Canva.\n성과 중심의 기획 능력:전 회사에서 월간 콘텐츠 도달률 200% 증가 달성. 팀 프로젝트로 캠페인 기획 및 실행.",
-		},
-	],
-};
+interface Section {
+	title: string;
+	content: string;
+}
+
+interface ProfileData {
+	name: string;
+	tagline: string;
+	photo: string;
+	sections: Section[];
+}
 
 const MobileProfilePage = () => {
-	const [profileData, setProfileData] = useState(initialProfileData);
+	// const [profileData, setProfileData] = useState(initialProfileData);
+	const accessToken = useAuthStore((state) => state.accessToken);
+
+	const [profileData, setProfileData] = useState<ProfileData>({
+		name: "",
+		tagline: "",
+		photo: "",
+		sections: [],
+	});
+
 	const [isEditing, setIsEditing] = useState(false);
 	const [editedTagline, setEditedTagline] = useState(profileData.tagline);
-	const [isEditingSections, setIsEditingSections] = useState(false);
-	const [editedSections, setEditedSections] = useState(profileData.sections);
+	const [showForm, setShowForm] = useState(false); // 연혁 추가 폼 상태
+	const [title, setTitle] = useState(""); // 연혁 제목
+	const [content, setContent] = useState(""); // 연혁 내용
+	const [history, setHistory] = useState<Section[]>(profileData.sections); // 기존 연혁 데이터
 
-	const handleSectionEditClick = () => {
-		setIsEditingSections(true);
+	// 연혁 추가 버튼 상태 관리
+	const isButtonDisabled = title.trim() === "" || content.trim() === "";
+
+	// 연혁 추가 API 요청 함수
+	const addHistory = async () => {
+		try {
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_BASE_URL}/myPage/history/create`,
+				{ title, body: content },
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+
+			if (response.status === 200 && response.data.success) {
+				alert("연혁을 추가하였습니다!");
+
+				// 기존 history에 새로운 데이터 추가
+				setHistory((prev) => [...prev, { title, content }]);
+				setProfileData((prev) => ({
+					...prev,
+					sections: [...prev.sections, { title, content }],
+				}));
+
+				// 입력 필드 초기화 및 폼 닫기
+				setTitle("");
+				setContent("");
+				setShowForm(false);
+			}
+		} catch (error) {
+			console.error("연혁 추가 실패:", error);
+		}
 	};
 
-	const handleSectionInputChange = (index: number, value: string) => {
-		const updatedSections = [...editedSections];
-		updatedSections[index].content = value;
-		setEditedSections(updatedSections);
+	useEffect(() => {
+		const fetchProfileData = async () => {
+			try {
+				const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/myPage`, {
+					headers: {
+						"Accept": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+
+				if (response.status === 200 && response.data.success) {
+					setProfileData({
+						name: response.data.success.name,
+						tagline: response.data.success.introduction || "",
+						photo: response.data.success.photo || defaultImg,
+						sections: response.data.success.history
+							? response.data.success.history.map((item: { title?: string; body?: string }) => ({
+								title: item.title || "제목 없음",
+								content: item.body || "내용 없음",
+							}))
+							: [],
+					});
+				}
+			} catch (error) {
+				console.error("프로필 데이터 조회 실패:", error);
+			}
+		};
+
+		fetchProfileData();
+	}, [accessToken]);
+
+	// 프로필 사진 추가/변경 API 요청 함수 
+	const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files && event.target.files[0]) {
+			const file = event.target.files[0];
+			const formData = new FormData();
+			formData.append("photo", file);
+
+			try {
+				const response = await axios.patch(
+					`${import.meta.env.VITE_API_BASE_URL}/profile/modify`,
+					formData,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${accessToken}`,
+						},
+					}
+				);
+
+				if (response.status === 200 && response.data.success) {
+					console.log("성공!");
+					console.log(response.data.success.photo)
+					setProfileData((prev) => ({ ...prev, photo: response.data.success.photo }));
+				}
+			} catch (error) {
+				console.error("프로필 이미지 업로드 실패:", error);
+			}
+		}
 	};
 
-	const handleSectionSaveClick = () => {
-		setProfileData({ ...profileData, sections: editedSections });
-		setIsEditingSections(false);
+	// 한줄소개 추가/수정 API 요청
+	const updateIntroduction = async () => {
+		try {
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_BASE_URL}/myPage/history/create`,
+				{ editedTagline },
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+
+			if (response.status === 200 && response.data.success) {
+				alert("한줄소개가 추가/수정되었습니다!");
+				setProfileData((prev) => ({
+					...prev,
+					editedTagline, // 한줄소개 업데이트 즉시 반영
+				}));
+				setIsEditing(false); // 수정 완료 후 input 필드 닫음
+			}
+		} catch (error) {
+			console.error("한줄소개 추가/수정 실패:", error);
+		}
 	};
 
-	const allSectionsFilled = editedSections.every((section) => section.content.trim() !== "");
-
+	useEffect(() => {
+		setHistory(profileData.sections);
+	}, [profileData.sections]);
 
 	const handleEditClick = () => {
 		setIsEditing(true);
@@ -68,16 +179,19 @@ const MobileProfilePage = () => {
 		setEditedTagline(e.target.value);
 	};
 
-	const handleSaveClick = () => {
-		setProfileData({ ...profileData, tagline: editedTagline });
-		setIsEditing(false);
-	};
-
 	return (
 		<CustomColumn $width="90%" $minHeight="100vh" $alignitems="center" $justifycontent="center">
 			{/* 상단 프로필 정보 */}
 			<CustomRow $width="100%" $height="auto" $padding="1rem" $gap="1rem">
-				<StyledImg src={mockProfileImg} $width="40%" $height="auto" />
+				<CustomColumn $width="40%" $alignitems="center" $justifycontent="center" $gap="0.2rem">
+					<StyledImg src={profileData.photo} $width="100%" $height="auto" />
+
+					<CustomButton as="label" $backgroundColor="black" $padding="0.5rem" $width="100%" $height="auto">
+						<CustomFont $color="white">수정하기</CustomFont>
+						<input type="file" onChange={handleImageUpload} style={{ display: "none" }} />
+					</CustomButton>
+				</CustomColumn>
+
 				<CustomColumn $width="60%" $height="auto" $gap="1rem" $alignitems="flex-start" $justifycontent="center">
 					<CustomFont $font="1.5rem" $color="black" $fontweight="bold">
 						{profileData.name}
@@ -93,7 +207,7 @@ const MobileProfilePage = () => {
 								/>
 								<ThisCustomButton
 									$disabled={!editedTagline}
-									onClick={handleSaveClick}
+									onClick={updateIntroduction}
 								>
 									<CustomFont $color="black" $font="0.8rem">
 										저장
@@ -122,50 +236,51 @@ const MobileProfilePage = () => {
 			</CustomRow>
 
 			<CustomColumn $width="100%" $height="auto" $alignitems="flex-end" $justifycontent="center">
-				{isEditingSections ? (
-					<>
-						{editedSections.map((section, index) => (
-							<CustomColumn key={index} $width="100%" $gap="0.5rem">
-								<StyledInput
-									type="text"
-									value={section.content}
-									placeholder="내용을 입력해주세요"
-									onChange={(e) => handleSectionInputChange(index, e.target.value)}
-								/>
-							</CustomColumn>
-						))}
-						<ThisCustomButton
-							$disabled={!allSectionsFilled}
-							onClick={handleSectionSaveClick}
-						>
-							저장
-						</ThisCustomButton>
-					</>
+				{history.length > 0 ? (
+					history.map((section, index) => (
+						<CustomColumn key={index} $width="100%" $gap="0.5rem" $justifycontent="center" $alignitems="flex-start">
+							<CustomFont $font="1rem" $color="black" $fontweight="bold">
+								{section.title}
+							</CustomFont>
+							<CustomFont $font="0.9rem" $color="#666666">
+								{section.content}
+							</CustomFont>
+						</CustomColumn>
+					))
 				) : (
-					<>
-						{profileData.sections.map((section, index) => (
-							<CustomColumn key={index} $width="100%" $gap="0.5rem" $justifycontent="center" $alignitems="flex-start">
-								<CustomFont $font="1rem" $color="black" $fontweight="bold">
-									{section.title}
-								</CustomFont>
-								<CustomFont $font="0.9rem" $color="#666666">
-									{section.content}
-								</CustomFont>
-							</CustomColumn>
-						))}
-						<button
-							onClick={handleSectionEditClick}
-							style={{
-								backgroundColor: "transparent",
-								border: "none",
-								cursor: "pointer",
-							}}
+					<CustomFont $color="gray">아직 연혁이 없어요!</CustomFont>
+				)}
+
+				<CustomButton onClick={() => setShowForm(!showForm)} $width="auto" $height="auto" $padding="0.5rem" $backgroundColor="black">
+					<CustomFont $color="white">{showForm ? "추가 취소" : "연혁 추가"}</CustomFont>
+				</CustomButton>
+
+				{showForm && (
+					<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="1rem">
+						<CustomInput
+							placeholder="제목을 입력하세요"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+						<CustomInput
+							placeholder="내용을 입력하세요"
+							value={content}
+							onChange={(e) => setContent(e.target.value)}
+						/>
+						<CustomButton
+							onClick={addHistory}
+							disabled={isButtonDisabled}
+							$backgroundColor={isButtonDisabled ? "#D9D9D9" : "#FFE100"}
+							$padding="0.5rem"
+							$width="auto"
+							$height="auto"
 						>
-							<IoPencilOutline style={{ fontSize: "1rem", color: "#666666" }} />
-						</button>
-					</>
+							<CustomFont $color="black" $fontweight="bold">연혁 추가하기</CustomFont>
+						</CustomButton>
+					</CustomColumn>
 				)}
 			</CustomColumn>
+
 
 		</CustomColumn>
 	);
