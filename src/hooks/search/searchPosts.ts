@@ -16,7 +16,9 @@ export const searchPosts = async (searchTerm: string) => {
         });
 
         if (response.status === 200 && response.data.success) {
-            return response.data.success.data; // 여기에 결과 다 담아서 드려요 !!
+            const results = response.data.success.data || [];  // 만약 null이면 빈 배열 반환
+            console.log("📄 최종 검색 결과:", results);
+            return results;
         } else {
             console.error("실패ㅠㅠ:", response.data);
             return [];

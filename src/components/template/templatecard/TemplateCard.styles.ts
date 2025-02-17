@@ -12,12 +12,12 @@ export const Badge = styled.span`
 
     @media (max-width: 768px) {
       top: -20px;
-      width: 80px;
+      width: 100px;
     }
 
     @media (max-width: 480px) {
-      top: 0px;
-      width: 70px;
+      top: -20px;
+      width: 80px;
     }
   }
 `;
