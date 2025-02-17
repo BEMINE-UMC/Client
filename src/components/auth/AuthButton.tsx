@@ -59,6 +59,7 @@ const AuthButtonComponent: React.FC<AuthButtonProps> = ({
   width,
   fontSize,
   type,
+  height,
 }) => {
   return (
     <AuthButton
@@ -67,6 +68,7 @@ const AuthButtonComponent: React.FC<AuthButtonProps> = ({
       width={width}
       fontSize={fontSize}
       type={type}
+      height={height}
     >
       {children}
     </AuthButton>

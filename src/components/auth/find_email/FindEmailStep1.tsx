@@ -5,7 +5,6 @@ import AuthButton from "../AuthButton";
 import Label from "../Label";
 import { StepContainer } from "./FindEmail.styles";
 import api from "../../../api/axios";
-import { isAxiosError } from "axios";
 
 interface FindEmailStep1Props {
   nickname: string;
