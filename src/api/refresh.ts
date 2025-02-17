@@ -6,7 +6,6 @@ interface RefreshResponse {
   error: {
     errorCode: string;
     reason: string;
-    data: any;
   } | null;
   success: {
     accessToken: string;

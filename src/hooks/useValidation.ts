@@ -36,7 +36,11 @@ const useValidation = () => {
     };
   
     // 개별 필드 유효성 검사 함수
-    const validateField = (field: string, value: any, rules: { [key: string]: (value: any) => string }) => {
+    const validateField = (
+      field: string, 
+      value: any, 
+      rules: { [key: string]: (value: any) => string }
+    ) => {
       const error = rules[field]?.(value) || "";
       setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
     };
@@ -71,7 +75,7 @@ const useValidation = () => {
             return "";
           },
           confirmPassword: (value: string) => {
-            if (!password) return ""; // password가 undefined인 경우 에러 메시지 반환하지 않음
+            if (!value) return "비밀번호를 다시 입력해주세요.";
             return value !== password ? "비밀번호가 일치하지 않습니다." : "";
           },
         };
