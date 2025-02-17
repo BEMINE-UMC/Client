@@ -13,7 +13,7 @@ interface RegisterStep2Props {
   validateField: (field: string, value: string, rules: any) => void;
   errors: Record<string, string>;
   getValidationRules: (step: number, password?: string) => any;
-  isLoading: boolean;
+  // isLoading: boolean;
 }
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({
@@ -25,7 +25,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
   validateField,
   errors,
   getValidationRules,
-  isLoading,
+  // isLoading,
 }) => {
   const rules = getValidationRules(2, password);
 
@@ -35,7 +35,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
   };
 
   return (
-    <div style={{width: "100%"}}>
+    <div style={{ width: "100%" }}>
       <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
@@ -50,7 +50,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           }}
         />
       </div>
-      <ValidationMessage 
+      <ValidationMessage
         message={errors.password || " "}
         visible={!!errors.password}
       />
@@ -68,24 +68,24 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({
           }}
         />
       </div>
-      <ValidationMessage 
+      <ValidationMessage
         message={errors.confirmPassword || " "}
         visible={!!errors.confirmPassword}
       />
-      <div style={{width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
         <AuthButton
           onClick={handleSubmit}
           disabled={
-            !password || 
-            !confirmPassword || 
-            Object.values(errors).some((error) => error !== "") ||
-            isLoading
+            !password ||
+            !confirmPassword ||
+            Object.values(errors).some((error) => error !== "")
+            // isLoading
           }
           width="130px"
           height="65px"
           fontSize="20px"
         >
-          {isLoading ? "가입중..." : "가입하기"}
+          가입하기
         </AuthButton>
       </div>
     </div>
