@@ -9,6 +9,7 @@ import CustomBox from "../components/CustomBox";
 import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
 import CustomRow from "../components/CustomRow";
+import emptyLikes from '../../../assets/images/mine/icon_if_empty_likes.svg';
 
 // 스타일 코드 하단 분리 
 
@@ -70,7 +71,8 @@ const Likes = () => {
           ))
         ) : (
           <CustomRow $width="100%" $alignitems="center" $justifycontent="center">
-            <CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont>
+            {/* <CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont> */}
+            <StyledImg src={emptyLikes} $width="8rem" />
           </CustomRow>
         )}
       </ResponsiveBox>

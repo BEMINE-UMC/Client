@@ -22,9 +22,9 @@ export const fetchPosts = async (
 			},
 		});
 
-		console.log("🔍 API 요청 URL:", `${endpoint}`);
-		//추가 2
-		console.log("✅ API 응답 데이터:", response.data);
+		console.log(accessToken);
+		console.log("워크스페이스 요청 URL:", `${endpoint}`);
+		console.log(" 워크스페이스 응답 데이터:", response.data);
 
 		if (response.data.success) {
 			let posts: Post[] = [];
