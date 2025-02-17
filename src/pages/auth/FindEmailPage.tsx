@@ -6,15 +6,41 @@ import FindEmailStep2 from "../../components/auth/find_email/FindEmailStep2";
 import FindEmailLinks from "../../components/auth/find_email/FindEmailLinks";
 import AnimatedBackground from "../../components/common/AnimatedBackground";
 
+interface UserData {
+  nickname: string;
+  password: string;
+  foundEmail: string;
+}
+
 const FindEmailPage: React.FC = () => {
   const [step, setStep] = useState(1);
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [foundEmail, setFoundEmail] = useState("");
+  const [userData, setUserData] = useState<UserData>({
+    nickname: "",
+    password: "",
+    foundEmail: ""
+  });
 
-  const handleNext = (email: string) => {
-    setFoundEmail(email);
+  const handleEmailFound = (email: string) => {
+    setUserData(prev => ({ ...prev, foundEmail: email }));
     setStep(2);
+  };
+
+  const StepComponents = {
+    1: (
+      <FindEmailStep1
+        nickname={userData.nickname}
+        setNickname={(nickname) => setUserData(prev => ({ ...prev, nickname }))}
+        password={userData.password}
+        setPassword={(password) => setUserData(prev => ({ ...prev, password }))}
+        onNext={handleEmailFound}
+      />
+    ),
+    2: (
+      <FindEmailStep2 
+        nickname={userData.nickname} 
+        email={userData.foundEmail} 
+      />
+    )
   };
 
   return (
@@ -32,21 +58,7 @@ const FindEmailPage: React.FC = () => {
       >
         <FormContainer>
           <TextLogo />
-          {step === 1 && (
-            <FindEmailStep1
-              nickname={nickname}
-              setNickname={setNickname}
-              password={password}
-              setPassword={setPassword}
-              onNext={handleNext}
-            />
-          )}
-          {step === 2 && (
-            <FindEmailStep2 
-              nickname={nickname} 
-              email={foundEmail} 
-            />
-          )}
+          {StepComponents[step as keyof typeof StepComponents]}
           {step === 1 && <FindEmailLinks />}
         </FormContainer>
       </div>

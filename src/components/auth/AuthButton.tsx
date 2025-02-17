@@ -12,17 +12,15 @@ interface AuthButtonProps {
   width?: string;
   /** 버튼 폰트 크기 */
   fontSize?: string;
-  /** 버튼 높이 설정 */
-  height?: string;
   /** 버튼 타입 설정 */
   type?: 'button' | 'submit' | 'reset';
-  /** 버튼 텍스트 색상 */
-  color?: string;
+  /** 버튼 높이 설정 */
+  height?: string;
 }
 
 const AuthButton = styled.button<AuthButtonProps>`
   width: ${props => props.width || '100%'};
-  height: 60px;
+  height: ${props => props.height || '60px'};
   background-color: ${props => props.disabled ? '#D3D3D3' : '#FFE100'};
   border: none;
   border-radius: 10px;
@@ -60,9 +58,8 @@ const AuthButtonComponent: React.FC<AuthButtonProps> = ({
   children,
   width,
   fontSize,
-  height,
   type,
-  color,
+  height,
 }) => {
   return (
     <AuthButton
@@ -70,9 +67,8 @@ const AuthButtonComponent: React.FC<AuthButtonProps> = ({
       onClick={!disabled ? onClick : undefined}
       width={width}
       fontSize={fontSize}
-      height={height}
       type={type}
-      color={color}
+      height={height}
     >
       {children}
     </AuthButton>

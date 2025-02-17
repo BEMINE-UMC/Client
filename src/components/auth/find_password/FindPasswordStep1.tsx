@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import InputField from "../InputField";
 import Label from "../Label";
+import InputField from "../InputField";
 import ValidationMessage from "../ValidationMessage";
 import AuthButton from "../AuthButton";
 import api from "../../../api/axios";
-import { isAxiosError } from "axios";
 import { ApiResponse, UserVerificationData } from "../../../types/auth";
 
 interface FindPasswordStep1Props {

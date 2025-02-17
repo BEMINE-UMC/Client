@@ -7,19 +7,42 @@ import FormContainer from "../../components/auth/FormContainer";
 import TextLogo from "../../components/auth/TextLogo";
 import AnimatedBackground from "../../components/common/AnimatedBackground";
 
+interface UserData {
+  nickname: string;
+  email: string;
+  userId: number | null;
+}
+
 const FindPasswordPage: React.FC = () => {
   const [step, setStep] = useState(1);
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userData, setUserData] = useState<UserData>({
+    nickname: "",
+    email: "",
+    userId: null
+  });
 
   const handleStep1Success = (verifiedUserId: number) => {
-    setUserId(verifiedUserId);
+    setUserData(prev => ({ ...prev, userId: verifiedUserId }));
     setStep(2);
   };
 
-  const handleStep2Success = () => {
-    setStep(3);
+  const StepComponents = {
+    1: (
+      <FindPasswordStep1
+        nickname={userData.nickname}
+        setNickname={(nickname) => setUserData(prev => ({ ...prev, nickname }))}
+        email={userData.email}
+        setEmail={(email) => setUserData(prev => ({ ...prev, email }))}
+        onSuccess={handleStep1Success}
+      />
+    ),
+    2: userData.userId && (
+      <FindPasswordStep2 
+        userId={userData.userId}
+        onSuccess={() => setStep(3)}
+      />
+    ),
+    3: <FindPasswordStep3 />
   };
 
   return (
@@ -40,22 +63,7 @@ const FindPasswordPage: React.FC = () => {
             center={step === 3} 
             marginBottom={step === 3 ? "95px" : undefined}
           />
-          {step === 1 && (
-            <FindPasswordStep1
-              nickname={nickname}
-              setNickname={setNickname}
-              email={email}
-              setEmail={setEmail}
-              onSuccess={handleStep1Success}
-            />
-          )}
-          {step === 2 && userId && (
-            <FindPasswordStep2 
-              userId={userId}
-              onSuccess={handleStep2Success}
-            />
-          )}
-          {step === 3 && <FindPasswordStep3 />}
+          {StepComponents[step as keyof typeof StepComponents]}
           {step !== 3 && <FindPasswordLinks />}
         </FormContainer>
       </div>

@@ -18,7 +18,6 @@ const FindPasswordStep3: React.FC = () => {
         onClick={() => navigate("/login")}
         fontSize="20px"
         width="100%"
-        height="65px"
       >
         로그인 하러가기
       </AuthButton>

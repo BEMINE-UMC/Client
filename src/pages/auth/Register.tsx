@@ -6,105 +6,97 @@ import FormContainer from "../../components/auth/FormContainer";
 import TextLogo from "../../components/auth/TextLogo";
 import useValidation from "../../hooks/useValidation";
 import api from '../../api/axios';
-import { isAxiosError } from 'axios';
 import AnimatedBackground from '../../components/common/AnimatedBackground';
+import { RegisterUserData, SignupResponse } from "../../types/auth";
 
 const Register: React.FC = () => {
   const { getValidationRules, validateField, errors } = useValidation();
-
-  // 상태 관리
   const [step, setStep] = useState(1);
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [userData, setUserData] = useState<RegisterUserData>({
+    nickname: "",
+    email: "",
+    verificationCode: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  // 타이머 상태
-  const [timeLeft, setTimeLeft] = useState(180);
-  const [timerActive, setTimerActive] = useState(false);
-
-  // 이메일 인증 상태
+  const [timeLeft, setTimeLeft] = useState(0);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isLoading, setIsLoading] = useState({
     emailSend: false,
     emailVerify: false,
   });
 
-  // 회원가입 응답 타입 수정
-  interface SignupResponse {
-    resultType: "SUCCESS" | "FAIL";
-    error: {
-      errorCode: string;
-      reason: string;
-      data: any;
-    } | null;
-    success: {
-      userId: number;
-      name: string;
-      created_at: string;
-    } | null;
-  }
-
-  // 타이머 작동
   useEffect(() => {
-    if (!timerActive || timeLeft <= 0) return;
+    let timer: number;
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
+    if (timeLeft > 0 && !isEmailVerified) {
+      timer = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    }
 
-    return () => clearInterval(timer);
-  }, [timerActive, timeLeft]);
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [timeLeft, isEmailVerified]);
 
   const startTimer = () => {
-    setTimeLeft(180);
-    setTimerActive(true);
-  };
-
-  const stopTimer = () => {
-    setTimerActive(false);
+    setTimeLeft(300);
   };
 
   const handleRegister = async () => {
     try {
-      console.log('회원가입 요청 데이터:', { name: nickname, email, password });
-
       const response = await api.post<SignupResponse>('/users/signup', {
-        name: nickname,
-        email,
-        password
+        name: userData.nickname,
+        email: userData.email,
+        password: userData.password
       });
 
-      console.log('회원가입 응답:', response.data);
-
       if (response.data.resultType === "SUCCESS" && response.data.success) {
-        console.log('회원가입 성공!');
         localStorage.setItem('userId', response.data.success.userId.toString());
         localStorage.setItem('userName', response.data.success.name);
         setStep(3);
       }
-    } catch (err: unknown) {
-      const error = err as Error;
-
-      console.error('회원가입 에러 상세:', {
-        message: error.message,
-        response: (error as any).response?.data,
-        status: (error as any).response?.status,
-        stack: error.stack
-      });
-
-      if (isAxiosError(error)) {
-        if (error.code === 'ECONNABORTED') {
-          alert('서버 응답 시간이 초과되었습니다.');
-        } else {
-          const errorMessage = error.response?.data?.error?.reason || '회원가입에 실패했습니다.';
-          alert(errorMessage);
-        }
-      } else {
-        alert('예기치 않은 오류가 발생했습니다.');
-      }
+    } catch (error) {
+      alert('회원가입에 실패했습니다.');
     }
+  };
+
+  const StepComponents = {
+    1: (
+      <RegisterStep1
+        userData={userData}
+        setUserData={setUserData}
+        startTimer={startTimer}
+        timeLeft={timeLeft}
+        validateField={validateField}
+        errors={errors}
+        getValidationRules={getValidationRules}
+        isEmailVerified={isEmailVerified}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        onVerifySuccess={() => setIsEmailVerified(true)}
+        onNext={() => setStep(2)}
+      />
+    ),
+    2: (
+      <RegisterStep2
+        userData={userData}
+        setUserData={setUserData}
+        onNext={handleRegister}
+        validateField={validateField}
+        errors={errors}
+        getValidationRules={getValidationRules}
+      />
+    ),
+    3: (
+      <RegisterStep3
+        nickname={userData.nickname}
+      />
+    )
   };
 
   return (
@@ -121,47 +113,11 @@ const Register: React.FC = () => {
         }}
       >
         <FormContainer>
-          <TextLogo />
-          {step === 1 && (
-            <RegisterStep1
-              nickname={nickname}
-              setNickname={setNickname}
-              email={email}
-              setEmail={setEmail}
-              verificationCode={verificationCode}
-              setVerificationCode={setVerificationCode}
-              onNext={() => setStep(2)}
-              startTimer={startTimer}
-              timeLeft={timeLeft}
-              validateField={validateField}
-              errors={errors}
-              getValidationRules={getValidationRules}
-              isEmailVerified={isEmailVerified}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              onVerifySuccess={() => setIsEmailVerified(true)}
-              setErrors={validateField}
-              onVerifyCode={async (code: string) => {
-                setIsEmailVerified(true);
-                stopTimer();
-                return Promise.resolve();
-              }}
-            />
-          )}
-          {step === 2 && (
-            <RegisterStep2
-              password={password}
-              setPassword={setPassword}
-              confirmPassword={confirmPassword}
-              setConfirmPassword={setConfirmPassword}
-              onNext={handleRegister}
-              validateField={validateField}
-              errors={errors}
-              getValidationRules={getValidationRules}
-              isLoading={isLoading as any}
-            />
-          )}
-          {step === 3 && <RegisterStep3 nickname={nickname} />}
+          <TextLogo
+            center={step === 3}
+            marginBottom={step === 3 ? "95px" : undefined}
+          />
+          {StepComponents[step as keyof typeof StepComponents]}
         </FormContainer>
       </div>
     </>
