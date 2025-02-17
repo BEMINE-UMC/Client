@@ -69,7 +69,7 @@ const Register: React.FC = () => {
   const handleRegister = async () => {
     try {
       console.log('회원가입 요청 데이터:', { name: nickname, email, password });
-      
+
       const response = await api.post<SignupResponse>('/users/signup', {
         name: nickname,
         email,
@@ -86,14 +86,14 @@ const Register: React.FC = () => {
       }
     } catch (err: unknown) {
       const error = err as Error;
-      
+
       console.error('회원가입 에러 상세:', {
         message: error.message,
         response: (error as any).response?.data,
         status: (error as any).response?.status,
         stack: error.stack
       });
-      
+
       if (isAxiosError(error)) {
         if (error.code === 'ECONNABORTED') {
           alert('서버 응답 시간이 초과되었습니다.');
@@ -158,6 +158,7 @@ const Register: React.FC = () => {
               validateField={validateField}
               errors={errors}
               getValidationRules={getValidationRules}
+              isLoading={isLoading as any}
             />
           )}
           {step === 3 && <RegisterStep3 nickname={nickname} />}
