@@ -1,91 +1,71 @@
 import React from "react";
-import Label from "../../../components/auth/Label";
-import InputField from "../../../components/auth/InputField";
-import ValidationMessage from "../../../components/auth/ValidationMessage";
-import AuthButton from "../../../components/auth/AuthButton";
-
-interface RegisterStep2Props {
-  password: string;
-  setPassword: (value: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (value: string) => void;
-  onNext: () => void;
-  validateField: (field: string, value: string, rules: any) => void;
-  errors: Record<string, string>;
-  getValidationRules: (step: number, password?: string) => any;
-  isLoading: boolean;
-}
+import Label from "../Label";
+import InputField from "../InputField";
+import ValidationMessage from "../ValidationMessage";
+import AuthButton from "../AuthButton";
+import { RegisterStep2Props } from "../../../types/auth";
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({
-  password,
-  setPassword,
-  confirmPassword,
-  setConfirmPassword,
+  userData,
+  setUserData,
   onNext,
   validateField,
   errors,
   getValidationRules,
-  isLoading,
 }) => {
-  const rules = getValidationRules(2, password);
-
-  const handleSubmit = () => {
-    // Implement the logic to handle form submission
-    onNext();
-  };
+  const rules = getValidationRules(2, userData.password);
 
   return (
-    <div style={{width: "100%"}}>
+    <div style={{ width: "100%" }}>
       <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="password">비밀번호</Label>
         <InputField
           type="password"
           name="password"
           placeholder="비밀번호를 입력해주세요."
-          value={password}
+          value={userData.password}
           onChange={(e) => {
             const value = e.target.value;
-            setPassword(value);
+            setUserData(prev => ({ ...prev, password: value }));
             validateField("password", value, rules);
           }}
         />
       </div>
-      <ValidationMessage 
+      <ValidationMessage
         message={errors.password || " "}
         visible={!!errors.password}
       />
+
       <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="confirmPassword">비밀번호 확인</Label>
         <InputField
           type="password"
           name="confirmPassword"
           placeholder="비밀번호를 다시 입력해주세요."
-          value={confirmPassword}
+          value={userData.confirmPassword}
           onChange={(e) => {
             const value = e.target.value;
-            setConfirmPassword(value);
+            setUserData(prev => ({ ...prev, confirmPassword: value }));
             validateField("confirmPassword", value, rules);
           }}
         />
       </div>
-      <ValidationMessage 
+      <ValidationMessage
         message={errors.confirmPassword || " "}
         visible={!!errors.confirmPassword}
       />
-      <div style={{width:"100%", display: "flex", justifyContent: "flex-end", marginTop: "20px"}}>
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
         <AuthButton
-          onClick={handleSubmit}
+          onClick={onNext}
           disabled={
-            !password || 
-            !confirmPassword || 
-            Object.values(errors).some((error) => error !== "") ||
-            isLoading
+            !userData.password ||
+            !userData.confirmPassword ||
+            Object.values(errors).some((error) => error !== "")
           }
           width="130px"
-          height="65px"
           fontSize="20px"
         >
-          {isLoading ? "가입중..." : "가입하기"}
+          가입하기
         </AuthButton>
       </div>
     </div>

@@ -1,5 +1,8 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuthStore } from "../../../../store/authStore";
+import axios from "axios";
 
 import CustomColumn from "../../components/CustomColumn";
 import CustomFont from "../../components/CustomFont";
@@ -50,10 +53,54 @@ const rankAfterImages = [
 ];
 
 const MobileEachWorkspace = () => {
+	const accessToken = useAuthStore((state) => state.accessToken);
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [showNotification, setShowNotification] = useState(false); // 좋아요 버튼 알림
 	const [isHeartClicked, setIsHeartClicked] = useState(false); // 좋아요 상태
+
+	const location = useLocation();
+	const { state } = location;
+	const [imageList, setImageList] = useState<string[]>([]);
+	const [message, setMessage] = useState<string>(state?.message || "");
+
+	// ✅ API URL을 message 값에 따라 동적으로 설정
+	const getApiUrl = (message: string): string => {
+		switch (message) {
+			case "여기는 워크스페이스":
+				return "/myPage/posts";
+			case "여기는 최근 본 게시물":
+				return "/myPage/recentPost";
+			case "여기는 좋아요":
+				return "/myPage/likePost";
+			case "여기는 북마크":
+				return "/myPage/bookMark";
+			default:
+				return "/myPage/posts"; // 기본값
+		}
+	};
+
+	const fetchPosts = async () => {
+		try {
+			const apiUrl = getApiUrl(message);
+			const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${apiUrl}`, {
+				headers: {
+					"Authorization": `Bearer ${accessToken}`,
+					"Accept": "application/json",
+				},
+			});
+
+			if (response.status === 200 && response.data.success) {
+				setImageList(response.data.success.posts || []);
+			}
+		} catch (error) {
+			console.error("데이터 가져오기 실패:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchPosts();
+	}, [message]);
 
 	const handleHeartClick = () => {
 		setIsHeartClicked(!isHeartClicked);
@@ -188,18 +235,27 @@ const MobileEachWorkspace = () => {
 			)}
 
 			<CustomColumn $width="90%" $gap="1rem" $alignitems="center">
-				{mockDataTemplates.map((src, index) => (
-					<CustomButton
-						key={index}
-						$width="auto"
-						$height="auto"
-						$padding="0"
-						$backgroundColor="transparent"
-						onClick={openPdfInNewTab}
-					>
-						<StyledImg src={src} alt={`Template ${index + 1}`} $width="100%" />
-					</CustomButton>
-				))}
+				<CustomColumn $width="90%" $gap="1rem" $alignitems="center">
+					{imageList.length > 0 ? (
+						imageList.map((src, index) => (
+							<CustomButton
+								key={index}
+								$width="auto"
+								$height="auto"
+								$padding="0"
+								$backgroundColor="transparent"
+								onClick={openPdfInNewTab}
+							>
+								<StyledImg src={src} alt={`Template ${index + 1}`} $width="100%" />
+							</CustomButton>
+						))
+					) : (
+						<CustomFont $color="gray" $font="1rem">
+							워크스페이스에 담긴 내용이 없어요.
+						</CustomFont>
+					)}
+				</CustomColumn>
+
 
 				{isDownloadModal && (
 					<DownloadModal>

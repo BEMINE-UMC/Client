@@ -1,22 +1,23 @@
 import styled from "styled-components";
 
 interface CustomButtonProps {
-	$width?: string | number;
-	$height?: string | number;
-	$gap?: string | number;
-	$display?: string;
-	$flexDirection?: string;
-	$alignItems?: string;
-	$justifyContent?: string;
-	$margin?: string;
-	$padding?: string;
-	$backgroundColor?: string;
-	$color?: string;
-	$border?: string;
-	$borderRadius?: string;
-	$hoverBackgroundColor?: string;
-	$hoverOpacity?: string | number;
-	$boxshadow?: string;
+  $width?: string | number;
+  $height?: string | number;
+  $gap?: string | number;
+  $display?: string;
+  $flexDirection?: string;
+  $alignItems?: string;
+  $justifyContent?: string;
+  $margin?: string;
+  $padding?: string;
+  $backgroundColor?: string;
+  $color?: string;
+  $border?: string;
+  $borderRadius?: string;
+  $hoverBackgroundColor?: string;
+  $hoverOpacity?: string | number;
+  $boxshadow?: string;
+  onClick?: () => void;
 }
 
 const CustomButton = styled.button<CustomButtonProps>`
@@ -43,7 +44,7 @@ const CustomButton = styled.button<CustomButtonProps>`
   /* Hover 스타일링 */
   &:hover {
     background: ${(props) =>
-		props.$hoverBackgroundColor || props.$backgroundColor};
+    props.$hoverBackgroundColor || props.$backgroundColor};
     opacity: ${(props) => props.$hoverOpacity || 0.7};
   }
 `;

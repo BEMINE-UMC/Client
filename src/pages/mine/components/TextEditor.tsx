@@ -1,5 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useAuthStore } from "../../../store/authStore";
 import ReactQuill from "react-quill";
+import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import CustomColumn from "./CustomColumn";
 import CustomBox from "./CustomBox";
@@ -12,62 +14,71 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 	const [content, setContent] = useState<string>("");
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const quillRef = useRef<ReactQuill | null>(null);
+	const accessToken = useAuthStore((state) => state.accessToken);
 
-	// 썸네일 지정 핸들러
-	const handleThumbnailSelect = (imageSrc: string) => {
-		setThumbnail(imageSrc);
-		document.querySelectorAll(".thumbnail-button").forEach((btn) => {
-			if (!(btn instanceof HTMLButtonElement)) return; // 타입 검증 추가
-			const button = btn; // 타입 단언 추가
-			if (button.dataset.src === imageSrc) {
-				btn.textContent = "썸네일 선택됨";
-				button.style.backgroundColor = "green";
+	// 이미지 업로드 핸들러
+	const handleImageUpload = async (file: File) => {
+		const formData = new FormData();
+		formData.append("image", file);
+
+		try {
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_BASE_URL}/posts/image/uploads`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+
+			if (response.status === 200) {
+				// console.log(response);
+				const imageUrl = response.data.imageUrl;
+				console.log('첨부한 이미지의 url은:', imageUrl);
+				console.log('토큰은:', accessToken);
+
+				// 에디터에 이미지 삽입
+				const quill = quillRef.current?.getEditor();
+				const range = quill?.getSelection();
+				if (quill && range) {
+					quill.insertEmbed(range.index, "image", imageUrl);
+					console.log('찐으로 에디터에 첨부한 이미지의 url은:', imageUrl);
+				}
 			} else {
-				btn.textContent = "썸네일로 지정";
-				btn.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+				alert("이미지 업로드에 실패했습니다.");
 			}
-		});
+		} catch (error) {
+			console.error("Error uploading image:", error);
+			alert("이미지 업로드 중 오류가 발생했습니다.");
+		}
 	};
 
-	// 이미지 삽입 후 썸네일 버튼 추가 -> 현재 버튼 추가되지 않는 중, 나중에 해결할 것...
-	useEffect(() => {
-		const quill = quillRef.current?.getEditor();
-		if (!quill) return;
+	const handleImageInsert = useCallback(() => {
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", "image/png, image/jpeg, image/jpg, image/bmp, image/gif");
+		input.click();
 
-		quill.root.addEventListener("DOMNodeInserted", (event) => {
-			const target = event.target as HTMLImageElement;
-			if (target.tagName === "IMG" && !target.classList.contains("processed")) {
-				target.classList.add("processed");
-				target.style.position = "relative";
-
-				const wrapper = document.createElement("div");
-				wrapper.style.position = "relative";
-				wrapper.style.display = "inline-block";
-
-				const button = document.createElement("button");
-				button.textContent = "썸네일로 지정";
-				button.className = "thumbnail-button";
-				button.dataset.src = target.src;
-				button.style.position = "absolute";
-				button.style.top = "5px";
-				button.style.right = "5px";
-				button.style.background = "rgba(0, 0, 0, 0.5)";
-				button.style.color = "white";
-				button.style.border = "none";
-				button.style.padding = "5px";
-				button.style.cursor = "pointer";
-				button.onclick = () => handleThumbnailSelect(target.src);
-
-				wrapper.appendChild(target.cloneNode(true));
-				wrapper.appendChild(button);
-
-				target.replaceWith(wrapper);
+		input.onchange = () => {
+			if (input.files) {
+				const file = input.files[0];
+				if (file.size > 5 * 1024 * 1024) {
+					alert("이미지 크기는 5MB를 초과할 수 없습니다.");
+					return;
+				}
+				handleImageUpload(file);
 			}
-			else {
-				console.log('DomNodeInserted 인식 안됨 !!');
-			}
-		});
+		};
 	}, []);
+
+	useEffect(() => {
+		if (quillRef.current) {
+			const quill = quillRef.current.getEditor();
+			quill.getModule("toolbar").addHandler("image", handleImageInsert);
+		}
+	}, [handleImageInsert]);
 
 	return (
 		<CustomBox
@@ -85,6 +96,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 				<ReactQuill
 					ref={quillRef}
 					value={content}
+					// 그냥 서버한테 " 랑 ' 둘 다 처리해달라고 하자.
 					onChange={(value) => {
 						setContent(value);
 						onChange && onChange(value);
@@ -98,7 +110,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 						],
 					}}
 					formats={["bold", "italic", "underline", "list", "bullet", "link", "image"]}
-					style={{ width: '100%', minHeight: "30rem", border: "1px solid #ccc", padding: "10px" }}
+					style={{ width: "100%", minHeight: "30rem", border: "1px solid #ccc", padding: "10px" }}
 				/>
 			</CustomColumn>
 		</CustomBox>

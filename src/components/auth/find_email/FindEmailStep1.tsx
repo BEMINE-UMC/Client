@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import InputField from "../../auth/InputField";
-import ValidationMessage from "../../auth/ValidationMessage";
-import AuthButton from "../../auth/AuthButton";
-import Label from "../../auth/Label";
+import InputField from "../InputField";
+import ValidationMessage from "../ValidationMessage";
+import AuthButton from "../AuthButton";
+import Label from "../Label";
 import { StepContainer } from "./FindEmail.styles";
 import api from "../../../api/axios";
-import { isAxiosError } from "axios";
 
 interface FindEmailStep1Props {
   nickname: string;
