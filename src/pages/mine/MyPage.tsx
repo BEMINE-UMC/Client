@@ -12,8 +12,9 @@ import MobileWorkspace from "./for_mobile/main_component/mobile_workspace";
 // Styled-component를 사용해 반응형 디자인 적용
 const ResponsiveRow = styled(CustomRow)`
   width: 100%;
-  height: auto;
-  align-items: center;
+  min-height: 100vh;
+  height: 100%;
+  align-items: flex-start;
   justify-content: center;
   padding: 0.5rem;
   flex-direction: row;
@@ -32,7 +33,8 @@ const ResponsiveRow = styled(CustomRow)`
 
 const ResponsiveDivider = styled(CustomDivider)`
   width: 0.5px;
-  height: 90vh;
+  min-height: 100vh;
+  height: 100%;
   background-color: #d9d9d9;
 
   @media (max-width: 1024px) {

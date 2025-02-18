@@ -37,6 +37,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 				// console.log(response);
 				const imageUrl = response.data.imageUrl;
 				console.log('첨부한 이미지의 url은:', imageUrl);
+				console.log('토큰은:', accessToken);
 
 				// 에디터에 이미지 삽입
 				const quill = quillRef.current?.getEditor();
@@ -54,7 +55,6 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 		}
 	};
 
-	// 이미지 선택 시 이벤트 처리
 	const handleImageInsert = useCallback(() => {
 		const input = document.createElement("input");
 		input.setAttribute("type", "file");
@@ -96,6 +96,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 				<ReactQuill
 					ref={quillRef}
 					value={content}
+					// 그냥 서버한테 " 랑 ' 둘 다 처리해달라고 하자.
 					onChange={(value) => {
 						setContent(value);
 						onChange && onChange(value);
@@ -104,7 +105,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 						toolbar: [
 							["bold", "italic", "underline"],
 							[{ list: "ordered" }, { list: "bullet" }],
-							["link", "image"], // 이미지 업로드 버튼 포함
+							["link", "image"],
 							["clean"],
 						],
 					}}
