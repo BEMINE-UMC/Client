@@ -14,7 +14,7 @@ const PUBLIC_ENDPOINTS = [
 ];
 
 const api = axios.create({
-  baseURL: 'http://3.37.241.32:3000',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
