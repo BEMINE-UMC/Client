@@ -2,16 +2,33 @@ import axios from 'axios';
 import { refreshTokens } from './refresh';
 import { useAuthStore } from '../store/authStore';
 
+// 토큰이 필요없는 public API 엔드포인트 목록
+const PUBLIC_ENDPOINTS = [
+  '/users/login',
+  '/users/signup',
+  '/users/sendEmail',
+  '/users/checkEmail',
+  '/users/search/data',
+  '/users/search/password',
+  '/users/refresh',
+  //'/users/check-nickname'  // 닉네임 중복 검사 API 추가
+];
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   }
 });
 
-// 요청 인터셉터 - 토큰 추가
 api.interceptors.request.use(
   (config) => {
+    // public 엔드포인트인 경우 토큰을 추가하지 않음
+    if (PUBLIC_ENDPOINTS.some(endpoint => config.url?.includes(endpoint))) {
+      return config;
+    }
+
     const accessToken = useAuthStore.getState().accessToken;
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;

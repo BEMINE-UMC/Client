@@ -1,5 +1,5 @@
 import React from "react";
-import LinkText from "../../auth/LinkText";
+import LinkText from "../LinkText";
 import { LinksContainer } from "./FindPassword.styles";
 
 const FindPasswordLinks: React.FC = () => {

@@ -1,5 +1,4 @@
 import React from "react";
-import LinkText from "../../auth/LinkText";
 import { StepContainer, HighlightedText } from "./FindEmail.styles";
 import AuthButton from "../AuthButton";
 import { useNavigate } from "react-router-dom";

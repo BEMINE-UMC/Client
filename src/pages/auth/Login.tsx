@@ -1,6 +1,7 @@
 import React from "react";
 import LoginForm from "../../components/auth/login/LoginForm";
 import AnimatedBackground from "../../components/common/AnimatedBackground";
+import FormContainer from "../../components/auth/FormContainer";
 
 const Login: React.FC = () => {
   return (
@@ -16,7 +17,9 @@ const Login: React.FC = () => {
           flexDirection: "column",
         }}
       >
-        <LoginForm />
+        <FormContainer>
+          <LoginForm />
+        </FormContainer>
       </div>
     </>
   );

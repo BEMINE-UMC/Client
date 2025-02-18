@@ -1,25 +1,6 @@
 import styled from "styled-components";
-import { BREAKPOINTS } from "../../../hooks/useResponsive";
 
 /** RegisterStep1, RegisterStep2, RegisterStep3 공통 스타일 */
-export const TimerMessage = styled.div`
-  color: red;
-  font-size: 14px;
-  margin-top: 8px;
-  
-  span {
-    font-weight: bold;
-  }
-
-  @media (max-width: ${BREAKPOINTS.MOBILE}px) {
-    font-size: 10px;
-  }
-
-  @media (min-width: ${BREAKPOINTS.TABLET.MIN}px) and (max-width: ${BREAKPOINTS.TABLET.MAX}px) {
-    font-size: 10px;
-  }
-`;
-
 export const StepContainer = styled.div`
   display: flex;
   flex-direction: column;
