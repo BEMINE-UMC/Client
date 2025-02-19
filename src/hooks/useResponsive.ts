@@ -2,12 +2,12 @@ import { useMediaQuery } from 'react-responsive';
 
 // 브레이크포인트 상수 정의
 export const BREAKPOINTS = {
-  MOBILE: 480,
+  MOBILE: 520,
   TABLET: {
-    MIN: 481,
-    MAX: 840,
+    MIN: 521,
+    MAX: 999,
   },
-  DESKTOP: 841,
+  DESKTOP: 1000,
 } as const;
 
 // 반응형 타입 정의

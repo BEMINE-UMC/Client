@@ -11,7 +11,7 @@ const PUBLIC_ENDPOINTS = [
   '/users/search/data',
   '/users/search/password',
   '/users/refresh',
-  //'/users/check-nickname'  // 닉네임 중복 검사 API 추가
+  '/users/search/nickname'
 ];
 
 const api = axios.create({

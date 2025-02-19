@@ -3,73 +3,64 @@ import { FaSearch } from 'react-icons/fa';
 import React, { useState } from 'react';
 import useSearchStore from '../../store/search/searchStore';
 import { searchPosts } from '../../hooks/search/searchPosts';
+import { useResponsive } from '../../hooks/useResponsive';
 
-const SearchInput = () => {
-    // const searchTerm = useSearchStore((state) => state.searchTerm); // zustand 전역 상태
+interface SearchInputProps {
+  $width?: string;
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({ $width }) => {
+    const { isMobile, isTablet } = useResponsive();
     const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
     const setResults = useSearchStore((state) => state.setResults);
-
     const [localSearchTerm, setLocalSearchTerm] = useState("");
-    
 
-    const handleSearch = async () => {
-        if (localSearchTerm.trim()) {
-            console.log("🔍 검색 실행! 검색어:", localSearchTerm);  // [디버깅] 검색어 확인
-            
-            setSearchTerm(localSearchTerm)
-            const data = await searchPosts(localSearchTerm);
-            
-            console.log("📄 검색 결과:", data);  // [디버깅] 검색 결과 확인
-            setResults(data);
-        }
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
+    const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            handleSearch();
+            setSearchTerm(localSearchTerm);
+            const results = await searchPosts(localSearchTerm);
+            setResults(results);
         }
     };
-
-
+    
     return (
-        <SearchInputWrapper>
-            <SearchIcon size={20} />
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            width: $width || '100%',
+            padding: isMobile ? '0.1rem 0.7rem' : '0.5rem 1rem',
+            borderRadius: '5rem',
+            backgroundColor: '#f5f5f5',
+            border: '1px solid #dcdcdc'
+        }}>
+            <FaSearch style={{
+                color: 'gray',
+                marginRight: isMobile ? '5px' : '10px',
+                fontSize: isMobile ? '0.6rem' : '1rem'
+            }} />
             <InputField 
                 type="text" 
                 placeholder="검색"
                 value={localSearchTerm}
                 onChange={(e) => setLocalSearchTerm(e.target.value)}
                 onKeyDown={handleKeyDown}
+                style={{ 
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    fontSize: isMobile ? '0.6rem' : isTablet ? '0.7rem' : '0.9rem',
+                    width: '100%',
+                    color: '#333'
+                }}
             />
-        </SearchInputWrapper>
+        </div>
     );
 };
 
 export default SearchInput;
 
-const SearchInputWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    min-width: 50%;
-    padding: 0.5rem 1rem;
-    border-radius: 5rem;
-    background-color: #f5f5f5;
-    border: 1px solid #dcdcdc;
-`;
-
-const SearchIcon = styled(FaSearch)`
-    color: gray;
-    margin-right: 10px;
-`;
-
+// styled-components는 이제 InputField만 사용
 const InputField = styled.input`
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 16px;
-    width: 100%;
-    color: #333;
-
     &::placeholder {
         color: gray;
     }

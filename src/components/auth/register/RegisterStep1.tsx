@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Label from "../Label";
 import InputField from "../InputField";
 import ValidationMessage from "../ValidationMessage";
@@ -21,6 +21,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
   onVerifySuccess,
   onNext,
 }) => {
+  const [isNicknameVerified, setIsNicknameVerified] = useState(false);
+  const [isCheckingNickname, setIsCheckingNickname] = useState(false);
+  const [nicknameError, setNicknameError] = useState<string>("");
   const rules = getValidationRules(1);
 
   const handleSendVerificationCode = async () => {
@@ -74,25 +77,67 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
     }
   };
 
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUserData(prev => ({ ...prev, nickname: value }));
+    validateField("nickname", value, rules);
+    setIsNicknameVerified(false);  // 닉네임 변경 시 인증 상태 초기화
+  };
+
+  const handleCheckNickname = async () => {
+    if (isCheckingNickname) return;
+    
+    try {
+      setIsCheckingNickname(true);
+      
+      const response = await api.post('/users/search/nickname', {
+        name: userData.nickname
+      });
+      
+      if (response.data.resultType === "FAIL" && response.data.error?.errorCode === "A025") {
+        setIsNicknameVerified(false);
+        setNicknameError(response.data.error.reason);
+      } else if (response.data.resultType === "SUCCESS") {
+        setIsNicknameVerified(true);
+        setNicknameError("");
+      }
+    } catch (error: any) {
+      setIsNicknameVerified(false);
+      setNicknameError("닉네임 중복 확인에 실패했습니다.");
+    } finally {
+      setIsCheckingNickname(false);
+    }
+  };
+
   return (
     <div style={{width: "100%"}}>
       <div style={{ marginBottom: "15px" }}>
         <Label htmlFor="nickname">닉네임</Label>
-        <InputField
-          type="text"
-          name="nickname"
-          placeholder="닉네임을 입력해주세요."
-          value={userData.nickname}
-          onChange={(e) => {
-            const value = e.target.value;
-            setUserData(prev => ({ ...prev, nickname: value }));
-            validateField("nickname", value, rules);
-          }}
-        />
+        <HorizontalInputGroup>
+          <InputField
+            type="text"
+            name="nickname"
+            placeholder="닉네임을 입력해주세요."
+            value={userData.nickname}
+            onChange={handleNicknameChange}
+          />
+          <AuthButton
+            disabled={!!errors.nickname || !userData.nickname || isCheckingNickname}
+            fontSize="15px"
+            onClick={handleCheckNickname}
+          >
+            {isCheckingNickname ? "확인 중..." : "중복 확인"}
+          </AuthButton>
+        </HorizontalInputGroup>
       </div>
       <ValidationMessage 
-        message={errors.nickname || " "}
-        visible={!!errors.nickname}
+        type={isNicknameVerified ? "success" : undefined}
+        message={
+          isNicknameVerified 
+            ? "사용 가능한 닉네임입니다." 
+            : nicknameError || errors.nickname || " "
+        }
+        visible={isNicknameVerified || !!nicknameError || !!errors.nickname}
       />
 
       <div style={{ marginBottom: "15px" }}>
@@ -167,7 +212,8 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({
             !userData.nickname || 
             !userData.email || 
             !userData.verificationCode || 
-            !isEmailVerified || 
+            !isEmailVerified ||
+            !isNicknameVerified ||
             Object.values(errors).some((error) => error !== "")
           }
           width="130px"
