@@ -139,7 +139,7 @@ const WriteTemplatePage = () => {
 				$alignItems="center" $justifyContent="center">
 				<CustomColumn>
 					{profileImage === upload && <CustomFont $color="black">템플릿 썸네일</CustomFont>}
-					<StyledImg src={profileImage} />
+					<StyledImg src={profileImage} $width="60%" />
 				</CustomColumn>
 				<input type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
 			</UploadButton>
