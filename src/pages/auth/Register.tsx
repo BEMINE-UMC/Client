@@ -58,16 +58,20 @@ const Register: React.FC = () => {
       const response = await api.post('/users/signup', signupData);
       
       if (response.data.resultType === "SUCCESS") {
-        setStep(3);  // 성공 시 step3로 이동
+        setStep(3);
       } else {
         alert(response.data.error?.reason || '회원가입에 실패했습니다.');
-        if (response.data.error?.errorCode === "U002") {
+        if (response.data.error?.errorCode === "U002" || 
+            response.data.error?.errorCode === "A011" || 
+            response.data.error?.errorCode === "A012") {
           setStep(1);
         }
       }
     } catch (error: any) {
       alert(error.response?.data?.error?.reason || '회원가입에 실패했습니다.');
-      if (error.response?.data?.error?.errorCode === "U002") {
+      if (error.response?.data?.error?.errorCode === "U002" || 
+          error.response?.data?.error?.errorCode === "A011" || 
+          error.response?.data?.error?.errorCode === "A012") {
         setStep(1);
       }
     }
