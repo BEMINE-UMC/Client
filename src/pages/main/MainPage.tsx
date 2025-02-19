@@ -30,14 +30,17 @@ const MainPage = () => {
 export default MainPage;
 
 const PageContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #ffffff, #fff6b4);
-
-    @media (max-width: 768px) {
-        width: min(100vw, 95%);
-    }
-
-    
-    @media (max-width: 480px) {
-        width: min(100vw, 95%); 
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
 `;

@@ -7,6 +7,7 @@ import { useAuthStore } from "../../store/authStore";
 import { usePostDetailStore } from "../../store/main/postDetailStore";
 import { Post } from "../main/type/Post";
 import PostCard from "../main/postcard/PostCard";
+import { useResponsive } from "../../hooks/useResponsive";
 
 
 interface SearchResultsProps {
@@ -15,6 +16,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm }) => {
+  const { isMobile, isTablet } = useResponsive();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [likedStatus, setLikedStatus] = useState<{ [key: number]: boolean }>({});
@@ -51,8 +53,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
 
   return (
     <SearchResultsWrapper>
-      <SearchHeader> 🔎 검색 결과</SearchHeader>
-      <PostCardContainer>
+      <SearchHeader isMobile={isMobile} isTablet={isTablet}> 🔎 검색 결과</SearchHeader>
+      <PostCardContainer isMobile={isMobile} isTablet={isTablet}>
         {searchResults && searchResults.length > 0 ? (
           searchResults.map((post) => (
             <PostCard
@@ -68,7 +70,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
             />
           ))
         ) : (
-          <A>검색 결과가 없습니다.</A>
+          <NoResultMessage isMobile={isMobile} isTablet={isTablet}>검색 결과가 없습니다.</NoResultMessage>
         )}
       </PostCardContainer>
 
@@ -99,41 +101,38 @@ const SearchResultsWrapper = styled.div`
   margin-left: 1%;
 `;
 
-const PostCardContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, minmax(200px, 1fr));
-  justify-content: center;
-  gap: 10px;
+const SearchHeader = styled.h2<{ isMobile: boolean, isTablet: boolean }>`
+  color: black;
+  font-size: ${({ isMobile, isTablet }) => 
+    isMobile ? '1.2rem' : 
+    isTablet ? '1.3rem' : '1.5rem'};
+  font-weight: bold;
+  margin-bottom: 2%;
+  margin-left: ${({ isMobile, isTablet }) => 
+    isMobile ? '1%' : 
+    isTablet ? '2%' : '3%'};
+  margin-top: 3%;
+`;
+
+const NoResultMessage = styled.div<{ isMobile: boolean, isTablet: boolean }>`
+  color: black;
+  font-size: ${({ isMobile, isTablet }) => 
+    isMobile ? '1rem' : 
+    isTablet ? '1.2rem' : '1.5rem'};
+  margin: 2% 0;
   width: 100%;
-  padding: 10px;
-  margin-left: 3%;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-    margin-left: 2%;
-    
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(2, 1fr);
-    margin-left: 0px;
-  }
+  text-align: center;
+  grid-column: 1 / -1;
 `;
 
-const SearchHeader = styled.h2`
-  color: black;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2%;
-
-  margin-left: 3%;
-`;
-
-const A = styled.p`
-  color: black;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2%;
-
-  margin-left: 3%;
+const PostCardContainer = styled.div<{ isMobile: boolean, isTablet: boolean }>`
+  display: grid;
+  grid-template-columns: ${({ isMobile, isTablet }) => 
+    isMobile ? 'repeat(2, 1fr)' :
+    isTablet ? 'repeat(3, 1fr)' : 'repeat(5, minmax(200px, 1fr))'};
+  justify-content: center;
+  width: 100%;
+  margin-left: ${({ isMobile, isTablet }) => 
+    isMobile ? '0px' : 
+    isTablet ? '2%' : '3%'};
 `;

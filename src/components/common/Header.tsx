@@ -17,11 +17,13 @@ const Header = () => {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const setLoggedOut = useAuthStore((state) => state.setLoggedOut);
     const setResults = useSearchStore((state) => state.setResults);
+    const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
     const { isMobile, isTablet } = useResponsive();
 
     const GoMain = () => {
         setResults([]);
-        navigate('/');
+        setSearchTerm('');
+        window.location.href = '/';
     }
     const GoTemplate = () => { navigate('/template'); }
     const GoMy = () => { navigate('/my'); }
@@ -38,7 +40,7 @@ const Header = () => {
                 <CustomRow $width="100%" $height="auto" $padding="0" $alignitems="center" $justifycontent="space-around">
                     <CustomButton $width='auto' $height='auto' $backgroundColor="transparent" $padding="0" onClick={GoMain}>
                         <CustomRow $width="auto" $height="auto" $gap="0.5rem">
-                            <StyledImg src={logo} $width={isMobile ? "2.5rem" : isTablet ? "3.5rem" : "4rem"} />
+                            <StyledImg src={logo} $width={isMobile ? "2rem" : isTablet ? "3rem" : "4rem"} />
                             {!isMobile && !isTablet && (
                                 <StyledImg src={logotext} $width="8rem" />
                             )}
@@ -90,9 +92,12 @@ const Header = () => {
                             </>
                         ) : (
                             <CustomButton $width='auto' $height='auto' 
-                                $padding={isMobile ? "0.15rem 0.5rem" : "0.5rem 1rem"} 
+                                $padding={isMobile ? "0.2rem 0.5rem" : "0.5rem 1rem"} 
                                 $backgroundColor="#FFE100" 
                                 $borderRadius="5rem"
+                                $display="flex"
+                                $justifyContent="center"
+                                $alignItems="center"
                                 onClick={GoLogin}>
                                 <CustomFont 
                                     $color="black" 
