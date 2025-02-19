@@ -13,7 +13,8 @@ import {
 } from "./PostCard.styles";
 import { AiFillHeart } from "react-icons/ai";
 import { BsBookmarkFill } from "react-icons/bs";
-import { usePostStore } from "../../../store/main/postStore";
+import { useNavigate } from "react-router-dom";
+import { usePostActions } from "../../../store/main/postAction";
 
 interface PostCardData {
   postId: number;
@@ -28,11 +29,14 @@ interface PostCardProps {
   data: PostCardData;
   onCardClick: () => void;
   isLoggedIn: boolean;
+  onLikeClick: (postId: number) => void; // ✅ 추가됨
 }
 
-const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) => {
+const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn, onLikeClick }) => {
   const { postId, thumbnail, authorName, title, liked, likesCount } = data;
-  const { likePost, scrapPost } = usePostStore();
+  const { likePost, scrapPost } = usePostActions();
+
+  const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState(liked);
   const [likeCount, setLikeCount] = useState(likesCount);
@@ -45,10 +49,10 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) =>
       return;
     }
 
-    await likePost(postId);
-    setIsLiked((prev) => !prev);
-    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-  }
+    onLikeClick(postId); // 부모로부터 전달된 onLikeClick 호출  
+    setIsLiked(!isLiked);
+    setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+  };
 
   const handleScrap = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,10 +63,20 @@ const PostCard: React.FC<PostCardProps> = ({ data, onCardClick, isLoggedIn }) =>
 
     await scrapPost(postId);
     setIsBookmarked((prev) => !prev);
-  }
+  };
+
+  const handleCardClick = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    onCardClick();
+  };
+
+
 
   return (
-    <CardContainer onClick={onCardClick} style={{ cursor: "pointer" }}>
+    <CardContainer onClick={handleCardClick} style={{ cursor: "pointer" }}>
       <ImageSection image={thumbnail} />
       {isLoggedIn && (
       <BookmarkContainer onClick={handleScrap}>
