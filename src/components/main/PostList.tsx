@@ -80,11 +80,12 @@
                 data={{
                   ...post,
                   thumbnail: getImageOrDefault(post.thumbnail),
-                  liked: post.likedStatus || false,
+                  liked: likedStatus[post.postId] || post.likedStatus || false, // ✅ 수정된 부분
                   likesCount: post.likesCount || 0, 
                 }}
                 onCardClick={() => openModal(post)}
                 isLoggedIn={isLoggedIn} // 로그인 상태 전달
+                onLikeClick={() => handleLikeClick(post.postId)} // 좋아요 클릭 핸들러 전달
               />
             ))
           ) : (
@@ -100,7 +101,7 @@
                 ...selectedPost,
               }}
               onLikeClick={() => handleLikeClick(selectedPost.postId)} // ✅ 수정됨: 좋아요 클릭 핸들러 전달
-            liked={likedStatus[selectedPost.postId] || false} // ✅ 수정됨: liked 상태 전달
+              liked={likedStatus[selectedPost.postId] || false} // ✅ 수정됨: liked 상태 전달
             />
           )}
         </PostListWrapper>
