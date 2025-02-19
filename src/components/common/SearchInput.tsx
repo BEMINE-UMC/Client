@@ -42,7 +42,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ $width }) => {
                 type="text" 
                 placeholder="검색"
                 value={localSearchTerm}
-                onChange={(e) => setLocalSearchTerm(e.target.value)} 
+                onChange={(e) => setLocalSearchTerm(e.target.value)}
                 onKeyDown={handleKeyDown}
                 style={{ 
                     border: 'none',

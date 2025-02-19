@@ -4,6 +4,9 @@ import NoticeBoard from "../../components/main/NoticeBoard";
 
 import useSearchStore from "../../store/search/searchStore";
 import SearchResults from "../../components/search/SearchResults";
+import { useEffect } from "react";
+
+import { FaSearch } from "react-icons/fa";
 
 
 const MainPage: React.FC = () => {
@@ -13,32 +16,80 @@ const MainPage: React.FC = () => {
 
     console.log("🔎 MainPage 렌더링됨! 검색어:", searchTerm, "검색 결과 개수:", results.length);
     console.log("🟢 검색 결과 상태 확인:", results);
+    
+    useEffect(() => {
+        console.log("🔄 검색 상태 변경됨:", { searchTerm, results });
+    }, [searchTerm, results]);
+
     return (
-        <MainContainer>
-            <ContentContainer>
-                {(results.length > 0 || searchTerm.trim()) ? (
+        <PageContainer>
+            
+            {/* {(results.length > 0 || searchTerm.trim()) ? (
+                <SearchResults searchResults={results} searchTerm={searchTerm}/>
+            ) : (
+                <Banner />
+            )} */}
+
+            {searchTerm.trim() ? (
+                results.length > 0 ? (
                     <SearchResults searchResults={results} searchTerm={searchTerm}/>
                 ) : (
-                    <Banner />
-                )}
-                <NoticeBoard />
-            </ContentContainer>
-        </MainContainer>
+                    <NoResultsContainer>
+                        <NoResultsIcon />
+                        <NoResultsText> "{searchTerm}"에 대한 검색 결과가 없습니다.</NoResultsText>
+                    </NoResultsContainer>
+                )
+            ) : (
+                <Banner />
+            )}
+            <NoticeBoard />
+            
+        </PageContainer>
     );
 };
 
 export default MainPage;
 
-const MainContainer = styled.div`
-    display: flex;
-    flex-direction: column;  // 세로 방향 정렬
-    width: 100%;
-    min-height: 100vh;
+const PageContainer = styled.div`
+    background: linear-gradient(to bottom, #ffffff, #fff6b4);
+
+    @media (max-width: 768px) {
+        width: min(100vw, 95%);
+    }
+
+    
+    @media (max-width: 480px) {
+        width: min(100vw, 95%); 
+    }
 `;
 
-const ContentContainer = styled.div`
-    width: 100%;
-    max-width: 1920px;
-    margin: 0 auto;
+const NoResultsContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
+    margin-top: 50px;
+
+`;
+
+const NoResultsIcon = styled(FaSearch)`
+    font-size: 48px;
+    color: #bbb;
+    margin-bottom: 15px;
+
+    @media (max-width: 480px) {
+        font-size: 35px;
+    }
+`;
+
+const NoResultsText = styled.p`
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    
+    @media (max-width: 480px) {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+    }
 `;

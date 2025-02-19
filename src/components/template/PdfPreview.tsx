@@ -3,6 +3,7 @@ import { IoIosHeart } from "react-icons/io";
 import { FaFileDownload } from "react-icons/fa";
 import { BiSolidPencil } from "react-icons/bi";
 import { IoMdChatbubbles } from "react-icons/io";
+import { useTemplateLikeStore } from '../../store/template/TemplateLikeStore';
 
 interface PdfPreviewProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface PdfPreviewProps {
   onLike: () => void; // ✅ 추가: 좋아요 클릭 이벤트 핸들러
   onDownload: () => void; // ✅ 추가: 다운로드 클릭 이벤트 핸들러
   onEdit?: () => void; // ✅ 추가: 편집 버튼 (선택적)
+  templteId: number;
     thumbnail: string;
     filePDF?: string; // PDF 파일 경로
     templateCreatedAt: string;
@@ -23,8 +25,20 @@ interface PdfPreviewProps {
     likesCount: number;
 }
 
-const PdfPreview: React.FC<PdfPreviewProps> = ({ isOpen, filePDF, onClose, onLike, onDownload, onEdit, isLiked }) => {
+const PdfPreview: React.FC<PdfPreviewProps> = ({ 
+  isOpen, 
+  filePDF, 
+  onClose, 
+  onLike, 
+  onDownload, 
+  onEdit, 
+  isLiked,
+  templateId
+ }) => {
   if (!isOpen) return null;
+
+  const { likedTemplates, toggleLike } = useTemplateLikeStore();
+  const isLikedFromStore = likedTemplates[templateId] || false;
   
   return (
     <Overlay onClick={onClose}>
@@ -35,7 +49,7 @@ const PdfPreview: React.FC<PdfPreviewProps> = ({ isOpen, filePDF, onClose, onLik
           <IoIosHeart
             size={40}
             color={isLiked ? "red" : "gray"}
-            onClick={onLike}
+            onClick={() => toggleLike(templateId)}
             style={{ cursor: 'pointer' }}
           />
           <FaFileDownload size={40} style={{ cursor: 'pointer', color: 'gray' }} onClick={onDownload} />
