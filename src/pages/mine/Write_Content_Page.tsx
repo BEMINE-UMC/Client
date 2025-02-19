@@ -15,6 +15,7 @@ import TextEditor from "./components/TextEditor";
 import defaultImg from '../../assets/images/mine/default_img.png';
 import CustomBox from "./components/CustomBox";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const categories = [
 	"콘텐츠 마케터",
@@ -30,6 +31,20 @@ const WriteContentPage = () => {
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const [writeModal, setWriteModal] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
+	const id = location.state?.id;
+
+	useEffect(() => {
+		if (id) {
+			console.log("ID 전달받음, 수정하겠다는 뜻 !!:", id);
+			// TODO: 게시물 상세 API에게 id param으로 전달하여, 존재하는 게시물이면
+			// 썸네일, 제목, 파일, 공개범위를 전달받은 데이터를 기본값으로 설정하여 보여지게 하기
+			// 이 페이지에 도착했는데 id를 전달 못받았다? 그럼 그건 그냥 처음부터 게시물 작성하기이므로
+			// 원래대로 두기 (아무것도 입력, 선택 x 상태)
+		} else {
+			console.log("ID가 전달되지 않음, 새 게시물 작성한다는 뜻!");
+		}
+	}, [id]);
 
 	// 프로필 데이터 전체 상태로 관리
 	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({

@@ -54,14 +54,13 @@ const Workspace = () => {
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const navigate = useNavigate();
+	const [imageList, setImageList] = useState<{ id: number; url: string }[]>([]);
 
 	useEffect(() => {
 		// 컴포넌트가 마운트되면 '내가 쓴 게시물'을 기본으로 불러옴
 		fetchPosts('/myPage/posts', '내가 쓴 게시물', setImageList, setMessage);
 	}, []); // 의존성 배열을 비워서 마운트 시에만 실행되게 함
 
-
-	const [imageList, setImageList] = useState<string[]>([]);
 	const [message, setMessage] = useState("아직 담긴 게시물이 없어요.");
 	// const accessToken = useAuthStore((state) => state.accessToken);
 
@@ -77,9 +76,10 @@ const Workspace = () => {
 		navigate('/writetemplatepage');
 	}
 
-	const GoContentEdit = () => {
-		navigate('/writecontentpage');
-	}
+	const GoContentEdit = (id: number) => {
+		console.log('클릭한 게시물 ID는:', id);
+		navigate('/writecontentpage', { state: { id } });
+	};
 
 	const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -164,16 +164,16 @@ const Workspace = () => {
 			</DropdownWrapper>
 			{imageList.length > 0 ? (
 				<GridContainer>
-					{imageList.map((src, index) => (
+					{imageList.map((post, index) => (
 						<CustomButton
 							key={index}
-							$width='auto'
-							$height='auto'
-							$padding='0'
-							$backgroundColor='transparent'
-							onClick={GoContentEdit}
+							$width="auto"
+							$height="auto"
+							$padding="0"
+							$backgroundColor="transparent"
+							onClick={() => GoContentEdit(post.id)}
 						>
-							<ImageItem src={src} alt={`Template ${index + 1}`} />
+							<ImageItem src={post.url} alt={`Template ${index + 1}`} />
 						</CustomButton>
 					))}
 				</GridContainer>

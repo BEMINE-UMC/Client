@@ -7,10 +7,15 @@ interface Post {
 	url: string;
 }
 
+interface PostWithId {
+	id: number;
+	url: string;
+}
+
 export const fetchPosts = async (
 	endpoint: string,
 	buttonText: string,
-	setImageList: (images: string[]) => void,
+	setImageList: (images: PostWithId[]) => void,
 	setMessage: (message: string) => void
 ): Promise<void> => {
 	try {
@@ -34,7 +39,7 @@ export const fetchPosts = async (
 		};
 
 		if (response.data.success) {
-			let posts: Post[] = [];
+			let posts: PostWithId[] = [];
 			console.log('success고, 현재 endloint는:', endpoint);
 
 			// '/myPage/posts'의 경우 응답 구조가 다름
@@ -43,18 +48,21 @@ export const fetchPosts = async (
 				console.log('내가 쓴 포스트 API 응답은:', data);
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({
-						postId: post.id,
+						id: post.id,
 						url: extractImageUrl(post.body) ?? defaultImg,
 					}));
 					// console.log('/myPage/posts의 반환값에서 id와 url은:', posts);
 				}
 			} else {
 				// 다른 엔드포인트는 동일한 방식 처리
-				posts = response.data.success.post;
+				posts = response.data.success.post.map((post) => ({
+					id: post.id,
+					url: extractImageUrl(post.body) ?? defaultImg,
+				}));
 			}
 
 			if (posts.length > 0) {
-				setImageList(posts.map((post) => post.url ?? defaultImg));
+				setImageList(posts);
 
 				// 디버깅 코드임
 				const imageUrls = posts.map((post) => post.url);
