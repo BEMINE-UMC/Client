@@ -88,7 +88,7 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
           filePDF={selectedTemplate.file || ""} // `data.file`을 `pdfUrl`로 전달
           isLiked={selectedTemplate.likedStatus || false}
           onLike={() => console.log("좋아요 클릭")}
-          onDownload={() => console.log("다운로드 클릭")} thumbnail={""} templateCreatedAt={""} templateId={0} title={""} authorId={0} authorName={""} categoryId={0} categoryName={""} likesCount={0}        />
+          onDownload={() => console.log("다운로드 클릭")} thumbnail={""} templateCreatedAt={""} templateId={0} title={""} authorId={0} authorName={""} categoryId={0} categoryName={""} likesCount={0} templteId={0}        />
         )}
 
       </>

@@ -19,6 +19,7 @@ import Badge_DU from "../../../assets/images/template/Badge_D&U.svg";
 import Badge_DCU from "../../../assets/images/template/Badge_D&C&U.svg";
 
 import { useNavigate } from "react-router-dom";
+import { useTemplateLikeStore } from "../../../store/template/TemplateLikeStore";
 
 interface TemplateCardData {
   templateId: number;
@@ -43,12 +44,12 @@ interface TemplateCardProps {
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLoggedIn }) => {
-  const { templateId, title, authorName, thumbnail, likedStatus = false, likeCount = 0, surveyCountDesign, surveyCountCredible, surveyCountUseful } = data;
-  const { likeTemplate } = useTemplateStore();
+  const { templateId, title, authorName, thumbnail, likeCount = 0, surveyCountDesign, surveyCountCredible, surveyCountUseful } = data;
+  const { likedTemplates, toggleLike } = useTemplateLikeStore();
 
   const navigate = useNavigate();
 
-  const [isLiked, setIsLiked] = useState<boolean>(likedStatus);
+  const isLiked = likedTemplates[templateId] || false;
   const [likes, setLikes] = useState<number>(likeCount);
 
   const getBadgeImage = () => {
@@ -91,11 +92,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
       return;
     }
 
-    const updatedLikeStatus = !isLiked;
-    setIsLiked(updatedLikeStatus);
-    setLikes((prev) => (updatedLikeStatus ? prev + 1 : prev - 1));
-
-    await likeTemplate(templateId);
+    toggleLike(templateId); // zustand 상태 업데이트
+    setLikes((prev) => (isLiked ? prev - 1 : prev + 1)); 
   };
 
   const handleCardClick = () => {
