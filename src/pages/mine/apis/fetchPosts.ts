@@ -51,14 +51,16 @@ export const fetchPosts = async (
 						id: post.id,
 						url: extractImageUrl(post.body) ?? defaultImg,
 					}));
-					// console.log('/myPage/posts의 반환값에서 id와 url은:', posts);
+					console.log('내가 쓴 포스트에서 posts는:', posts);
 				}
 			} else {
 				// 다른 엔드포인트는 동일한 방식 처리
 				posts = response.data.success.post.map((post) => ({
-					id: post.id,
-					url: extractImageUrl(post.body) ?? defaultImg,
+					id: post.postId,
+					// url: extractImageUrl(post.body) ?? defaultImg,
+					url: post.url
 				}));
+				console.log('내가 쓴 포스트가 아닌 다른 포스트에서 posts는:', posts);
 			}
 
 			if (posts.length > 0) {

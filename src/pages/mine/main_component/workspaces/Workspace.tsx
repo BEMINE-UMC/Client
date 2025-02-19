@@ -11,6 +11,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import { fetchPosts } from "../../apis/fetchPosts";
 import pdfMock from '../../../../assets/images/mine/mine_PDF_mockData.pdf';
 import emptySpace from '../../../../assets/images/mine/icon_if_workspace_is_empty.svg';
+import emptyThumbmail from '../../../../assets/images/mine/if_no_thumnail_default.svg';
 
 import rank_before_1 from '../../../../assets/images/mine/rank_img/mine_rank_before_1.svg';
 import rank_before_2 from '../../../../assets/images/mine/rank_img/mine_rank_before_2.svg';
@@ -173,7 +174,7 @@ const Workspace = () => {
 							$backgroundColor="transparent"
 							onClick={() => GoContentEdit(post.id)}
 						>
-							<ImageItem src={post.url} alt={`Template ${index + 1}`} />
+							<ImageItem src={post.url ?? emptyThumbmail} alt={`Template ${index + 1}`} />
 						</CustomButton>
 					))}
 				</GridContainer>
