@@ -10,7 +10,7 @@ export const Container = styled.div`
   width: min(100vw, 95%); /* 화면 크기에 맞게 조정 */
   margin: 3.5% 0 3.5% 2%;
   overflow: visible;
-  // cursor: pointer;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     width: 100%;
