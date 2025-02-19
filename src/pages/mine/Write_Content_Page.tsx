@@ -14,6 +14,7 @@ import profile from "../../assets/images/mockData/mockData_mine_ProfileImg.png";
 import TextEditor from "./components/TextEditor";
 import defaultImg from '../../assets/images/mine/default_img.png';
 import CustomBox from "./components/CustomBox";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
 	"콘텐츠 마케터",
@@ -28,6 +29,8 @@ const WriteContentPage = () => {
 	const [editorContent, setEditorContent] = useState("");
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const [writeModal, setWriteModal] = useState(false);
+	const navigate = useNavigate();
+
 	// 프로필 데이터 전체 상태로 관리
 	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({
 		name: "",
@@ -70,11 +73,19 @@ const WriteContentPage = () => {
 
 
 	const handleSubmit = async () => {
+		// <img /> 태그의 src 속성을 추출하는 함수
+		const extractImageSrc = (body: string): string | null => {
+			const match = body.match(/<img.*?src=["'](.*?)["']/);
+			return match ? match[1] : null;
+		};
+
+		const thumbnail = extractImageSrc(editorContent); // 첫 번째 이미지의 src 추출
+
 		const data = {
 			title,
 			body: editorContent,
 			categoryId: categories.indexOf(category) + 1,
-			thumbnail,
+			thumbnail, // 추출한 이미지 URL을 thumbnail에 담음
 		};
 
 		try {
@@ -92,9 +103,11 @@ const WriteContentPage = () => {
 			if (response.status === 201) {
 				alert("게시글이 성공적으로 작성되었습니다.");
 				setWriteModal(false);
+				navigate('/my');
 			}
 		} catch (error) {
 			console.log('body에 담긴 내용은:', editorContent);
+			console.log('썸네일 이미지 링크는:', thumbnail);
 			// console.log(accessToken);
 			console.error("Error submitting post:", error);
 			alert("게시글 작성에 실패했습니다. 다시 시도해주세요.");

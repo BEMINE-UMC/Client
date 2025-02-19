@@ -19,6 +19,15 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 
 	// 이미지 업로드 핸들러
 	const handleImageUpload = async (file: File) => {
+
+		const quill = quillRef.current?.getEditor();
+		const imageCount = quill?.root.querySelectorAll('img').length || 0;
+
+		if (imageCount >= 1) {
+			alert('이미지는 최대 1장만 첨부하실 수 있습니다.');
+			return; // 이미지 삽입 중단
+		}
+
 		const formData = new FormData();
 		formData.append("image", file);
 
