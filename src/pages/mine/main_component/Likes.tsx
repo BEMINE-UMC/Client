@@ -10,6 +10,7 @@ import StyledImg from "../components/StyledImg";
 import CustomButton from "../components/CustomButton";
 import CustomRow from "../components/CustomRow";
 import emptyLikes from '../../../assets/images/mine/icon_if_empty_likes.svg';
+import defaultImg from '../../../assets/images/mine/if_no_thumnail_default.svg';
 
 // 스타일 코드 하단 분리 
 
@@ -31,9 +32,11 @@ const Likes = () => {
         });
 
         if (response.data.success) {
-          const posts: { postId: number; url: string }[] = response.data.success.post;
+          const posts: { postId: number; url: string | null }[] = response.data.success.post;
           if (posts.length > 0) {
-            setImageList(posts.map((post) => post.url));
+            console.log(accessToken);
+            console.log(response);
+            setImageList(posts.map((post) => post.url ?? defaultImg));
             setMessage("");
           } else {
             setImageList([]);
@@ -102,6 +105,7 @@ const ResponsiveColumn = styled(CustomColumn)`
 
 const ResponsiveImg = styled(StyledImg)`
   width: 100%;
+  border-radius: 0.5rem;
 
   @media (max-width: 768px) {
     border-radius: 0.5rem;

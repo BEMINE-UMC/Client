@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "../../../store/authStore";
+import defaultImg from '../../../assets/images/mine/if_no_thumnail_default.svg';
 
 interface Post {
 	postId: number;
@@ -32,10 +33,11 @@ export const fetchPosts = async (
 			// '/myPage/posts'의 경우 응답 구조가 다름
 			if (endpoint === "/posts") {
 				const data = response.data.success; // API 문서 참고
+				console.log('내가 쓴 포스트 API 응답은:', data);
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({
 						postId: post.id,
-						url: post.thumbnail,
+						url: post.thumbnail ?? defaultImg,
 					}));
 					// console.log('/myPage/posts의 반환값에서 id와 url은:', posts);
 				}
@@ -45,11 +47,11 @@ export const fetchPosts = async (
 			}
 
 			if (posts.length > 0) {
-				setImageList(posts.map((post) => post.url));
+				setImageList(posts.map((post) => post.url ?? defaultImg));
 
 				// 디버깅 코드임
-				// const imageUrls = posts.map((post) => post.url);
-				// console.log('imageList에 담긴 애들은', imageUrls);
+				const imageUrls = posts.map((post) => post.url);
+				console.log('imageList에 담긴 애들은', imageUrls);
 
 				setMessage("");
 				console.log("성공!");

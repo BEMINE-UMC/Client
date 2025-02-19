@@ -148,22 +148,36 @@ const Workspace = () => {
 					</DropdownMenu>
 				)}
 			</DropdownWrapper>
-
 			{imageList.length > 0 ? (
-				imageList.map((src, index) => (
-					<GridContainer>
-						<CustomButton key={index} $width='auto' $height='auto' $padding='0' $backgroundColor='transparent' onClick={GoTemplateShow}>
+				<GridContainer>
+					{imageList.map((src, index) => (
+						<CustomButton
+							key={index}
+							$width='auto'
+							$height='auto'
+							$padding='0'
+							$backgroundColor='transparent'
+							onClick={GoTemplateShow}
+						>
 							<ImageItem src={src} alt={`Template ${index + 1}`} />
 						</CustomButton>
-					</GridContainer>
-				))
+					))}
+				</GridContainer>
 			) : (
 				message && (
-					<CustomColumn $width="100%" $minHeight="90vh" $alignitems="center" $justifycontent="center">
+					<CustomColumn
+						$width="100%"
+						$minHeight="90vh"
+						$alignitems="center"
+						$justifycontent="center"
+					>
 						{/* <CustomFont $color='gray' $font='0.8rem'>{message}</CustomFont> */}
 						<StyledImg src={emptySpace} />
 					</CustomColumn>
-				))}
+				)
+			)}
+
+
 
 
 
