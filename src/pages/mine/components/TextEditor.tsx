@@ -8,11 +8,17 @@ import CustomColumn from "./CustomColumn";
 import CustomBox from "./CustomBox";
 
 interface TextEditorProps {
+	value?: string;
 	onChange?: (content: string) => void;
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
-	const [content, setContent] = useState<string>("");
+const TextEditor: React.FC<TextEditorProps> = ({ onChange, value }) => {
+	const [content, setContent] = useState<string>(value || ""); // 초기값을 props로 받음
+
+	useEffect(() => {
+		setContent(value || ""); // value 변경 시 content 업데이트
+	}, [value]);
+
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const quillRef = useRef<ReactQuill | null>(null);
 	const accessToken = useAuthStore((state) => state.accessToken);

@@ -33,18 +33,16 @@ const WriteContentPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const id = location.state?.id;
+	const accessToken = useAuthStore((state) => state.accessToken);
 
 	useEffect(() => {
 		if (id) {
 			console.log("ID 전달받음, 수정하겠다는 뜻 !!:", id);
-			// TODO: 게시물 상세 API에게 id param으로 전달하여, 존재하는 게시물이면
-			// 썸네일, 제목, 파일, 공개범위를 전달받은 데이터를 기본값으로 설정하여 보여지게 하기
-			// 이 페이지에 도착했는데 id를 전달 못받았다? 그럼 그건 그냥 처음부터 게시물 작성하기이므로
-			// 원래대로 두기 (아무것도 입력, 선택 x 상태)
+			fetchPostById(id); // ✅ ID가 있으면 API 호출
 		} else {
 			console.log("ID가 전달되지 않음, 새 게시물 작성한다는 뜻!");
 		}
-	}, [id]);
+	}, [id, accessToken]);
 
 	// 프로필 데이터 전체 상태로 관리
 	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({
@@ -55,8 +53,6 @@ const WriteContentPage = () => {
 	});
 	const [history, setHistory] = useState<{ id: number; title: string; body: string }[]>([]);
 	const [loading, setLoading] = useState(true);
-
-	const accessToken = useAuthStore((state) => state.accessToken);
 
 	// 마이페이지 정보 조회 API 요청 함수
 	useEffect(() => {
@@ -85,6 +81,27 @@ const WriteContentPage = () => {
 		};
 		fetchProfileData();
 	}, [accessToken]);
+
+	const fetchPostById = async (id: number) => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/posts/${id}`, {
+				headers: {
+					"Accept": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			if (response.status === 200 && response.data.success) {
+				const { title, body } = response.data.success;
+
+				setTitle(title);          // 제목을 CustomInput에 설정
+				setEditorContent(body);  // 본문을 TextEditor에 설정
+			}
+		} catch (error) {
+			console.error(`게시물 ID ${id}의 데이터를 불러오는 중 오류 발생:`, error);
+		}
+	};
+
 
 
 	const handleSubmit = async () => {
@@ -235,7 +252,7 @@ const WriteContentPage = () => {
 				</CustomRow>
 			</CustomColumn>
 
-			<TextEditor onChange={setEditorContent} />
+			<TextEditor value={editorContent} onChange={setEditorContent} />
 
 			<CustomRow $width="90%" $justifycontent="flex-end">
 				<CustomButton
