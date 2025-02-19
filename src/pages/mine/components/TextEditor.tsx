@@ -3,6 +3,7 @@ import { useAuthStore } from "../../../store/authStore";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
+import './TextEditor.css';
 import CustomColumn from "./CustomColumn";
 import CustomBox from "./CustomBox";
 
@@ -110,7 +111,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
 						],
 					}}
 					formats={["bold", "italic", "underline", "list", "bullet", "link", "image"]}
-					style={{ width: "100%", minHeight: "30rem", border: "1px solid #ccc", padding: "10px" }}
+					style={{ width: "100%", height: "8rem", minHeight: "30rem", borderBottom: "1px solid #ccc" }}
 				/>
 			</CustomColumn>
 		</CustomBox>

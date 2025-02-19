@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "../../store/authStore";
 
 import CustomColumn from "./components/CustomColumn";
@@ -12,6 +12,8 @@ import CustomInput from "./components/CustomInput";
 import Modal from "./components/Modal";
 import profile from "../../assets/images/mockData/mockData_mine_ProfileImg.png";
 import TextEditor from "./components/TextEditor";
+import defaultImg from '../../assets/images/mine/default_img.png';
+import CustomBox from "./components/CustomBox";
 
 const categories = [
 	"콘텐츠 마케터",
@@ -26,10 +28,47 @@ const WriteContentPage = () => {
 	const [editorContent, setEditorContent] = useState("");
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const [writeModal, setWriteModal] = useState(false);
+	// 프로필 데이터 전체 상태로 관리
+	const [profileData, setProfileData] = useState<{ name: string; introduction: string; photo: string; history: { id: number; title: string; body: string }[] }>({
+		name: "",
+		introduction: "",
+		photo: "",
+		history: []
+	});
+	const [history, setHistory] = useState<{ id: number; title: string; body: string }[]>([]);
+	const [loading, setLoading] = useState(true);
 
 	const accessToken = useAuthStore((state) => state.accessToken);
 
-	// 게시물 작성 시, 'url이 유효하지 않다'는 오류 발생 중 !!
+	// 마이페이지 정보 조회 API 요청 함수
+	useEffect(() => {
+		const fetchProfileData = async () => {
+			try {
+				const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/myPage`, {
+					headers: {
+						"Accept": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+
+				if (response.status === 200 && response.data.success) {
+					setProfileData({
+						...response.data.success,
+						photo: response.data.success.photo || defaultImg
+					});
+					setHistory(response.data.success.history || []);
+				}
+			} catch (error) {
+				console.error("게시물 페이지에서 마이페이지&연혁 정보 조회 실패:", error);
+				console.log(accessToken);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchProfileData();
+	}, [accessToken]);
+
+
 	const handleSubmit = async () => {
 		const data = {
 			title,
@@ -81,9 +120,9 @@ const WriteContentPage = () => {
 				$height="auto"
 				$gap="4rem"
 				$alignitems="flex-start"
-				$justifycontent="center"
+				$justifycontent="flex-start"
 			>
-				<StyledImg src={profile} $borderradius="0.5rem" $width="15%" />
+				<StyledImg src={profileData.photo || "default-profile.png"} style={{ maxWidth: '20%' }} $borderradius="0.5rem" />
 
 				<CustomColumn
 					$width="25%"
@@ -107,42 +146,66 @@ const WriteContentPage = () => {
 					>
 						<CustomFont $color="black">{new Date().toLocaleDateString()}</CustomFont>
 						<CustomDivider $width="100%" $height="1px" $backgroundcolor="#C9C9C9" />
-						<CustomFont $color="black">유궁둔</CustomFont>
+						<CustomFont $color="black" $font="1rem">{profileData.name}</CustomFont>
 					</CustomColumn>
 				</CustomColumn>
 
 				<CustomColumn
-					$width="50%"
+					$width="70%"
 					$height="auto"
-					$gap="2rem"
+					$gap="1rem"
 					$alignitems="flex-start"
 					$justifycontent="center"
 				>
-					<CustomFont $color="#666666" $fontweight="bold" $font="1rem">
-						카테고리 선택
-					</CustomFont>
-					<CustomColumn
-						$width="90%"
-						$alignitems="flex-start"
-						$justifycontent="center"
-						$gap="0.5rem"
-					>
-
-						{categories.map((cat, index) => (
-							<label key={index}>
-								<input
-									type="radio"
-									name="category"
-									value={cat}
-									checked={category === cat}
-									onChange={() => setCategory(cat)}
-								/>
-								<CustomFont $color="black" $fontweight="bold">{cat}</CustomFont>
-							</label>
-						))}
-					</CustomColumn>
+					{loading ? (
+						<CustomFont $color="gray">불러오는 중...</CustomFont>
+					) : history.length > 0 ? (
+						history.map((entry) => (
+							<CustomColumn key={entry.id} $width="100%" $alignitems="flex-start" $gap='0.5rem'>
+								<CustomFont $color="#686868" $font="0.8rem" $fontweight="bold">{entry.title}</CustomFont>
+								<CustomFont $color="#686868" $font="0.8rem">{entry.body}</CustomFont>
+							</CustomColumn>
+						))
+					) : (
+						<CustomColumn $width="100%" $alignitems="center">
+							<CustomFont $color="gray">아직 연혁이 없어요!</CustomFont>
+						</CustomColumn>
+					)}
 				</CustomColumn>
+
 			</CustomRow>
+
+			<CustomColumn
+				$width="90%"
+				$height="auto"
+				$gap="1rem"
+				$alignitems="flex-start"
+				$justifycontent="flex-start"
+			>
+				<CustomFont $color="#666666" $fontweight="bold" $font="1rem">
+					카테고리 선택
+				</CustomFont>
+				<CustomRow
+					$width="100%"
+					$alignitems="flex-start"
+					$justifycontent="flex-start"
+					$gap="0.5rem"
+				>
+
+					{categories.map((cat, index) => (
+						<label key={index}>
+							<input
+								type="radio"
+								name="category"
+								value={cat}
+								checked={category === cat}
+								onChange={() => setCategory(cat)}
+							/>
+							<CustomFont $color="black" $fontweight="bold">{cat}</CustomFont>
+						</label>
+					))}
+				</CustomRow>
+			</CustomColumn>
 
 			<TextEditor onChange={setEditorContent} />
 

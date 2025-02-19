@@ -14,3 +14,11 @@
 .toolbarClassName {
 	border-bottom: 1px solid #ccc;
 }
+
+.ql-editor img {
+	max-height: 300px;
+	width: auto;
+	object-fit: contain;
+	border-radius: 8px;
+	margin: 8px 0;
+}
