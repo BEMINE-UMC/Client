@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "../../../store/authStore";
-import defaultImg from '../../../assets/images/mine/if_no_thumnail_default.svg';
+import defaultImg from '../../../assets/images/mine/emptyThumbnail.svg';
 
 interface Post {
 	postId: number;
@@ -27,17 +27,24 @@ export const fetchPosts = async (
 		console.log("워크스페이스 요청 URL:", `${endpoint}`);
 		console.log(" 워크스페이스 응답 데이터:", response.data);
 
+		// body에서 이미지 URL 추출 함수
+		const extractImageUrl = (body: string): string | null => {
+			const match = body.match(/<img src='(.*?)'/); // 첫 번째 이미지 추출
+			return match ? match[1] : null;
+		};
+
 		if (response.data.success) {
 			let posts: Post[] = [];
+			console.log('success고, 현재 endloint는:', endpoint);
 
 			// '/myPage/posts'의 경우 응답 구조가 다름
-			if (endpoint === "/posts") {
+			if (endpoint === "/myPage/posts") {
 				const data = response.data.success; // API 문서 참고
 				console.log('내가 쓴 포스트 API 응답은:', data);
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({
 						postId: post.id,
-						url: post.thumbnail ?? defaultImg,
+						url: extractImageUrl(post.body) ?? defaultImg,
 					}));
 					// console.log('/myPage/posts의 반환값에서 id와 url은:', posts);
 				}

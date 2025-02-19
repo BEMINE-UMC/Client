@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { useAuthStore } from "../../../store/authStore";
 // import axios from "axios";
 import CustomColumn from "../../components/CustomColumn";
@@ -55,9 +55,19 @@ const Workspace = () => {
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		// 컴포넌트가 마운트되면 '내가 쓴 게시물'을 기본으로 불러옴
+		fetchPosts('/myPage/posts', '내가 쓴 게시물', setImageList, setMessage);
+	}, []); // 의존성 배열을 비워서 마운트 시에만 실행되게 함
+
+
 	const [imageList, setImageList] = useState<string[]>([]);
 	const [message, setMessage] = useState("아직 담긴 게시물이 없어요.");
 	// const accessToken = useAuthStore((state) => state.accessToken);
+
+	// 워크스페이스에서 GET API를 반복출력하는데, 이것이 템플릿인지 게시물인지 파악한 후 서로 다른 화면으로 서로 다른 데이터를 보내주어야 함
+	// 템플릿 클릭 시 pdf 뷰어 열리고, pdf 뷰어에서 템플릿 수정(연필 버튼)을 이동
+	// 게시물 클릭 시 바로 게시물 수정 화면으로 이동 
 
 	const GoTemplateShow = () => { // 템플릿 보기
 		setIsOverlayVisible(true);
@@ -65,6 +75,10 @@ const Workspace = () => {
 
 	const GoTemplateEdit = () => { // 템플릿 수정
 		navigate('/writetemplatepage');
+	}
+
+	const GoContentEdit = () => {
+		navigate('/writecontentpage');
 	}
 
 	const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -157,7 +171,7 @@ const Workspace = () => {
 							$height='auto'
 							$padding='0'
 							$backgroundColor='transparent'
-							onClick={GoTemplateShow}
+							onClick={GoContentEdit}
 						>
 							<ImageItem src={src} alt={`Template ${index + 1}`} />
 						</CustomButton>
