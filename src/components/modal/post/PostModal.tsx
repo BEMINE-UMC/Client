@@ -9,6 +9,7 @@ import FooterSection from "./FooterSection";
 import { PostDetail } from "../../main/type/PostDetail";
 import Bar from "./Bar";
 
+import { useOtherPostsStore } from "../../../store/main/otherPostStore";
 
 interface PostModalProps {
   isOpen: boolean;
@@ -18,19 +19,26 @@ interface PostModalProps {
   liked: boolean;  
 }
 
-const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data }) => {
+const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClick, liked }) => {
   if (!isOpen || !data) return null;
 
-  useEffect(() => {
-    console.log("✅ PostModal 내부 postDetail 업데이트:", data);
-  }, [data]);
-
   const postDetail = data as PostDetail;
+
+  const [likedStatus, setLikedStatus] = useState(liked);
+
+  const { posts: otherPosts, fetchOtherPosts } = useOtherPostsStore();
+
+  useEffect(() => {
+    if (data) {
+      console.log("✅ PostModal 내부 postDetail 업데이트:", data);
+      fetchOtherPosts(String(data.postId)); //postId 기반으로 데이터 가져오기
+    }
+  }, [data, fetchOtherPosts]);
   
-  const [likedStatus, setLikedStatus] = useState(postDetail.liked);
 
   const handleLikeClick = () => {
     setLikedStatus((prev) => !prev);
+    onLikeClick();
     console.log("👍 좋아요 상태 변경:", !likedStatus);
   };
 
@@ -53,12 +61,13 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data }) => {
         <ContentSection
           title={data.title}
           content={postDetail.body || ""} 
-          liked={postDetail.liked}
+          liked={likedStatus}
           onLikeClick={handleLikeClick} 
       />
         <FooterSection
           author={data.authorName}
           contentImage={data.thumbnail}  // contentImage를 thumbnail로 변경
+          // otherPosts={otherPosts} // !여기부터! 
         />
       </ModalContent>
     </ModalOverlay>

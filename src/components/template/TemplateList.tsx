@@ -8,8 +8,6 @@ import { getImageOrDefault } from "../../utils/imageUtils";
 import { useTemplateDetailStore } from "../../store/template/templateDetailStore";
 import PdfPreview from "./PdfPreview";
 
-
-
 interface TemplateListProps {
   selectedCategory: string;
 }
@@ -100,7 +98,7 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
 export default TemplateList;
 
 const ListContainer = styled.div`
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   gap: 30px;
   justify-content: center;
