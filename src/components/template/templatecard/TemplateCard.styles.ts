@@ -2,24 +2,44 @@ import styled from "styled-components";
 
 export const Badge = styled.span`
   position: absolute;
-  top: -30px;  /* 카드 영역 위로 벗어나게 */
-  left: -20px;
+  top: -50px;  /* 카드 영역 위로 벗어나게 */
+  left: -70px;
   z-index: 10;  /* 다른 요소들보다 위에 표시되도록 설정 */
 
   img {
-    width: 125px;  /* 원하는 크기로 설정 */
+    width: 12vw;  /* 원하는 크기로 설정 */
     height: auto;
 
+    @media (max-width: 1000px) {
+
+      width: 18vw;
+    }
+
     @media (max-width: 768px) {
-      top: -20px;
-      width: 80px;
+      top: -100px;  /* 카드 영역 위로 벗어나게 */
+      width: 20vw;
+    }
+
+    @media (max-width: 680px) {
+      
+      width: 24vw;
+    }
+
+    @media (max-width: 600px) {
+      
+      width: 27vw;
+    }
+
+    @media (max-width: 600px) {
+      
+      width: 30vw;
     }
 
     @media (max-width: 480px) {
-      top: 0px;
-      width: 70px;
+      top: -20px;
+      width: 40vw;
     }
-  }
+  } 
 `;
 
 export const CardContainer = styled.div`
@@ -145,7 +165,7 @@ interface LikeButtonProps {
 export const LikeButton = styled.button<LikeButtonProps>`
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   color: ${(props) => (props.liked ? "#ff6347" : "#ccc")};
   font-size: clamp(18px, 2.5vw, 24px); /* 최소 18px, 최대 24px */
   display: flex;
@@ -153,7 +173,7 @@ export const LikeButton = styled.button<LikeButtonProps>`
   justify-content: center;
 
   &:hover {
-    color: #ff0000;
+    color: ${(props) => (props.disabled ? "#ccc" : "#ff0000")};
   }
 `;
 

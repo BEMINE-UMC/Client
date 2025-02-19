@@ -96,6 +96,8 @@ const CategoryButton = styled.button<{ selected?: boolean }>`
   cursor: pointer;
   transition: all 0.3s ease;
 
+  white-space: nowrap;  /* 이 부분 추가 */
+
   width: auto; /* 버튼 너비 고정되지 않도록 설정 */
   min-width: 120px; 
   height: 40px; 
@@ -127,6 +129,8 @@ const CategoryImage = styled.div<{ src?: string; color?: string }>`
   background-image: ${({ src }) => (src ? `url(${src})` : "none")};
   background-size: contain;
   background-position: center;
+
+  min-width: 25px;
 
   @media (max-width: 480px) {
     width: 20px;

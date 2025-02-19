@@ -16,7 +16,7 @@ const SearchInput = () => {
         if (localSearchTerm.trim()) {
             console.log("🔍 검색 실행! 검색어:", localSearchTerm);  // [디버깅] 검색어 확인
             
-            setLocalSearchTerm(localSearchTerm)
+            setSearchTerm(localSearchTerm)
             const data = await searchPosts(localSearchTerm);
             
             console.log("📄 검색 결과:", data);  // [디버깅] 검색 결과 확인
@@ -38,7 +38,7 @@ const SearchInput = () => {
                 type="text" 
                 placeholder="검색"
                 value={localSearchTerm}
-                onChange={(e) => setLocalSearchTerm(e.target.value)} 
+                onChange={(e) => setLocalSearchTerm(e.target.value)}
                 onKeyDown={handleKeyDown}
             />
         </SearchInputWrapper>

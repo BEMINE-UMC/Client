@@ -8,7 +8,6 @@ import { usePostDetailStore } from "../../store/main/postDetailStore";
 import { Post } from "../main/type/Post";
 import PostCard from "../main/postcard/PostCard";
 
-
 interface SearchResultsProps {
   searchResults: Post[];
   searchTerm: string;
@@ -21,9 +20,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
 
   const { fetchPostDetail, postDetail } = usePostDetailStore();
   const { isLoggedIn } = useAuthStore();
-
-
-  const displaySearchTerm = searchTerm?.trim() ? searchTerm : "검색어 없음";
 
   const openModal = async (post: Post) => {
     setSelectedPost(post);
@@ -51,9 +47,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
 
   return (
     <SearchResultsWrapper>
-      <SearchHeader> 🔎 검색 결과</SearchHeader>
+      <SearchHeader> 🔎 {searchTerm}에 대한 검색 결과</SearchHeader>
       <PostCardContainer>
-        {searchResults && searchResults.length > 0 ? (
+        {(searchResults && searchResults.length > 0) ? (
           searchResults.map((post) => (
             <PostCard
               key={post.postId}
@@ -127,6 +123,11 @@ const SearchHeader = styled.h2`
   margin-bottom: 2%;
 
   margin-left: 3%;
+
+  @media (max-width: 480px) {
+    margin-top: 5%;
+    font-size: 1rem;
+  }
 `;
 
 const A = styled.p`
