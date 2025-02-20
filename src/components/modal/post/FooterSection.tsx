@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Empty from "../../../assets/images/main/Empty.png"
 
-
 interface OtherPost {
   userId: number;
   postId: number;
@@ -32,10 +31,7 @@ const FooterSection: React.FC<FooterProps> = ({ author, contentImage, otherPosts
             {otherPosts.length > 0 ? (
               <OtherPostsContainer>
                 {otherPosts.map((post) => (
-                  <OtherPostItem key={post.postId} onClick={() => {
-                    console.log("📝 클릭한 postId:", post.postId); // 디버깅용 로그
-                    onOtherPostClick(post.postId);
-                  }}>
+                  <OtherPostItem key={post.postId} onClick={() => onOtherPostClick(post.postId)}>
                     <StyledImage src={post.picture} alt={post.title} />
                     <PostTitle>{post.title}</PostTitle>
                   </OtherPostItem>

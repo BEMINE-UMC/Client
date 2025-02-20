@@ -29,6 +29,7 @@ interface PdfPreviewProps {
   onEdit?: () => void; // ✅ 추가: 편집 버튼 (선택적)
     thumbnail: string;
     filePDF?: string; // PDF 파일 경로
+    filePPT?: string
     templateCreatedAt: string;
     templateId: number;
     title: string;

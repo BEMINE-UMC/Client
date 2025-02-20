@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { CardContainer, ImageSection, ContentSection, Description, Author, Title, LikeSection, LikeButton, LikeCount, Badge } from "./TemplateCard.styles";
 import Empty from "../../../assets/images/main/Empty.png";
-import { useTemplateStore } from "../../../store/template/templateStore";
+
 
 import Badge_D from "../../../assets/images/template/Badge_D.svg";
 import Badge_C from "../../../assets/images/template/Badge_C.svg";
@@ -19,7 +19,9 @@ import Badge_DU from "../../../assets/images/template/Badge_D&U.svg";
 import Badge_DCU from "../../../assets/images/template/Badge_D&C&U.svg";
 
 import { useNavigate } from "react-router-dom";
-import { useTemplateLikeStore } from "../../../store/template/TemplateLikeStore";
+
+import { useLikeMutation } from "../../../hooks/template/useLikesMutation";
+import { useLikesStore } from "../../../store/template/useLikesStore";
 
 interface TemplateCardData {
   templateId: number;
@@ -45,12 +47,17 @@ interface TemplateCardProps {
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLoggedIn }) => {
   const { templateId, title, authorName, thumbnail, likeCount = 0, surveyCountDesign, surveyCountCredible, surveyCountUseful } = data;
-  const { likedTemplates, toggleLike } = useTemplateLikeStore();
+  const { likedTemplates, likeCounts } = useLikesStore();
+  const { mutate } = useLikeMutation();
 
   const navigate = useNavigate();
 
   const isLiked = likedTemplates[templateId] || false;
-  const [likes, setLikes] = useState<number>(likeCount);
+  const [likes, setLikes] = useState<number>(likeCounts[templateId] || likeCount);
+
+  useEffect(() => {
+    setLikes(likeCounts[templateId] || likeCount); // 상태 초기화
+  }, [likeCounts, templateId, likeCount]);
 
   const getBadgeImage = () => {
     if (surveyCountDesign > 1 && surveyCountCredible > 1 && surveyCountUseful > 1) {
@@ -92,8 +99,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
       return;
     }
 
-    toggleLike(templateId); // zustand 상태 업데이트
-    setLikes((prev) => (isLiked ? prev - 1 : prev + 1)); 
+    mutate(templateId); // 좋아요 요청 보내기
   };
 
   const handleCardClick = () => {

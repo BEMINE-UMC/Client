@@ -6,8 +6,6 @@ import useSearchStore from "../../store/search/searchStore";
 import SearchResults from "../../components/search/SearchResults";
 import { useEffect } from "react";
 
-
-
 const MainPage: React.FC = () => {
 
     const results = useSearchStore((state) => state.results);   //전역상태로 부터 검색결과 가져오기

@@ -3,9 +3,6 @@ import instance from "../../api/axios";
 import { useAuthStore } from "../authStore";
 import { refreshTokens } from "../../api/refresh";
 
-//토큰 재발급
-
-
 interface Post {
   postCreatedAt: string;
   postId: number;
@@ -33,7 +30,7 @@ export const usePostStore = create<PostStore>((set) => ({
   loading: false,
   error: null,
 
-  fetchPosts: async (categoryId = undefined, offset = 0, limit = 20) => {
+  fetchPosts: async (categoryId = undefined, offset = 0, limit = 100) => {
     set({ loading: true, error: null });
 
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -114,81 +111,4 @@ export const usePostStore = create<PostStore>((set) => ({
       ),
     }));
   },
-
-  // //게시물 좋아요 api 
-  // likePost: async (postId: number) => {
-  //   const { posts } = usePostStore.getState();
-  //   const token = useAuthStore.getState().accessToken;
-
-  //   if (!token) {
-  //     alert("로그인이 필요합니다.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await instance.put(`/posts/${postId}/likes`, {}, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-
-  //     console.log("📡 좋아요 API 응답 데이터:", response.data); // ✅ API 응답 확인용 로그
-      
-
-  //     if (response.data.resultType === "SUCCESS") {
-  //       console.log(`✅ 게시물 ID ${postId} 좋아요 성공!`);
-        
-  //       set({
-  //         posts: posts.map((post) =>
-  //           post.postId === postId
-  //             ? { ...post, likedStatus: !post.likedStatus, likesCount: post.likedStatus ? post.likesCount - 1 : post.likesCount + 1 }
-  //             : post
-  //         ),
-  //       });
-  //     } else if (response.data.error?.errorCode === 'TOKEN_EXPIRED') {
-  //       console.log("❌ 토큰 만료됨, 재발급 시도...");
-  //       await refreshTokens();  // 토큰 갱신 후 다시 호출
-  //       await usePostStore.getState().likePost(postId);  // 갱신된 토큰으로 다시 좋아요 API 호출
-  //     } else {
-  //       console.error("❌ 좋아요 실패:", response.data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ 좋아요 API 오류:", error);
-  //   }
-  // },
-  // //게시물 스크랩 api
-  // scrapPost: async (postId: number) => {
-  //   const { posts } = usePostStore.getState();
-  //   const token = useAuthStore.getState().accessToken;
-    
-  //   if (!token) {
-  //     alert("로그인이 필요합니다.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await instance.put(`/posts/${postId}/scrapts`, {}, {
-  //       headers: {Authorization: `Bearer ${token}`},
-  //     });
-  //     console.log("📡 스크랩 API 응답 데이터:", response.data);
-
-  //     if (response.data.resultType === "SUCCESS") {
-  //       console.log(`✅ 게시물 ID ${postId} 스크랩 성공!`);
-  //       set({
-  //         posts: posts.map((post) =>
-  //           post.postId === postId
-  //             ? { ...post, scrapStatus: !post.scrapStatus }
-  //             : post  
-  //         ),
-  //       });
-  //     } else if (response.data.error?.errorCode === 'TOKEN_EXPIRED') {
-  //       console.log("❌ 토큰 만료됨, 재발급 시도...");
-  //       await refreshTokens();  // 토큰 갱신 후 다시 호출
-  //       await usePostStore.getState().scrapPost(postId);  // 갱신된 토큰으로 다시 스크랩 API 호출
-  //     } else {
-  //       alert("스크랩 실패");
-  //       console.error("❌ 스크랩 실패:", response.data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ 스크랩 API 오류:", error);
-  //   }
-  // },
 }));

@@ -19,6 +19,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ $width }) => {
         if (e.key === 'Enter') {
             setSearchTerm(localSearchTerm);
             const results = await searchPosts(localSearchTerm);
+
+            console.log("📢 검색 API 결과:", results); // 여기에 추가!
             setResults(results);
         }
     };

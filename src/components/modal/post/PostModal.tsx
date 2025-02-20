@@ -48,6 +48,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClic
   };
 
   const handleOtherPostClick = (postId: number) => {
+    console.log("📌 다른 게시물 클릭:", postId);
     onOtherPostClick(postId); // 다른 게시물 클릭시 부모에게 요청
     
   };
