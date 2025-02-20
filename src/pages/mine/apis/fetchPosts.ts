@@ -48,7 +48,7 @@ export const fetchPosts = async (
 				console.log('내가 쓴 포스트 API 응답은:', data);
 				if (Array.isArray(data) && data.length > 0) {
 					posts = data.map((post) => ({
-						id: post.id,
+						id: post.postId,
 						// url: extractImageUrl(post.body) ?? defaultImg, <- 썸네일이 아닌 body에 추가한 이미지(추가 시 자동 썸네일 적용 전)를 주는 방식임 !! 즉
 						url: post.thumbnail
 					}));
