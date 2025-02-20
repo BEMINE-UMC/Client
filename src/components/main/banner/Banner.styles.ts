@@ -21,7 +21,7 @@ export const Container = styled.div`
 export const BannerContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 30px;
   width: max(100vw, 150%); /* 가로 스크롤 허용 */ 
   height: 100%;
