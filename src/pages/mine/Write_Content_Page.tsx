@@ -108,24 +108,30 @@ const WriteContentPage = () => {
 	// 게시물 삭제 API
 	const contentDelete = async (id: number) => {
 		try {
-			const response = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/posts/${id}`, {
-				headers: {
-					"Accept": "application/json",
-					Authorization: `Bearer ${accessToken}`,
-				},
-			});
+			const response = await axios.patch(
+				`${import.meta.env.VITE_API_BASE_URL}/posts/${id}`,
+				{}, // PATCH 요청에 Body가 필요하지 않으므로 빈 객체 전달
+				{
+					headers: {
+						"Accept": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
 
 			if (response.status === 200 && response.data.success) {
 				console.log('삭제 성공 !!');
 				setDeleteModal(false);
 				alert('성공적으로 삭제되었습니다.');
+				navigate('/my');
 			}
 		} catch (error) {
 			console.error(`게시물 ID ${id}를 삭제하던 중 오류 발생:`, error);
-			// console.log(accessToken);
+			console.log(accessToken);
 			alert('삭제에 실패했습니다.');
 		}
 	};
+
 
 	const openDeleteModal = () => {
 		setDeleteModal(true);
@@ -328,7 +334,7 @@ const WriteContentPage = () => {
 				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
 					<CustomFont $color="black" $fontweight="bold">삭제하시겠습니까?</CustomFont>
 					<CustomRow $width="90%">
-						<CustomButton $backgroundColor="transparent" onClick={() => setWriteModal(false)}>
+						<CustomButton $backgroundColor="transparent" onClick={() => setDeleteModal(false)}>
 							<CustomFont $color="black" $fontweight="bold">취소</CustomFont>
 						</CustomButton>
 						<CustomButton $backgroundColor="#FFE100" onClick={() => contentDelete(id)}>

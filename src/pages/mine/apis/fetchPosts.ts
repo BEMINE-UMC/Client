@@ -10,6 +10,7 @@ interface Post {
 interface PostWithId {
 	id: number;
 	url: string;
+	userId: number;
 }
 
 export const fetchPosts = async (
@@ -50,16 +51,19 @@ export const fetchPosts = async (
 					posts = data.map((post) => ({
 						id: post.postId,
 						// url: extractImageUrl(post.body) ?? defaultImg, <- 썸네일이 아닌 body에 추가한 이미지(추가 시 자동 썸네일 적용 전)를 주는 방식임 !! 즉
-						url: post.thumbnail
+						url: post.thumbnail,
+						userId: post.userId
 					}));
 					console.log('내가 쓴 포스트에서 posts는:', posts);
 				}
 			} else {
+				console.log('내가 안썼을 때 API 응답은:', response);
 				// 다른 엔드포인트는 동일한 방식 처리
 				posts = response.data.success.post.map((post) => ({
 					id: post.postId,
 					// url: extractImageUrl(post.body) ?? defaultImg,
-					url: post.url
+					url: post.url,
+					userId: post.userId
 				}));
 				console.log('내가 쓴 포스트가 아닌 다른 포스트에서 posts는:', posts);
 			}
