@@ -5,12 +5,14 @@ import defaultImg from '../../../assets/images/mine/emptyThumbnail.svg';
 interface Post {
 	postId: number;
 	url: string;
+	myId: number;
 }
 
 interface PostWithId {
 	id: number;
 	url: string;
 	userId: number;
+	myId: number;
 }
 
 export const fetchPosts = async (
@@ -46,24 +48,34 @@ export const fetchPosts = async (
 			// '/myPage/posts'의 경우 응답 구조가 다름
 			if (endpoint === "/myPage/posts") {
 				const data = response.data.success; // API 문서 참고
+				const myId = response.data.success.userId; // 본인인지 아닌지 비교하기 위한 아이디
+
+
 				console.log('내가 쓴 포스트 API 응답은:', data);
 				if (Array.isArray(data) && data.length > 0) {
+					console.log('내가 쓴 포스트 API 응답:', response);
 					posts = data.map((post) => ({
 						id: post.postId,
 						// url: extractImageUrl(post.body) ?? defaultImg, <- 썸네일이 아닌 body에 추가한 이미지(추가 시 자동 썸네일 적용 전)를 주는 방식임 !! 즉
 						url: post.thumbnail,
-						userId: post.userId
+						userId: post.userId,
+						// myId: response.data.userId
+						myId: 1 // 임시 할당 
 					}));
 					console.log('내가 쓴 포스트에서 posts는:', posts);
 				}
 			} else {
 				console.log('내가 안썼을 때 API 응답은:', response);
+				const myId = response.data.success.userId;
+				console.log('내 myId는', myId);
+
 				// 다른 엔드포인트는 동일한 방식 처리
 				posts = response.data.success.post.map((post) => ({
 					id: post.postId,
 					// url: extractImageUrl(post.body) ?? defaultImg,
 					url: post.url,
-					userId: post.userId
+					userId: post.userId,
+					myId: response.data.success.userId
 				}));
 				console.log('내가 쓴 포스트가 아닌 다른 포스트에서 posts는:', posts);
 			}

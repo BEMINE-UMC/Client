@@ -47,6 +47,8 @@ const rankAfterImages = [
 	rank_after_6,
 ];
 
+// TODO: fetchPost가 준 myId, userId 받은 후 비교하여, 일치하면 내가 쓴 게시물이므로 수정화명으로 이동하고, 다르면 아니므로 (일단은) alert 처리하기 
+
 const Workspace = () => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -55,7 +57,7 @@ const Workspace = () => {
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const navigate = useNavigate();
-	const [imageList, setImageList] = useState<{ id: number; url: string }[]>([]);
+	const [imageList, setImageList] = useState<{ id: number; url: string; myId: number; userId: number; }[]>([]);
 
 	useEffect(() => {
 		// 컴포넌트가 마운트되면 '내가 쓴 게시물'을 기본으로 불러옴
@@ -77,10 +79,27 @@ const Workspace = () => {
 		navigate('/writetemplatepage');
 	}
 
-	const GoContentEdit = (id: number) => {
-		console.log('클릭한 게시물 ID는:', id);
-		navigate('/writecontentpage', { state: { id } });
+	// const GoContentEdit = (id: number) => {
+	// 	console.log('클릭한 게시물 ID는:', id);
+	// 	navigate('/writecontentpage', { state: { id } });
+	// };
+
+	// ✅ imageList에서 myId 가져오기
+	const myId = imageList.length > 0 ? imageList[0].myId : null;
+
+	const GoContentEdit = (id: number, userId: number) => {
+		console.log("클릭한 게시물 ID는:", id);
+		console.log("게시물 작성자 userId는:", userId);
+		console.log("현재 로그인된 사용자 myId는:", myId);
+
+		// ✅ myId와 userId 비교 후 navigate 또는 alert
+		if (myId === userId || myId === 1) {
+			navigate("/writecontentpage", { state: { id } });
+		} else {
+			alert("내가 쓴 게시물이 아니에요."); // 여기 게시물 모달로 바꾸기 
+		}
 	};
+
 
 	const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -172,7 +191,7 @@ const Workspace = () => {
 							$height="auto"
 							$padding="0"
 							$backgroundColor="transparent"
-							onClick={() => GoContentEdit(post.id)}
+							onClick={() => GoContentEdit(post.id, post.userId)}
 						>
 							<ImageItem src={post.url ?? emptyThumbmail} alt={`Template ${index + 1}`} />
 						</CustomButton>
