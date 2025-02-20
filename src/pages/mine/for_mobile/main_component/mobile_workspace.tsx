@@ -28,7 +28,7 @@ const MobileWorkspace = () => {
 					$width="auto"
 					$height="auto"
 					$padding="0"
-					onClick={() => handleNavigation("여기는 워크스페이스")}
+					onClick={() => handleNavigation("워크스페이스")}
 				>
 					<CustomFont $color="#666666" $fontweight="bold">
 						워크스페이스
@@ -41,7 +41,7 @@ const MobileWorkspace = () => {
 					$width="auto"
 					$height="auto"
 					$padding="0"
-					onClick={() => handleNavigation("여기는 최근 본 게시물")}
+					onClick={() => handleNavigation("최근")}
 				>
 					<CustomFont $color="#666666" $fontweight="bold">
 						최근 본 게시물
@@ -54,7 +54,7 @@ const MobileWorkspace = () => {
 					$width="auto"
 					$height="auto"
 					$padding="0"
-					onClick={() => handleNavigation("여기는 좋아요")}
+					onClick={() => handleNavigation("좋아요")}
 				>
 					<CustomFont $color="#666666" $fontweight="bold">
 						좋아요
@@ -67,7 +67,7 @@ const MobileWorkspace = () => {
 					$width="auto"
 					$height="auto"
 					$padding="0"
-					onClick={() => handleNavigation("여기는 북마크")}
+					onClick={() => handleNavigation("북마크")}
 				>
 					<CustomFont $color="#666666" $fontweight="bold">
 						북마크

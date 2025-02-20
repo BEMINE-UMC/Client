@@ -180,7 +180,7 @@ const MobileProfilePage = () => {
 	};
 
 	return (
-		<CustomColumn $width="90%" $minHeight="100vh" $alignitems="center" $justifycontent="center">
+		<CustomColumn $width="90%" $minHeight="100vh" $alignitems="center" $justifycontent="flex-start">
 			{/* 상단 프로필 정보 */}
 			<CustomRow $width="100%" $height="auto" $padding="1rem" $gap="1rem">
 				<CustomColumn $width="40%" $alignitems="center" $justifycontent="center" $gap="0.2rem">

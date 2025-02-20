@@ -3,6 +3,9 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../../store/authStore";
 import axios from "axios";
+import { fetchPosts } from "../../apis/fetchPosts";
+import defaultImg from '../../../../assets/images/mine/emptyThumbnail.svg';
+import { useNavigate } from "react-router-dom";
 
 import CustomColumn from "../../components/CustomColumn";
 import CustomFont from "../../components/CustomFont";
@@ -58,49 +61,44 @@ const MobileEachWorkspace = () => {
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [showNotification, setShowNotification] = useState(false); // 좋아요 버튼 알림
 	const [isHeartClicked, setIsHeartClicked] = useState(false); // 좋아요 상태
+	const navigate = useNavigate();
 
 	const location = useLocation();
 	const { state } = location;
-	const [imageList, setImageList] = useState<string[]>([]);
+	// const [imageList, setImageList] = useState<string[]>([]);
+	const [imageList, setImageList] = useState<{ id: number; url: string }[]>([]);
 	const [message, setMessage] = useState<string>(state?.message || "");
 
-	// ✅ API URL을 message 값에 따라 동적으로 설정
+	const [apiMessage, setApiMessage] = useState<string>("");
+
+	// 화면 접속 시 message에 따라 자동으로 fetchPost 호출
+	useEffect(() => {
+		const endpoint = getApiUrl(message);
+		const buttonText = message || "워크스페이스";
+
+		fetchPosts(endpoint, buttonText, setImageList, setApiMessage);
+	}, [message]);
+
+	// getApiUrl 함수 (수정 필요 시 참고)
 	const getApiUrl = (message: string): string => {
 		switch (message) {
-			case "여기는 워크스페이스":
+			case "워크스페이스":
 				return "/myPage/posts";
-			case "여기는 최근 본 게시물":
+			case "최근":
 				return "/myPage/recentPost";
-			case "여기는 좋아요":
+			case "좋아요":
 				return "/myPage/likePost";
-			case "여기는 북마크":
+			case "북마크":
 				return "/myPage/bookMark";
 			default:
-				return "/myPage/posts"; // 기본값
+				return "/myPage/posts";
 		}
 	};
 
-	const fetchPosts = async () => {
-		try {
-			const apiUrl = getApiUrl(message);
-			const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}${apiUrl}`, {
-				headers: {
-					"Authorization": `Bearer ${accessToken}`,
-					"Accept": "application/json",
-				},
-			});
-
-			if (response.status === 200 && response.data.success) {
-				setImageList(response.data.success.posts || []);
-			}
-		} catch (error) {
-			console.error("데이터 가져오기 실패:", error);
-		}
+	const GoContentEdit = (id: number) => {
+		console.log('클릭한 게시물 ID는:', id);
+		navigate('/writecontentpage', { state: { id } });
 	};
-
-	useEffect(() => {
-		fetchPosts();
-	}, [message]);
 
 	const handleHeartClick = () => {
 		setIsHeartClicked(!isHeartClicked);
@@ -235,26 +233,28 @@ const MobileEachWorkspace = () => {
 			)}
 
 			<CustomColumn $width="90%" $gap="1rem" $alignitems="center">
+				<CustomColumn $height="2rem" />
 				<CustomColumn $width="90%" $gap="1rem" $alignitems="center">
 					{imageList.length > 0 ? (
-						imageList.map((src, index) => (
+						imageList.map((post) => (
 							<CustomButton
-								key={index}
+								key={post.id}
 								$width="auto"
 								$height="auto"
 								$padding="0"
 								$backgroundColor="transparent"
-								onClick={openPdfInNewTab}
+								onClick={() => GoContentEdit(post.id)}
 							>
-								<StyledImg src={src} alt={`Template ${index + 1}`} $width="100%" />
+								<StyledImg src={post.url ?? defaultImg} alt={`Template ${post.id}`} $width="100%" $borderradius="0.5rem" />
 							</CustomButton>
 						))
 					) : (
 						<CustomFont $color="gray" $font="1rem">
-							워크스페이스에 담긴 내용이 없어요.
+							{apiMessage || "워크스페이스에 담긴 내용이 없어요."}
 						</CustomFont>
 					)}
 				</CustomColumn>
+				<CustomColumn $height="2rem" />
 
 
 				{isDownloadModal && (
