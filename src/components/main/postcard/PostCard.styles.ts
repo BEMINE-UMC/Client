@@ -97,24 +97,20 @@ export const Description = styled.p`
   line-height: 1.4;
   font-weight: bold;
   margin-bottom: 10%;
-  
+  white-space: nowrap; /* 텍스트가 한 줄로만 표시되도록 설정 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트에 ... 표시 */
+  transition: all 0.3s ease; /* 호버 시 부드럽게 전환 */
+  max-width: 10vw;
 
   @media (max-width: 768px) {
     font-size: 16px;
-    display: -webkit-box; /* 플렉스 기반 레이아웃 */
-    -webkit-line-clamp: 1; /* 표시할 줄 수 */
-    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
-    
+    max-width: 12.5vw;
   }
 
   @media (max-width: 480px) {
     font-size: 14px;
-    display: -webkit-box; /* 플렉스 기반 레이아웃 */
-    -webkit-line-clamp: 1; /* 표시할 줄 수 */
-    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
-   
+    max-width: 25vw;
   }
 `;
 

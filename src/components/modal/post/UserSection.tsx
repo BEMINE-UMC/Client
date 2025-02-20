@@ -42,8 +42,8 @@ const Wrapper = styled.div`
 const UserImage = styled.img`
   margin-top: 5%;
   margin-left: 5%;
-  width: 300px;
-  height: 300px;
+  width: 10vw;
+  height: auto;
   border-radius: 10px;
 
   @media (max-width: 768px) {

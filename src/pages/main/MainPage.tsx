@@ -6,7 +6,6 @@ import useSearchStore from "../../store/search/searchStore";
 import SearchResults from "../../components/search/SearchResults";
 import { useEffect } from "react";
 
-import { FaSearch } from "react-icons/fa";
 
 
 const MainPage: React.FC = () => {
@@ -35,7 +34,6 @@ const MainPage: React.FC = () => {
                     <SearchResults searchResults={results} searchTerm={searchTerm}/>
                 ) : (
                     <NoResultsContainer>
-                        <NoResultsIcon />
                         <NoResultsText> "{searchTerm}"에 대한 검색 결과가 없습니다.</NoResultsText>
                     </NoResultsContainer>
                 )
@@ -64,15 +62,6 @@ const NoResultsContainer = styled.div`
 
 `;
 
-const NoResultsIcon = styled(FaSearch)`
-    font-size: 48px;
-    color: #bbb;
-    margin-bottom: 15px;
-
-    @media (max-width: 480px) {
-        font-size: 35px;
-    }
-`;
 
 const NoResultsText = styled.p`
     font-size: 18px;

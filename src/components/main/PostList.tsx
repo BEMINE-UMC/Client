@@ -7,6 +7,8 @@
     import { Post } from "./type/Post";
     import { useAuthStore } from "../../store/authStore"; 
     import { usePostDetailStore } from "../../store/main/postDetailStore";  
+import SkeletonPostCard from "./skeleton/SkeletonPostCard";
+
 
     interface PostListProps {
       selectedCategory: string;
@@ -18,7 +20,7 @@
 
       const [likedStatus, setLikedStatus] = useState<{ [key: number]: boolean }>({}); // ✅ 수정됨: 좋아요 상태 관리
       
-      const { posts , fetchPosts } = usePostStore();
+      const { posts , fetchPosts, loading } = usePostStore();
       
       const { fetchPostDetail, postDetail } =usePostDetailStore();
 
@@ -56,6 +58,16 @@
         setIsModalOpen(true);
         await fetchPostDetail(post.postId);
       };
+      
+      const handleOtherPostClick = async (postId: number) => {
+        const newSelectedPost = posts.find((post) => post.postId === postId);
+        if (newSelectedPost) {
+          setSelectedPost(null);  // 기존 선택된 포스트 초기화
+          await new Promise((resolve) => setTimeout(resolve, 0)); // 상태 업데이트 보장
+          setSelectedPost(newSelectedPost);
+          fetchPostDetail(postId);  // 새로운 게시물 상세 정보 불러오기
+        }
+      };
 
       const closeModal = () => {
         setSelectedPost(null);
@@ -73,8 +85,12 @@
       return (
         <PostListWrapper>
           <PostCardContainer>
-          {posts && posts.length > 0 ? (
-            posts.map((post) => (
+          {/* {posts && posts.length > 0 ? (
+            posts.map((post) => ( */}
+            {loading ? ( // ✅ 수정: 로딩 상태일 때 Skeleton 표시
+              [...Array(10)].map((_, index) => <SkeletonPostCard key={index} />)
+            ) : posts && posts.length > 0 ? (
+              posts.map((post) => (
               <PostCard
                 key={post.postId}
                 data={{
@@ -102,7 +118,8 @@
               }}
               onLikeClick={() => handleLikeClick(selectedPost.postId)} // ✅ 수정됨: 좋아요 클릭 핸들러 전달
               liked={likedStatus[selectedPost.postId] || false} // ✅ 수정됨: liked 상태 전달
-            />
+              onOtherPostClick={handleOtherPostClick}  // 다른 게시물 클릭 핸들러 전달           
+              />
           )}
         </PostListWrapper>
       );

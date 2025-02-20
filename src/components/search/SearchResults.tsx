@@ -64,9 +64,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
                 likesCount: post.likesCount || 0,
               }}
               onCardClick={() => openModal(post)}
-              onLikeClick={() => handleLikeClick(post.postId)}
-              isLoggedIn={isLoggedIn}
-            />
+              isLoggedIn={isLoggedIn} onLikeClick={function (postId: number): void {
+                throw new Error("Function not implemented.");
+              } }            
+              />
           ))
         ) : (
           <A>검색 결과가 없습니다.</A>
