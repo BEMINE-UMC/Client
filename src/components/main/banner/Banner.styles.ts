@@ -94,7 +94,7 @@ export const Title = styled.h3`
   font-size: 20px;
   font-weight: 800;
   margin: 0;
-  color: yellow;
+  color: white;
 
   @media (max-width: 768px) {
     font-size: 18px;
