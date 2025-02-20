@@ -65,6 +65,8 @@ const Workspace = () => {
 	const accessToken = useAuthStore((state) => state.accessToken);
 	const [postTitle, setPostTitle] = useState<string>("");
 	const [postBody, setPostBody] = useState<string>("");
+	const [selectedButtonText, setSelectedButtonText] = useState("워크스페이스"); // 기본값
+
 
 
 	useEffect(() => {
@@ -177,36 +179,43 @@ const Workspace = () => {
 		setIsDownloadModal(false);
 	};
 
+	const handleButtonClick = (endpoint: string, buttonText: string) => {
+		fetchPosts(endpoint, buttonText, setImageList, setMessage);
+		setSelectedButtonText(buttonText); // 클릭 시 상태 업데이트
+		setIsDropdownOpen(false); // 드롭다운 닫기
+	};
+
+
 	return (
 		<CustomColumn $width="50%" $minHeight="100vh" $alignitems="flex-start" $justifycontent="flex-start">
 			<DropdownWrapper>
 				<CustomButton onClick={toggleDropdown} $backgroundColor="white" $width="auto" $height='auto' $padding="0.5rem 1rem"
 					$boxshadow='1px 2px 3px rgba(0, 0, 0, 0.1)' $borderRadius='3rem'>
-					<CustomFont $color="black" $font="0.7rem">워크스페이스</CustomFont>
+					<CustomFont $color="black" $font="0.7rem">{selectedButtonText}</CustomFont>
 					<FaChevronDown style={{ color: '#595959' }} />
 				</CustomButton>
 				{isDropdownOpen && (
 					<DropdownMenu>
 						<CustomColumn $width='100%' $alignitems='flex-start' $justifycontent='center' $gap="0.2rem">
-							<CustomButton onClick={() => fetchPosts('/myPage/posts', '내가 쓴 게시물', setImageList, setMessage)}
+							<CustomButton onClick={() => handleButtonClick('/myPage/posts', '내가 쓴 포스트')}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
 								<CustomFont $color="black">내가 쓴 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
-							<CustomButton onClick={() => fetchPosts('/myPage/recentPost', '최근 본 게시물', setImageList, setMessage)}
+							<CustomButton onClick={() => handleButtonClick('/myPage/recentPost', '최근 본 포스트')}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
 								<CustomFont $color="black">최근 본 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
-							<CustomButton onClick={() => fetchPosts('/myPage/likePost', '좋아요 누른 게시물', setImageList, setMessage)}
+							<CustomButton onClick={() => handleButtonClick('/myPage/likePost', '좋아요 누른 포스트')}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
 								<CustomFont $color="black">좋아요 누른 포스트</CustomFont>
 							</CustomButton>
 							<CustomDivider $width="100%" $height="0.8px" $backgroundcolor="#D9D9D9" />
 
-							<CustomButton onClick={() => fetchPosts('/myPage/bookMark', '북마크한 게시물', setImageList, setMessage)}
+							<CustomButton onClick={() => handleButtonClick('/myPage/bookMark', '북마크한 포스트')}
 								$padding="0.5rem" $backgroundColor="white" $height='auto'>
 								<CustomFont $color="black">북마크한 포스트</CustomFont>
 							</CustomButton>
