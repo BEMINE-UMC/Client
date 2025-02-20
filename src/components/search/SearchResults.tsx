@@ -64,9 +64,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
                 likesCount: post.likesCount || 0,
               }}
               onCardClick={() => openModal(post)}
-              onLikeClick={() => handleLikeClick(post.postId)}
-              isLoggedIn={isLoggedIn}
-            />
+              isLoggedIn={isLoggedIn} onLikeClick={function (postId: number): void {
+                throw new Error("Function not implemented.");
+              } }            
+              />
           ))
         ) : (
           <A>검색 결과가 없습니다.</A>
@@ -82,8 +83,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, searchTerm
             ...selectedPost,
           }}
           onLikeClick={() => handleLikeClick(selectedPost.postId)}
-          liked={likedStatus[selectedPost.postId] || false}
-        />
+          liked={likedStatus[selectedPost.postId] || false} onOtherPostClick={function (postId: number): void {
+            throw new Error("Function not implemented.");
+          } }        />
       )}
     </SearchResultsWrapper>
   );
@@ -107,7 +109,6 @@ const PostCardContainer = styled.div`
   gap: 10px;
   width: 100%;
   padding: 10px;
-  margin-left: 3%;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(4, 1fr);

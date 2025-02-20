@@ -17,9 +17,10 @@ interface PostModalProps {
   data: Post | PostDetail | null;
   onLikeClick: () => void;  
   liked: boolean;  
+  onOtherPostClick: (postId: number) => void; // 다른 게시물 클릭시 데이터를 가져오는 함수
 }
 
-const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClick, liked }) => {
+const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClick, liked, onOtherPostClick }) => {
   if (!isOpen || !data) return null;
 
   const postDetail = data as PostDetail;
@@ -29,11 +30,11 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClic
   const { posts: otherPosts, fetchOtherPosts } = useOtherPostsStore();
 
   useEffect(() => {
-    if (data) {
+    if (data?.postId) {
       console.log("✅ PostModal 내부 postDetail 업데이트:", data);
-      fetchOtherPosts(String(data.postId)); //postId 기반으로 데이터 가져오기
+      fetchOtherPosts(data.postId);
     }
-  }, [data, fetchOtherPosts]);
+  }, [data?.postId, fetchOtherPosts]);  // ✅ data.postId가 변경될 때마다 실행
   
 
   const handleLikeClick = () => {
@@ -44,6 +45,12 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClic
 
   const handleBackClick = () => {
     onClose();
+  };
+
+  const handleOtherPostClick = (postId: number) => {
+    console.log("📌 다른 게시물 클릭:", postId);
+    onOtherPostClick(postId); // 다른 게시물 클릭시 부모에게 요청
+    
   };
 
   return (
@@ -67,7 +74,8 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, data, onLikeClic
         <FooterSection
           author={data.authorName}
           contentImage={data.thumbnail}  // contentImage를 thumbnail로 변경
-          // otherPosts={otherPosts} // !여기부터! 
+          otherPosts={otherPosts} // !여기부터! 
+          onOtherPostClick={handleOtherPostClick} // 다른 게시물 클릭시 실행될 함수 전달
         />
       </ModalContent>
     </ModalOverlay>

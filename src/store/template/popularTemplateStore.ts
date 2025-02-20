@@ -7,6 +7,8 @@ export interface PopularTemplate {
     id: number;   // API 응답에 맞게 `templateId` -> `id`로 변경
     title: string;
     image: string;  // `thumbnail`을 `image`로 저장
+    filePDF: string;
+    filePPT: string;
 }
 
 // Zustand 스토어 타입 정의
@@ -33,6 +35,8 @@ export const usePopularTemplateStore = create<PopularTemplateStore>((set) => ({
                 id: template.id,  // API에서 제공하는 `id`
                 title: template.title,
                 image: template.thumbnail,  // `thumbnail`을 `image`로 사용
+                filePDF: template.filePDF, // 추가된 PDF 파일 경로
+                filePPT: template.filePPT, // 추가된 PPT 파일 경로 (사용 여부 확인 필요)
             }));
 
             console.log("✅ 배너 응답:", response.data);

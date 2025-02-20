@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import DOMPurify from "dompurify"; // XSS 방지용 라이브러리
-import { AiFillHeart } from "react-icons/ai"; // 아이콘 추가
+// import { AiFillHeart } from "react-icons/ai"; // 아이콘 추가
 
 
 interface ContentSectionProps {
@@ -18,9 +18,9 @@ const ContentSection: React.FC<ContentSectionProps> = ({ title, content, liked, 
   return (
     <Wrapper>
       <ModalTitle>{title}</ModalTitle>
-      <LikeButton onClick={onLikeClick}>
+      {/* <LikeButton onClick={onLikeClick}>
           {liked ? <AiFillHeart className="liked" /> : <AiFillHeart className="not-liked" />}
-        </LikeButton>
+        </LikeButton> */}
       <Content dangerouslySetInnerHTML={{ __html: sanitizedContent }} /> {/* HTML 렌더링 */}
     </Wrapper>
   );
