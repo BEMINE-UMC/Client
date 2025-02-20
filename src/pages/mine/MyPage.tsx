@@ -33,19 +33,17 @@ const ResponsiveRow = styled(CustomRow)`
 
 const ResponsiveDivider = styled(CustomDivider)`
   width: 0.5px;
-  min-height: 100vh;
-  height: 100%;
-  background-color: #d9d9d9;
+  background-color: #D9D9D9;
 
   @media (max-width: 1024px) {
-    width: 100%;
-    height: 0.5px;
+    width: 0.5px;
+    min-height: 100vh;
     margin: 1rem 0;
   }
 
   @media (max-width: 768px) {
     width: 100%;
-    height: 0.5px;
+    min-height: 0.5px;
     margin: 0.5rem 0;
   }
 `;
