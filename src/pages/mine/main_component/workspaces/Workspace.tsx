@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
-// import { useAuthStore } from "../../../store/authStore";
-// import axios from "axios";
+import { useAuthStore } from "../../../../store/authStore";
+import axios from "axios";
 import CustomColumn from "../../components/CustomColumn";
 import CustomFont from "../../components/CustomFont";
 import CustomButton from "../../components/CustomButton";
@@ -27,7 +27,10 @@ import rank_after_4 from '../../../../assets/images/mine/rank_img/mine_rank_afte
 import rank_after_5 from '../../../../assets/images/mine/rank_img/mine_rank_after_5.svg';
 import rank_after_6 from '../../../../assets/images/mine/rank_img/mine_rank_after_6.svg';
 import CustomDivider from "../../components/CustomDivider";
+import CustomRow from "../../components/CustomRow";
 import StyledImg from "../../components/StyledImg";
+import Modal from "../../components/Modal";
+import './postImg.css';
 
 const rankBeforeImages = [
 	rank_before_1,
@@ -57,7 +60,12 @@ const Workspace = () => {
 	const [isDownloadModal, setIsDownloadModal] = useState(false);
 	const [selectedRating, setSelectedRating] = useState(0); // 별점 상태 (0~6)
 	const navigate = useNavigate();
-	const [imageList, setImageList] = useState<{ id: number; url: string; myId: number; userId: number; }[]>([]);
+	const [imageList, setImageList] = useState<{ id: number; url: string; myId: number; userId: number; postId: number; }[]>([]);
+	const [contentModal, setContentModal] = useState(false);
+	const accessToken = useAuthStore((state) => state.accessToken);
+	const [postTitle, setPostTitle] = useState<string>("");
+	const [postBody, setPostBody] = useState<string>("");
+
 
 	useEffect(() => {
 		// 컴포넌트가 마운트되면 '내가 쓴 게시물'을 기본으로 불러옴
@@ -84,19 +92,44 @@ const Workspace = () => {
 	// 	navigate('/writecontentpage', { state: { id } });
 	// };
 
-	// ✅ imageList에서 myId 가져오기
+	// imageList에서 myId 가져오기
 	const myId = imageList.length > 0 ? imageList[0].myId : null;
 
-	const GoContentEdit = (id: number, userId: number) => {
+	const fetchPostById = async (id: number) => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/posts/${id}`, {
+				headers: {
+					"Accept": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			if (response.status === 200 && response.data.success) {
+				console.log('게시물 상세 API 응답값:', response);
+				setPostTitle(response.data.success.title);
+				setPostBody(response.data.success.body);
+
+				setContentModal(true);
+			}
+		} catch (error) {
+			console.error(`게시물 ID ${id}의 데이터를 불러오는 중 오류 발생:`, error);
+			alert("열람할 수 없는 게시물이에요.");
+		}
+	};
+
+	const GoContentEdit = (id: number, userId: number, postId: number) => {
 		console.log("클릭한 게시물 ID는:", id);
 		console.log("게시물 작성자 userId는:", userId);
 		console.log("현재 로그인된 사용자 myId는:", myId);
 
-		// ✅ myId와 userId 비교 후 navigate 또는 alert
+		// myId와 userId 비교 후 navigate 또는 alert
 		if (myId === userId || myId === 1) {
 			navigate("/writecontentpage", { state: { id } });
 		} else {
-			alert("내가 쓴 게시물이 아니에요."); // 여기 게시물 모달로 바꾸기 
+			// alert("내가 쓴 게시물이 아니에요."); // 여기 게시물 모달로 바꾸기 
+			// postId를 전달해서 게시물 상세 정보 API 요청하여 받아오고, 게시물 Modal 띄우고, Modal 내부 content로 넣기.
+			// API 호출 결과 success이면 contentModal 띄우고, 오류나면 '열람할 수 없는 게시물이에요.' 띄우기
+			fetchPostById(id);
 		}
 	};
 
@@ -191,7 +224,7 @@ const Workspace = () => {
 							$height="auto"
 							$padding="0"
 							$backgroundColor="transparent"
-							onClick={() => GoContentEdit(post.id, post.userId)}
+							onClick={() => GoContentEdit(post.id, post.userId, post.postId)}
 						>
 							<ImageItem src={post.url ?? emptyThumbmail} alt={`Template ${index + 1}`} />
 						</CustomButton>
@@ -211,7 +244,23 @@ const Workspace = () => {
 				)
 			)}
 
-
+			<Modal isOpen={contentModal} onClose={() => setContentModal(false)}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color="black" $fontweight="bold" $font="1.5rem">
+						{postTitle}
+					</CustomFont>
+					<div
+						style={{ width: "100%", margin: "1rem 0" }}
+						dangerouslySetInnerHTML={{ __html: postBody }}
+						className="post-content"
+					/>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={() => setContentModal(false)}>
+							<CustomFont $color="black" $fontweight="bold">닫기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
 
 
 
