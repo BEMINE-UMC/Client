@@ -7,6 +7,7 @@ import { Template } from "./types/templateTypes";
 import { getImageOrDefault } from "../../utils/imageUtils";
 import { useTemplateDetailStore } from "../../store/template/templateDetailStore";
 import PdfPreview from "./PdfPreview";
+import TemplateCardSkeleton from "./TemplateCardSkeleton";
 
 interface TemplateListProps {
   selectedCategory: string;
@@ -16,9 +17,11 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
   const {templates, fetchTemplates} = useTemplateStore();
 
-  const { fetchTemplateDetail } = useTemplateDetailStore();
+  const { fetchTemplateDetail, templateDetail } = useTemplateDetailStore();
   
   const{isLoggedIn} = useAuthStore();
   
@@ -32,10 +35,15 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
   const categoryId = selectedCategory === "전체" ? undefined : categoryMap[selectedCategory];
 
   const fetchCategoryTemplates = useCallback(() => {
-    console.log ("선택된 카테고리:", selectedCategory);
+    console.log("선택된 카테고리:", selectedCategory);
     console.log("변환된 카테고리ID:", categoryId);
-
-    fetchTemplates(categoryId === undefined ? undefined : categoryId);
+  
+    setIsLoading(true); // 데이터 로딩 시작
+  
+    fetchTemplates(categoryId === undefined ? undefined : categoryId)
+      .finally(() => {
+        setIsLoading(false); // 데이터 로딩 완료 후 로딩 상태 종료
+      });
   }, [selectedCategory, fetchTemplates]);
 
   useEffect(() => {
@@ -60,7 +68,14 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
   return (
       <>
         <ListContainer>
-          {templates && templates.length > 0 ? (
+        {isLoading ? (
+            // 로딩 중에는 스켈레톤 표시
+            Array(8)
+              .fill(null)
+              .map((_, index) => (
+                <TemplateCardSkeleton key={index} />
+              ))
+          ) : templates && templates.length > 0 ? (
             templates.map((template) => (
               <TemplateCard
                 key={template.templateId}
@@ -85,10 +100,10 @@ const TemplateList: FC<TemplateListProps> = ({ selectedCategory }) => {
           <PdfPreview
           isOpen={isModalOpen}
           onClose={closeModal}
-          filePDF={selectedTemplate.file || ""} // `data.file`을 `pdfUrl`로 전달
+          filePDF={templateDetail.filePDF || ""} // `data.file`을 `pdfUrl`로 전달
           isLiked={selectedTemplate.likedStatus || false}
           onLike={() => console.log("좋아요 클릭")}
-          onDownload={() => console.log("다운로드 클릭")} thumbnail={""} templateCreatedAt={""} templateId={0} title={""} authorId={0} authorName={""} categoryId={0} categoryName={""} likesCount={0} templteId={0}        />
+          onDownload={() => console.log("다운로드 클릭")} thumbnail={""} templateCreatedAt={""} templateId={0} title={""} authorId={0} authorName={""} categoryId={0} categoryName={""} likesCount={0}        />
         )}
 
       </>
