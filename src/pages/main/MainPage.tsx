@@ -48,7 +48,8 @@ export default MainPage;
 
 const PageContainer = styled.div`
     background: linear-gradient(to bottom, #ffffff, #fff6b4);
-    width: 100vw
+    width: 100vw;
+    overflow: hidden;
 `;
 
 const NoResultsContainer = styled.div`

@@ -21,13 +21,13 @@ export const Container = styled.div`
 export const BannerContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 30px;
   width: max(100vw, 150%); /* 가로 스크롤 허용 */ 
   height: 100%;
   padding: 0 40px;
   scroll-snap-type: x mandatory;
-  overflow-x: visible;
+  overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
 
@@ -36,10 +36,18 @@ export const BannerContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    min-width: 100vw;
+    min-width: 120vw;
     width: fit-content;
     gap: 10px;
   }
+
+  @media (max-width: 480px) {
+    min-width: 100vw;
+    width: 100vw;  /* 화면 너비를 넘어가지 않도록 설정 */
+    gap: 10px;
+    overflow-x: auto; /* 가로 스크롤 방지 */
+  }
+
 `;
 
 export const BannerItem = styled.div`

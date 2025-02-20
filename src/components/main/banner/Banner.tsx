@@ -10,7 +10,7 @@ import {
   Title,  
   ArrowButton,
 } from "./Banner.styles";
-import { usePopularTemplateStore } from "../../../store/template/popularTemplateStore";
+import { PopularTemplate, usePopularTemplateStore } from "../../../store/template/popularTemplateStore";
 import { useBannerLogic } from "./useBannerLogic";
 
 import Empty from "../../../assets/images/main/Empty.png"; // 기본 이미지 가져오기
@@ -28,11 +28,11 @@ const Banner: React.FC = () => {
 
   const {isLoggedIn} = useAuthStore();
 
-  const handleBannerClick = (templateId: number) => {
+  const handleBannerClick = (template: PopularTemplate) => {
     if (!isLoggedIn) {
       navigate("/login");
     } else {
-      setSelectedTemplate(templateId); // 로그인 되어 있으면 템플릿 선택
+      setSelectedTemplate(template); // 로그인 되어 있으면 템플릿 선택
     }
   };
 
@@ -73,7 +73,7 @@ const Banner: React.FC = () => {
       </ArrowButton>
       <BannerContainer > 
         {visibleTemplates.map((template) => (
-          <BannerItem key={template.id} onClick={() => handleBannerClick(template.id)}>
+          <BannerItem key={template.id} onClick={() => handleBannerClick(template)}>
             <Image $backgroundImage={template.image || Empty} />
             <Info>
               <Title>{template.title}</Title>
