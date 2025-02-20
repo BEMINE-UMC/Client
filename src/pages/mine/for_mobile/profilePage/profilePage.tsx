@@ -90,6 +90,7 @@ const MobileProfilePage = () => {
 				});
 
 				if (response.status === 200 && response.data.success) {
+					console.log(response);
 					setProfileData({
 						name: response.data.success.name,
 						tagline: response.data.success.introduction || "",
@@ -155,6 +156,7 @@ const MobileProfilePage = () => {
 			);
 
 			if (response.status === 200 && response.data.success) {
+				console.log('모바일 한줄소개 성공!', response);
 				alert("한줄소개가 추가/수정되었습니다!");
 				setProfileData((prev) => ({
 					...prev,

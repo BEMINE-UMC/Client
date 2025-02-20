@@ -27,6 +27,11 @@ const MobileContentPage = () => {
 		return `${year}.${month}.${day}`;
 	};
 
+	const [data, setData] = useState<{ title: string; body: string }>({
+		title: "",
+		body: "",
+	});
+
 	const [editorContent, setEditorContent] = useState("");
 	const accessToken = useAuthStore((state) => state.accessToken);
 	const [title, setTitle] = useState("");
@@ -34,10 +39,10 @@ const MobileContentPage = () => {
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
 	const [writeModal, setWriteModal] = useState(false);
 
-	// 게시물 작성 시, 'url이 유효하지 않다'는 오류 발생 중 !!
 	const handleSubmit = async () => {
-		const data = {
-			title,
+		const data2 = {
+			// title: title,
+			title: data.title,
 			body: editorContent,
 			categoryId: categories.indexOf(category) + 1,
 			thumbnail,
@@ -46,7 +51,7 @@ const MobileContentPage = () => {
 		try {
 			const response = await axios.post(
 				`${import.meta.env.VITE_API_BASE_URL}/posts/write`,
-				data,
+				data2,
 				{
 					headers: {
 						"Content-Type": "application/json",
@@ -56,6 +61,7 @@ const MobileContentPage = () => {
 			);
 
 			if (response.status === 201) {
+				console.log('전송한 data는:', data2);
 				alert("게시글이 성공적으로 작성되었습니다.");
 				setWriteModal(false);
 			}
@@ -79,7 +85,11 @@ const MobileContentPage = () => {
 				</CustomButton>
 			</CustomRow>
 
-			<StyledInput placeholder="제목을 입력하세요" />
+			<StyledInput placeholder="제목을 입력하세요"
+				onChange={(e) => {
+					setData((prev) => ({ ...prev, title: e.target.value }));
+					setTitle(e.target.value);
+				}} />
 
 			<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
 				<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />

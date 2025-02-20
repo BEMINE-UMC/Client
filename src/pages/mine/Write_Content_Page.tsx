@@ -160,6 +160,7 @@ const WriteContentPage = () => {
 			);
 
 			if (response.status === 201) {
+				console.log('title은:', title);
 				console.log('body에 담긴 내용은:', editorContent);
 				console.log('썸네일 이미지 링크는:', thumbnail);
 				alert("게시글이 성공적으로 작성되었습니다.");
