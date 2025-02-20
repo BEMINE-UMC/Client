@@ -53,31 +53,31 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onCardClick, isLogged
   const [likes, setLikes] = useState<number>(likeCount);
 
   const getBadgeImage = () => {
-    if (surveyCountDesign > 0 && surveyCountCredible > 0 && surveyCountUseful > 0) {
+    if (surveyCountDesign > 1 && surveyCountCredible > 1 && surveyCountUseful > 1) {
       return Badge_DCU; // 세 개 다 0 이상일 때
     }
 
     // 2개 속성 중복
-    if (surveyCountDesign > 0 && surveyCountCredible > 0) {
+    if (surveyCountDesign > 1 && surveyCountCredible > 1) {
       return Badge_CD; // Design & Useful만 0 이상일 때
     }
 
-    if (surveyCountCredible > 0 && surveyCountUseful > 0) {
+    if (surveyCountCredible > 1 && surveyCountUseful > 1) {
       return Badge_UC;
     }
 
-    if (surveyCountDesign > 0 && surveyCountUseful > 0) {
+    if (surveyCountDesign > 1 && surveyCountUseful > 1) {
       return Badge_DU; // Design & Useful만 0 이상일 때
     }
 
     //1개 속성
-    if (surveyCountDesign > 0) {
+    if (surveyCountDesign > 1) {
       return Badge_D;
     }
-    if (surveyCountCredible > 0) {
+    if (surveyCountCredible > 1) {
       return Badge_C;
     }
-    if (surveyCountUseful > 0) {
+    if (surveyCountUseful > 1) {
       return Badge_U;
     }
     return null;
