@@ -34,11 +34,14 @@ const WriteContentPage = () => {
 	const location = useLocation();
 	const id = location.state?.id;
 	const accessToken = useAuthStore((state) => state.accessToken);
+	const [isDelete, setIsDelete] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
 
 	useEffect(() => {
 		if (id) {
 			console.log("ID 전달받음, 수정하겠다는 뜻 !!:", id);
-			fetchPostById(id); // ✅ ID가 있으면 API 호출
+			setIsDelete(true);
+			fetchPostById(id); // ID가 있으면 API 호출
 		} else {
 			console.log("ID가 전달되지 않음, 새 게시물 작성한다는 뜻!");
 		}
@@ -102,7 +105,31 @@ const WriteContentPage = () => {
 		}
 	};
 
+	// 게시물 삭제 API
+	const contentDelete = async (id: number) => {
+		try {
+			const response = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/posts/${id}`, {
+				headers: {
+					"Accept": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
 
+			if (response.status === 200 && response.data.success) {
+				console.log('삭제 성공 !!');
+				setDeleteModal(false);
+				alert('성공적으로 삭제되었습니다.');
+			}
+		} catch (error) {
+			console.error(`게시물 ID ${id}를 삭제하던 중 오류 발생:`, error);
+			// console.log(accessToken);
+			alert('삭제에 실패했습니다.');
+		}
+	};
+
+	const openDeleteModal = () => {
+		setDeleteModal(true);
+	}
 
 	const handleSubmit = async () => {
 		// <img /> 태그의 src 속성을 추출하는 함수
@@ -257,6 +284,19 @@ const WriteContentPage = () => {
 			<TextEditor value={editorContent} onChange={setEditorContent} />
 
 			<CustomRow $width="90%" $justifycontent="flex-end">
+
+				{isDelete && (
+					<CustomButton
+						$width="5rem"
+						$height="auto"
+						$padding="0"
+						$backgroundColor='transparent'
+						onClick={openDeleteModal}
+					>
+						<CustomFont $color="#D9D9D9" $fontweight="bold" style={{ textDecoration: "unserline" }}>삭제</CustomFont>
+					</CustomButton>
+				)}
+
 				<CustomButton
 					$width="5rem"
 					$height="auto"
@@ -278,6 +318,20 @@ const WriteContentPage = () => {
 						</CustomButton>
 						<CustomButton $backgroundColor="#FFE100" onClick={handleSubmit}>
 							<CustomFont $color="black" $fontweight="bold">게시하기</CustomFont>
+						</CustomButton>
+					</CustomRow>
+				</CustomColumn>
+			</Modal>
+
+			<Modal isOpen={deleteModal} onClose={() => setDeleteModal(false)}>
+				<CustomColumn $width="90%" $alignitems="center" $justifycontent="center">
+					<CustomFont $color="black" $fontweight="bold">삭제하시겠습니까?</CustomFont>
+					<CustomRow $width="90%">
+						<CustomButton $backgroundColor="transparent" onClick={() => setWriteModal(false)}>
+							<CustomFont $color="black" $fontweight="bold">취소</CustomFont>
+						</CustomButton>
+						<CustomButton $backgroundColor="#FFE100" onClick={() => contentDelete(id)}>
+							<CustomFont $color="black" $fontweight="bold">삭제하기</CustomFont>
 						</CustomButton>
 					</CustomRow>
 				</CustomColumn>
