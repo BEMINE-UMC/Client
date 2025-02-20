@@ -65,7 +65,7 @@ export const usePostStore = create<PostStore>((set) => ({
             categoryName: post.categoryName,
             likedStatus: isLoggedIn ? post.likedStatus : undefined,
             scrapStatus: isLoggedIn ? post.scrapStatus : undefined,
-            likesCount: post.likesCount ?? 0,
+            likesCount: post.totalLikes ?? 0,
           }));
         } else if (Array.isArray(successData?.data)) {
           posts = successData.data.map((post: any) => ({
@@ -79,7 +79,7 @@ export const usePostStore = create<PostStore>((set) => ({
             categoryName: post.categoryName,
             likedStatus: isLoggedIn ? post.likedStatus : undefined,
             scrapStatus: isLoggedIn ? post.scrapStatus : undefined,
-            likesCount: post.likesCount ?? 0,
+            likesCount: post.totalLikes ?? 0,
           }));
         } else {
           throw new Error("API 응답 형식이 예상과 다릅니다.");
