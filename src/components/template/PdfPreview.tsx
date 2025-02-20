@@ -5,7 +5,7 @@ import { BiSolidPencil } from "react-icons/bi";
 import { IoMdChatbubbles } from "react-icons/io";
 
 import DownloadModal from './DownloadModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Before_1 from "../../assets/images/mine/rank_img/mine_rank_before_1.svg";
 import Before_2 from "../../assets/images/mine/rank_img/mine_rank_before_2.svg";
@@ -68,6 +68,10 @@ const PdfPreview: React.FC<PdfPreviewProps> = ({ isOpen, filePDF, onClose, onLik
       handleCloseDownloadModal(); // ✅ 다운로드 후 모달 닫기
     }
   };
+
+  useEffect(() => {
+    console.log("filePDF:", filePDF);
+  }, [filePDF])
   
   if (!isOpen) return null;
   
