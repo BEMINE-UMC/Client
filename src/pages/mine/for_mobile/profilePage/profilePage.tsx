@@ -141,12 +141,12 @@ const MobileProfilePage = () => {
 		}
 	};
 
-	// 한줄소개 추가/수정 API 요청
 	const updateIntroduction = async () => {
 		try {
-			const response = await axios.post(
-				`${import.meta.env.VITE_API_BASE_URL}/myPage/history/create`,
-				{ editedTagline },
+			const response = await axios.patch(
+				`${import.meta.env.VITE_API_BASE_URL}/myPage/introduction/modify`,
+				{ introduction: editedTagline },
+				// { tagline: "흥" },
 				{
 					headers: {
 						"Content-Type": "application/json",
@@ -156,29 +156,37 @@ const MobileProfilePage = () => {
 			);
 
 			if (response.status === 200 && response.data.success) {
-				console.log('모바일 한줄소개 성공!', response);
-				alert("한줄소개가 추가/수정되었습니다!");
+				console.log(editedTagline);
+				alert("한줄소개가 수정되었습니다!");
 				setProfileData((prev) => ({
 					...prev,
-					editedTagline, // 한줄소개 업데이트 즉시 반영
+					tagline: editedTagline,
 				}));
-				setIsEditing(false); // 수정 완료 후 input 필드 닫음
+				setIsEditing(false);
 			}
 		} catch (error) {
-			console.error("한줄소개 추가/수정 실패:", error);
+			console.error("한줄소개 수정 실패:", error);
 		}
 	};
+
+
 
 	useEffect(() => {
 		setHistory(profileData.sections);
 	}, [profileData.sections]);
 
-	const handleEditClick = () => {
-		setIsEditing(true);
-	};
+	useEffect(() => {
+		setEditedTagline(profileData.tagline || ""); // ✅ `profileData` 변경 시 `editedTagline` 업데이트
+	}, [profileData.tagline]);
+
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setEditedTagline(e.target.value);
+	};
+
+	const handleEditClick = () => {
+		setEditedTagline(profileData.tagline || "");
+		setIsEditing(true);
 	};
 
 	return (
